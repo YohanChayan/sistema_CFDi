@@ -54,6 +54,30 @@
 
         <br>
 
+        <h4>Datos del receptor</h4>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>RFC</th>
+                    <th>Nombre</th>
+                    <th>Regimen Fiscal</th>
+                </tr>
+            </thead>
+        
+            <tbody>
+                @foreach ($data["Receptor"][0] as $receptor)
+                    <tr>
+                        <td>{{ $receptor["Rfc"] }}</td>
+                        <td>{{ $receptor["Nombre"] }}</td>
+                        <td>{{ $receptor["RegimenFiscalReceptor"] }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <br>
+
         <h4>Datos del timbre fiscal</h4>
 
         <table class="table">
