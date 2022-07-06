@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "livewire/livewire": "^2.5",
+        "realrashid/sweet-alert": "^5.1",
         "smalot/pdfparser": "^2.2",
         "spatie/pdf-to-text": "^1.4"
     },

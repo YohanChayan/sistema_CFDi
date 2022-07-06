@@ -1,19 +1,36 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use App\Models\Jesus;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Smalot\PdfParser\Parser;
-use RealRashid\SweetAlert\Facades\Alert;
 
-class JesusController extends Controller
+class Jesus extends Model
 {
-    public function index() {
-        return view('index');
+    use HasFactory;
+
+    public static function readXML($file) {
+        $xmlObject = simplexml_load_file($file);   //Convertir el archivo XML en un objeto XML de PHP
+        $xmlNamespaces = $xmlObject->getNamespaces(true);   //Obtener los namespaces utilizados al inicio del documento XML
+        $xmlObject->registerXPathNamespace('c', $xmlNamespaces['cfdi']);   //c hará referencia a todos los prefijos que empiecen con cfdi
+        $xmlObject->registerXPathNamespace('t', $xmlNamespaces['tfd']);   //t hará referencia a todos los prefijos que empiecen con tdf
+        
+        //Convertir a JSON los resultados obtenidos
+        $json = json_encode([
+            "Comprobante" => $xmlObject->xpath('//c:Comprobante'),
+            "Emisor" => $xmlObject->xpath('//c:Emisor'),
+            "Receptor" => $xmlObject->xpath('//c:Receptor'),
+            "TimbreFiscalDigital" => $xmlObject->xpath('//t:TimbreFiscalDigital')
+        ]);
+        
+        $data = json_decode($json, true);   //Convertir de JSON a arreglo asociativo los resultados
+        //dd($data);
+
+        return $data;
     }
 
-    public function leerPDF() {
+    public static function readPDF() {
         $parser = new Parser();   //Crea una instancia de la clase Parser
         $pdf = $parser->parseFile(public_path('archivos/pdf/565_PPA180626CC4.pdf'));   //Obtiene el PDF y lo guarda en un objeto de la clase Parser
         $text = $pdf->getText();   //Convierte el PDF a texto
@@ -191,65 +208,6 @@ class JesusController extends Controller
         $dataThirdFilter["REGIMEN FISCAL EMISOR"] = $caracteresRFE;
         $dataThirdFilter["REGIMEN FISCAL RECEPTOR"] = $caracteresRFR;
 
-        return view('jesus.leerPDF', ["data" => $dataThirdFilter]);
-    }
-
-    public function leerXML() {
-        $xmlObject = simplexml_load_file(public_path('archivos/xml/565_PPA180626CC4.xml'));   //Convertir el archivo XML en un objeto XML de PHP
-        $xmlNamespaces = $xmlObject->getNamespaces(true);   //Obtener los namespaces utilizados al inicio del documento XML
-        $xmlObject->registerXPathNamespace('c', $xmlNamespaces['cfdi']);   //c hará referencia a todos los prefijos que empiecen con cfdi
-        $xmlObject->registerXPathNamespace('t', $xmlNamespaces['tfd']);   //t hará referencia a todos los prefijos que empiecen con tdf
-        
-        //Convertir a JSON los resultados obtenidos
-        $json = json_encode([
-            "Comprobante" => $xmlObject->xpath('//c:Comprobante'),
-            "Emisor" => $xmlObject->xpath('//c:Emisor'),
-            "Receptor" => $xmlObject->xpath('//c:Receptor'),
-            "TimbreFiscalDigital" => $xmlObject->xpath('//t:TimbreFiscalDigital')
-        ]);
-        
-        $data = json_decode($json, true);   //Convertir de JSON a arreglo asociativo los resultados
-        //dd($data);
-
-        return view('jesus.leerXML', compact('data'));
-    }
-
-    public function subirArchivos() {
-        return view('jesus.subirArchivos');
-    }
-
-    public function enviarArchivos(Request $request) {
-        $data = $request->file('archivos');
-        
-        if(count($data) != 2) {
-            Alert::warning('Advertencia', 'Es necesario que subas 2 archivos');
-            return redirect()->back();
-        }
-        else {
-            $extensions = ["pdf", "xml"];
-            $file1 = $data[0];
-            $file2 = $data[1];
-
-            $file_extension_1 = strtolower($file1->extension());
-            $file_extension_2 = strtolower($file2->extension());
-            
-            if(in_array($file_extension_1, $extensions) && in_array($file_extension_2, $extensions) && $file_extension_1 != $file_extension_2) {
-                if($file_extension_1 == "pdf")
-                    $pdf = Jesus::readPDF($file1);
-                else if($file_extension_1 == "xml")
-                    $xml = Jesus::readXML($file1);
-
-                if($file_extension_2 == "pdf")
-                    $pdf = Jesus::readPDF($file2);
-                else if($file_extension_2 == "xml")
-                    $xml = Jesus::readXML($file2);
-                
-                dd($pdf, $xml);
-            }
-            else {
-                Alert::warning('Advertencia', 'Los archivos deben tener formato PDF y XML');
-                return redirect()->back();
-            }
-        }
+        return $dataThirdFilter;
     }
 }
