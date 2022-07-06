@@ -20,7 +20,7 @@
                 <tr>
                     <td>{{ $data["FOLIO"] }}</td>
                     <td>{{ date("d-m-Y h:i:s a", strtotime($data["FECHA DE EMISIÓN"])) }}</td>
-                    <td>{{ $data["TOTAL"] }}</td>
+                    <td>${{ $data["TOTAL"] }}</td>
                     <td>{{ $data["NO. SERIE CSD DEL EMISOR"] }}</td>
                 </tr>
             </tbody>
@@ -41,9 +41,31 @@
         
             <tbody>
                 <tr>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
+                    <td>{{ $data["RFC EMISOR"] }}</td>
+                    <td>{{ $data["NOMBRE EMISOR"] }}</td>
+                    <td>{{ $data["REGIMEN FISCAL EMISOR"] }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+        <h4>Datos del receptor</h4>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>RFC</th>
+                    <th>Nombre</th>
+                    <th>Regimen Fiscal</th>
+                </tr>
+            </thead>
+        
+            <tbody>
+                <tr>
+                    <td>{{ $data["RFC RECEPTOR"] }}</td>
+                    <td>{{ $data["NOMBRE RECEPTOR"] }}</td>
+                    <td>{{ $data["REGIMEN FISCAL RECEPTOR"] }}</td>
                 </tr>
             </tbody>
         </table>
@@ -66,7 +88,7 @@
                 <tr>
                     <td>{{ $data["UUID"] }}</td>
                     <td>{{ date("d-m-Y h:i:s a", strtotime($data["FECHA DE TIMBRADO"])) }}</td>
-                    <td>{{ $data["RFC"] }}</td>
+                    <td>-</td>
                     <td>{{ $data["NO. SERIE CSD DEL SAT"] }}</td>
                 </tr>
             </tbody>

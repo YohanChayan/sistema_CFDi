@@ -21,7 +21,7 @@
                     <tr>
                         <td>{{ $comprobante["Folio"] }}</td>
                         <td>{{ date("d-m-Y h:i:s a", strtotime($comprobante["Fecha"])) }}</td>
-                        <td>{{ $comprobante["Total"] }}</td>
+                        <td>${{ number_format($comprobante["Total"], 2) }}</td>
                         <td>{{ $comprobante["NoCertificado"] }}</td>
                     </tr>
                 @endforeach
