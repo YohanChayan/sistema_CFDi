@@ -230,9 +230,10 @@ class JesusController extends Controller
             $file1 = $data[0];
             $file2 = $data[1];
 
-            $file_extension_1 = strtolower($file1->extension());
-            $file_extension_2 = strtolower($file2->extension());
+            $file_extension_1 = strtolower($file1->extension());   //Obtiene la extensión del archivo 1
+            $file_extension_2 = strtolower($file2->extension());   //Obtiene la extensión del archivo 2
             
+            //Evaluación de extensiones de archivos
             if(in_array($file_extension_1, $extensions) && in_array($file_extension_2, $extensions) && $file_extension_1 != $file_extension_2) {
                 if($file_extension_1 == "pdf")
                     $pdf = Jesus::readPDF($file1);
@@ -243,8 +244,18 @@ class JesusController extends Controller
                     $pdf = Jesus::readPDF($file2);
                 else if($file_extension_2 == "xml")
                     $xml = Jesus::readXML($file2);
-                
-                dd($pdf, $xml);
+
+                $result = Jesus::compareFiles($pdf, $xml);
+
+                //Validar si el UUID existe en el archivo
+                if($result) {
+                    Alert::success('Éxito', 'Los archivos contienen el mismo UUID');
+                    return redirect()->back();
+                }
+                else if(!$result) {
+                    Alert::error('Error', 'Los archivos NO contienen el mismo UUID');
+                    return redirect()->back();
+                }
             }
             else {
                 Alert::warning('Advertencia', 'Los archivos deben tener formato PDF y XML');
