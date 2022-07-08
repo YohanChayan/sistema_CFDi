@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use App\Models\Jesus;
+use App\Models\Provider;
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Smalot\PdfParser\Parser;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -247,12 +251,54 @@ class JesusController extends Controller
 
                 $result = Jesus::compareFiles($pdf, $xml);
 
-                //Validar si el UUID existe en el archivo
+                //Validar si el UUID es el mismo entre el archivo pdf y xml
                 if($result) {
-                    Alert::success('Éxito', 'Los archivos contienen el mismo UUID');
-                    return redirect()->back();
+                    $uuid = Jesus::getUUID($xml);   //Obtiene el UUID del archivo xml
+                    $provider_rfc = Jesus::getProviderRFC($xml);   //Obtiene el RFC del emisor
+
+                    $search_provider = Provider::where('rfc', $provider_rfc)->first();   //Busca el RFC del emisor en la base de datos
+                    if($search_provider != null) {
+                        //Guardar los archivos en la carpeta public/archivos
+                        if($file_extension_1 == "pdf") {
+                            $name_pdf_file = time() . '.' . $file_extension_1;
+                            $file1->move(public_path("archivos/pdf"), $name_pdf_file);
+                            $pdf_name = "archivos/pdf/" . $name_pdf_file;
+                        }
+                        else if($file_extension_2 == "pdf") {
+                            $name_pdf_file = time() . '.' . $file_extension_2;
+                            $file2->move(public_path("archivos/pdf"), $name_pdf_file);
+                            $pdf_name = "archivos/pdf/" . $name_pdf_file;
+                        }
+
+                        if($file_extension_1 == "xml") {
+                            $name_xml_file = time() . '.' . $file_extension_1;
+                            $file1->move(public_path("archivos/xml"), $name_xml_file);
+                            $xml_name = "archivos/pdf/" . $name_xml_file;
+                        }
+                        else if($file_extension_2 == "xml") {
+                            $name_xml_file = time() . '.' . $file_extension_2;
+                            $file2->move(public_path("archivos/xml"), $name_xml_file);
+                            $xml_name = "archivos/pdf/" . $name_xml_file;
+                        }
+
+                        //Guardar la factura en la base de datos
+                        $invoice = new Invoice();
+                        $invoice -> provider_id = $search_provider->id;
+                        $invoice -> uuid = $uuid;
+                        $invoice -> pdf = $pdf_name;
+                        $invoice -> xml = $xml_name;
+                        //$invoice -> other = ; Pendiente de ver ese tercer archivo
+                        $invoice -> save();
+
+                        Alert::success('Éxito', 'Factura guardada correctamente');
+                        return redirect()->back();
+                    }
+                    else {
+                        Alert::success('Advertencia', 'El RFC del proveedor no se encuentra registrado en el sistema');
+                        return redirect()->back();
+                    }
                 }
-                else if(!$result) {
+                else {
                     Alert::error('Error', 'Los archivos NO contienen el mismo UUID');
                     return redirect()->back();
                 }

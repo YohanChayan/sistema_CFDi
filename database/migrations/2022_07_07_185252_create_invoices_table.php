@@ -15,11 +15,11 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("rfc_id")->constrained("rfcs", "id");
+            $table->foreignId("provider_id")->constrained("providers", "id");
             $table->string("uuid");
-            $table->string("pdf");
-            $table->string("xml");
-            $table->string("other");
+            $table->string("pdf")->comment("Url del archivo pdf");
+            $table->string("xml")->comment("Url del archivo xml");
+            $table->string("other")->nullable()->comment("Url de un posible tercer archivo");
             $table->timestamps();
         });
     }

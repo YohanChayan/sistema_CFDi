@@ -73,4 +73,12 @@ class Jesus extends Model
 
         return $flag;   //Retorna verdadero o falso dependiendo si los archivos contienen el mismo UUID
     }
+
+    public static function getUUID($xml) {
+        return $xml["TimbreFiscalDigital"][0]["@attributes"]["UUID"];   //Obtiene el UUID del archivo xml
+    }
+
+    public static function getProviderRFC($xml) {
+        return $xml["Emisor"][0]["@attributes"]["Rfc"];   //Obtiene el RFC del emisor
+    }
 }
