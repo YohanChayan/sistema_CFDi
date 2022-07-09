@@ -30,8 +30,13 @@ class OwnerSeeder extends Seeder
         ]);
 
         Owner::factory()->create([
-            'rfc' => 'PPA180626CC4',
-            'nombre' => 'PARADISE PAPAYA',
+            'rfc' => 'HPA0406153A6',
+            'nombre' => 'HORTALIZAS LA PALMITA',
+        ]);
+
+        Owner::factory()->create([
+            'rfc' => '',
+            'nombre' => 'PAPAYAS CAMPO REAL',
         ]);
     }
 }
