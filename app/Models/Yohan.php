@@ -5,11 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Owner extends Model
+class Yohan extends Model
 {
     use HasFactory;
-
-    public function invoice() {
-        return $this->hasOne(Invoice::class);
-    }
 }

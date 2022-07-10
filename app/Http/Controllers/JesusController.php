@@ -18,12 +18,23 @@ class JesusController extends Controller
     }
 
     public function leerPDF() {
+
+        $data = $this->GetDataFromPDF();
+
+        return view('jesus.leerPDF', ["data" => $data]);
+
+    }
+
+    private function GetDataFromPDF(){
+
         $parser = new Parser();   //Crea una instancia de la clase Parser
+        // $pdf = $parser->parseFile(public_path('archivos/pdf/565_PPA180626CC4.pdf'));   //Obtiene el PDF y lo guarda en un objeto de la clase Parser
         $pdf = $parser->parseFile(public_path('archivos/pdf/565_PPA180626CC4.pdf'));   //Obtiene el PDF y lo guarda en un objeto de la clase Parser
         $text = $pdf->getText();   //Convierte el PDF a texto
-        //dd($text);
+        // dd($text);
         $array = explode("\n", $text);   //Separa el PDF en un arreglo, utilizando como delimitador el salto de línea
         $dataFirstFilter = [];   //Arreglo que contendrá la información seleccionada del PDF después de aplicar el primer filtro (patron = "\n")
+        // dd($array);
 
         $flagCFDI = false;   //Bandera que sirve para añadir el elemento que sigue después del texto CFDI, es decir, el nombre del emisor
         $flagRFCReceptor = false;   //Bandera que sirve para añadir el elemento que sigue después del texto Receptor, es decir, el nombre del receptor
@@ -195,15 +206,24 @@ class JesusController extends Controller
         $dataThirdFilter["REGIMEN FISCAL EMISOR"] = $caracteresRFE;
         $dataThirdFilter["REGIMEN FISCAL RECEPTOR"] = $caracteresRFR;
 
-        return view('jesus.leerPDF', ["data" => $dataThirdFilter]);
+        // dd($dataThirdFilter);
+
+        // return view('jesus.leerPDF', ["data" => $dataThirdFilter]);
+        return $dataThirdFilter;
     }
 
     public function leerXML() {
+
+        $data = $this->GetDataFromXML();
+        return view('jesus.leerXML')->with('data', $data);
+    }
+
+    private function GetDataFromXML(){
         $xmlObject = simplexml_load_file(public_path('archivos/xml/565_PPA180626CC4.xml'));   //Convertir el archivo XML en un objeto XML de PHP
         $xmlNamespaces = $xmlObject->getNamespaces(true);   //Obtener los namespaces utilizados al inicio del documento XML
         $xmlObject->registerXPathNamespace('c', $xmlNamespaces['cfdi']);   //c hará referencia a todos los prefijos que empiecen con cfdi
         $xmlObject->registerXPathNamespace('t', $xmlNamespaces['tfd']);   //t hará referencia a todos los prefijos que empiecen con tdf
-        
+
         //Convertir a JSON los resultados obtenidos
         $json = json_encode([
             "Comprobante" => $xmlObject->xpath('//c:Comprobante'),
@@ -211,11 +231,10 @@ class JesusController extends Controller
             "Receptor" => $xmlObject->xpath('//c:Receptor'),
             "TimbreFiscalDigital" => $xmlObject->xpath('//t:TimbreFiscalDigital')
         ]);
-        
-        $data = json_decode($json, true);   //Convertir de JSON a arreglo asociativo los resultados
-        //dd($data);
 
-        return view('jesus.leerXML', compact('data'));
+        $data = json_decode($json, true);   //Convertir de JSON a arreglo asociativo los resultados
+        // dd($data);
+        return $data;
     }
 
     public function subirArchivos() {
@@ -224,7 +243,7 @@ class JesusController extends Controller
 
     public function enviarArchivos(Request $request) {
         $data = $request->file('archivos');
-        
+
         if(count($data) != 2) {
             Alert::warning('Advertencia', 'Es necesario que subas 2 archivos');
             return redirect()->back();
@@ -236,7 +255,7 @@ class JesusController extends Controller
 
             $file_extension_1 = strtolower($file1->extension());   //Obtiene la extensión del archivo 1
             $file_extension_2 = strtolower($file2->extension());   //Obtiene la extensión del archivo 2
-            
+
             //Evaluación de extensiones de archivos
             if(in_array($file_extension_1, $extensions) && in_array($file_extension_2, $extensions) && $file_extension_1 != $file_extension_2) {
                 if($file_extension_1 == "pdf")
@@ -293,7 +312,8 @@ class JesusController extends Controller
                         Alert::success('Éxito', 'Factura guardada correctamente');
                         return redirect()->back();
                     }
-                    else {
+                    else { //mi meet decicidió morir D,:
+                        // JAJAJAJA
                         Alert::success('Advertencia', 'El RFC del proveedor no se encuentra registrado en el sistema');
                         return redirect()->back();
                     }

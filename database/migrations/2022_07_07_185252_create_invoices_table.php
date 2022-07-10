@@ -15,7 +15,8 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("provider_id")->constrained("providers", "id");
+            $table->foreignId("provider_id");
+            $table->foreignId("owner_id");
             $table->string("uuid");
             $table->string("pdf")->comment("Url del archivo pdf");
             $table->string("xml")->comment("Url del archivo xml");

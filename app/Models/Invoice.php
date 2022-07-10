@@ -15,4 +15,12 @@ class Invoice extends Model
         'pdf',
         'xml',
     ];
+
+    public function owner() {
+        return $this->belongsTo(Owner::class);
+    }
+
+    public function provider() {
+        return $this->hasOne(Provider::class);
+    }
 }

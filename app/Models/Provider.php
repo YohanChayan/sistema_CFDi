@@ -13,4 +13,8 @@ class Provider extends Model
     protected $fillable = [
         'rfc',
     ];
+
+    public function invoice() {
+        return $this->hasOne(Invoice::class);
+    }
 }

@@ -185,7 +185,19 @@
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <i class="bi bi-file-earmark-code-fill"></i>
-                  Prueba 1
+                  Leer PDF
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i class="bi bi-file-earmark-code-fill"></i>
+                  Leer XML
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ route('yohan.create') }}">
+                  <i class="bi bi-file-earmark-code-fill"></i>
+                  Subir archivos
                 </a>
               </li>
             </ul>
