@@ -15,7 +15,7 @@ class Jesus extends Model
         $xmlNamespaces = $xmlObject->getNamespaces(true);   //Obtener los namespaces utilizados al inicio del documento XML
         $xmlObject->registerXPathNamespace('c', $xmlNamespaces['cfdi']);   //c hará referencia a todos los prefijos que empiecen con cfdi
         $xmlObject->registerXPathNamespace('t', $xmlNamespaces['tfd']);   //t hará referencia a todos los prefijos que empiecen con tdf
-        
+
         //Convertir a JSON los resultados obtenidos
         $json = json_encode([
             "Comprobante" => $xmlObject->xpath('//c:Comprobante'),
@@ -23,7 +23,7 @@ class Jesus extends Model
             "Receptor" => $xmlObject->xpath('//c:Receptor'),
             "TimbreFiscalDigital" => $xmlObject->xpath('//t:TimbreFiscalDigital')
         ]);
-        
+
         $data = json_decode($json, true);   //Convertir de JSON a arreglo asociativo los resultados
 
         return $data;   //Retorna los datos como un arreglo
@@ -80,5 +80,9 @@ class Jesus extends Model
 
     public static function getProviderRFC($xml) {
         return $xml["Emisor"][0]["@attributes"]["Rfc"];   //Obtiene el RFC del emisor
+    }
+
+    public static function getOwnerRFC($xml) {
+        return $xml["Receptor"][0]["@attributes"]["Rfc"];   //Obtiene el RFC del emisor
     }
 }
