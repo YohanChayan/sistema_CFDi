@@ -39,12 +39,16 @@ class YohanController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->file('other'));
         $validateData = $this->validate($request,[
             'pdf_input' => 'file|required|mimes:pdf',
             'xml_input' => 'file|required|mimes:xml',
+            'other' => 'file',
         ]);
         $file_pdf = $request->file('pdf_input');
         $file_xml = $request->file('xml_input');
+
+        
 
         $convertedPDF = Jesus::readPDF( $file_pdf );
         $convertedXML = Jesus::readXML( $file_xml );
@@ -64,12 +68,33 @@ class YohanController extends Controller
                 $name_xml_file = time() . '.xml';
                 $file_xml->move(public_path("archivos/xml"), $name_xml_file);
                 $xml_name = "archivos/pdf/" . $name_xml_file;
+                
+
+                if ($request->file('other') != null) {
+                    $other_file = $request->file('other');
+                    $other_file_aux = $other_file->getClientOriginalName();
+
+                    $name_other_file = time() . '.' . pathinfo($other_file_aux, PATHINFO_EXTENSION);
+                    $other_file->move(public_path("archivos/anexo"), $name_other_file);
+                    $other_name = "archivos/anexo/" . $name_other_file;
+
+                    $new_invoice->other = $other_name;
+                    
+                }
+                
 
                 $db_owner = Owner::where('rfc', $owner_rfc)->first();
                 $search_provider = Provider::where('rfc', $provider_rfc)->first();   //Busca el RFC del emisor en la base de
 
+                $invoice_uuid = Invoice::where('uuid', $uuid)->first();
+
                 if($db_owner == null){
                     Alert::error('Error', 'El RFC del receptor no coincide con ninguna empresa');
+                    return redirect()->back();
+                }
+
+                if ($invoice_uuid != null) {
+                    Alert::error('Error', 'El UUID ya se encuentra registrado');
                     return redirect()->back();
                 }
 
@@ -88,6 +113,7 @@ class YohanController extends Controller
                 $new_invoice->uuid = $uuid;
                 $new_invoice->pdf = $pdf_name;
                 $new_invoice->xml = $xml_name;
+                
                 $new_invoice->save();
                 // $new_invoice->other = pendiente
 
