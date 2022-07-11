@@ -39,7 +39,6 @@ class YohanController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->file('other'));
         $validateData = $this->validate($request,[
             'pdf_input' => 'file|required|mimes:pdf',
             'xml_input' => 'file|required|mimes:xml',
@@ -102,7 +101,7 @@ class YohanController extends Controller
                     $new_invoice->provider_id = $search_provider->id;
                 else{
                     $newProvider = new Provider();
-                    $newProvider->nombre = 'provider nombre';
+                    $newProvider->nombre = Jesus::getNameProviderXML($convertedXML);
                     $newProvider->rfc = $provider_rfc;
                     $newProvider->save();
 
@@ -124,23 +123,6 @@ class YohanController extends Controller
                 Alert::error('Error', 'Los archivos NO contienen el mismo UUID');
                 return redirect()->back();
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // dd($name_pdf,$name_xml);
-        // $path = $request->file('file')->store('public/files');
-
-
     }
 
 

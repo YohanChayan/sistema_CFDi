@@ -85,4 +85,8 @@ class Jesus extends Model
     public static function getOwnerRFC($xml) {
         return $xml["Receptor"][0]["@attributes"]["Rfc"];   //Obtiene el RFC del emisor
     }
+
+    public static function getNameProviderXML($xml) {
+        return $xml["Emisor"][0]["@attributes"]["Nombre"];
+    }
 }
