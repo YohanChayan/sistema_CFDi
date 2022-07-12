@@ -8,7 +8,14 @@
             <div class="col-md-6">
                 <form action="{{ route("jesusenviarArchivos") }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input class="form-control" type="file" name="archivos[]" id="archivos" multiple required>
+                    <label for="pdf_file">Seleccione un archivo PDF</label>
+                    <input class="form-control" type="file" name="pdf_file" id="pdf_file" required accept="application/pdf">
+                    <br>
+                    <label for="xml_file">Seleccione un archivo XML</label>
+                    <input class="form-control" type="file" name="xml_file" id="xml_file" required accept="application/xml">
+                    <br>
+                    <label for="other_file">Seleccione un archivo anexo (opcional)</label>
+                    <input class="form-control" type="file" name="other_file" id="other_file">
                     <br>
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-primary" type="submit">Subir</button>

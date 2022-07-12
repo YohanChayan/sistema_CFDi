@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Jesus;
+use App\Models\Owner;
 use App\Models\Provider;
-use Illuminate\Http\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Smalot\PdfParser\Parser;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -18,15 +17,11 @@ class JesusController extends Controller
     }
 
     public function leerPDF() {
-
         $data = $this->GetDataFromPDF();
-
         return view('jesus.leerPDF', ["data" => $data]);
-
     }
 
     private function GetDataFromPDF(){
-
         $parser = new Parser();   //Crea una instancia de la clase Parser
         // $pdf = $parser->parseFile(public_path('archivos/pdf/565_PPA180626CC4.pdf'));   //Obtiene el PDF y lo guarda en un objeto de la clase Parser
         $pdf = $parser->parseFile(public_path('archivos/pdf/565_PPA180626CC4.pdf'));   //Obtiene el PDF y lo guarda en un objeto de la clase Parser
@@ -208,12 +203,10 @@ class JesusController extends Controller
 
         // dd($dataThirdFilter);
 
-        // return view('jesus.leerPDF', ["data" => $dataThirdFilter]);
         return $dataThirdFilter;
     }
 
     public function leerXML() {
-
         $data = $this->GetDataFromXML();
         return view('jesus.leerXML')->with('data', $data);
     }
@@ -242,79 +235,82 @@ class JesusController extends Controller
     }
 
     public function enviarArchivos(Request $request) {
-        $data = $request->file('archivos');
+        $pdf_file = $request->file('pdf_file');
+        $xml_file = $request->file('xml_file');
+        $other_file = $request->file('other_file');
 
-        if(count($data) != 2) {
-            Alert::warning('Advertencia', 'Es necesario que subas 2 archivos');
+        if($pdf_file == null || $xml_file == null) {
+            Alert::warning('Advertencia', 'Es necesario que subas al menos un archivo pdf y un archivo xml');
             return redirect()->back();
         }
         else {
-            $extensions = ["pdf", "xml"];
-            $file1 = $data[0];
-            $file2 = $data[1];
-
-            $file_extension_1 = strtolower($file1->extension());   //Obtiene la extensión del archivo 1
-            $file_extension_2 = strtolower($file2->extension());   //Obtiene la extensión del archivo 2
+            $pdf_file_extension = strtolower($pdf_file->extension());   //Obtiene la extensión del archivo pdf
+            $xml_file_extension = strtolower($xml_file->extension());   //Obtiene la extensión del archivo xml
+            $other_file_extension = ($other_file != null) ? strtolower($other_file->extension()) : "";   //Obtiene la extensión del archivo anexo
 
             //Evaluación de extensiones de archivos
-            if(in_array($file_extension_1, $extensions) && in_array($file_extension_2, $extensions) && $file_extension_1 != $file_extension_2) {
-                if($file_extension_1 == "pdf")
-                    $pdf = Jesus::readPDF($file1);
-                else if($file_extension_1 == "xml")
-                    $xml = Jesus::readXML($file1);
-
-                if($file_extension_2 == "pdf")
-                    $pdf = Jesus::readPDF($file2);
-                else if($file_extension_2 == "xml")
-                    $xml = Jesus::readXML($file2);
-
+            if($pdf_file_extension == "pdf" && $xml_file_extension == "xml") {
+                $pdf = Jesus::readPDF($pdf_file);
+                $xml = Jesus::readXML($xml_file);
                 $result = Jesus::compareFiles($pdf, $xml);
 
                 //Validar si el UUID es el mismo entre el archivo pdf y xml
                 if($result) {
-                    $uuid = Jesus::getUUID($xml);   //Obtiene el UUID del archivo xml
-                    $provider_rfc = Jesus::getProviderRFC($xml);   //Obtiene el RFC del emisor
+                    $uuid = Jesus::getUUIDXML($xml);   //Obtiene el UUID del archivo xml
+                    $provider_rfc = Jesus::getProviderRFCXML($xml);   //Obtiene el RFC del emisor (proveedor)
+                    $owner_rfc = Jesus::getOwnerRFCXML($xml);   //Obtiene el RFC del receptor (propietario)
 
-                    $search_provider = Provider::where('rfc', $provider_rfc)->first();   //Busca el RFC del emisor en la base de datos
-                    if($search_provider != null) {
-                        //Guardar los archivos en la carpeta public/archivos
-                        if($file_extension_1 == "pdf") {
-                            $name_pdf_file = time() . '.' . $file_extension_1;
-                            $file1->move(public_path("archivos/pdf"), $name_pdf_file);
+                    $search_uuid = Invoice::where('uuid', $uuid)->first();
+
+                    //Evaluar si el uuid ya se había registrado anteriormente
+                    if($search_uuid == null) {
+                        $search_owner = Owner::where('rfc', $owner_rfc)->first();   //Busca el RFC del receptor (propietario) en la base de datos
+                        $search_provider = Provider::where('rfc', $provider_rfc)->first();   //Busca el RFC del emisor (proveedor) en la base de datos
+                        
+                        //Evaluar si el proveedor ya existe en la base de datos
+                        if($search_provider != null) {
+                            //Guardar los archivos en la carpeta public/archivos
+                            $name_pdf_file = time() . '.' . $pdf_file_extension;
+                            $pdf_file->move(public_path("archivos/pdf"), $name_pdf_file);
                             $pdf_name = "archivos/pdf/" . $name_pdf_file;
-                        }
-                        else if($file_extension_2 == "pdf") {
-                            $name_pdf_file = time() . '.' . $file_extension_2;
-                            $file2->move(public_path("archivos/pdf"), $name_pdf_file);
-                            $pdf_name = "archivos/pdf/" . $name_pdf_file;
-                        }
-
-                        if($file_extension_1 == "xml") {
-                            $name_xml_file = time() . '.' . $file_extension_1;
-                            $file1->move(public_path("archivos/xml"), $name_xml_file);
+                            
+                            $name_xml_file = time() . '.' . $xml_file_extension;
+                            $xml_file->move(public_path("archivos/xml"), $name_xml_file);
                             $xml_name = "archivos/pdf/" . $name_xml_file;
-                        }
-                        else if($file_extension_2 == "xml") {
-                            $name_xml_file = time() . '.' . $file_extension_2;
-                            $file2->move(public_path("archivos/xml"), $name_xml_file);
-                            $xml_name = "archivos/pdf/" . $name_xml_file;
-                        }
 
-                        //Guardar la factura en la base de datos
-                        $invoice = new Invoice();
-                        $invoice -> provider_id = $search_provider->id;
-                        $invoice -> uuid = $uuid;
-                        $invoice -> pdf = $pdf_name;
-                        $invoice -> xml = $xml_name;
-                        //$invoice -> other = ; Pendiente de ver ese tercer archivo
-                        $invoice -> save();
+                            if($other_file != null) {
+                                $name_other_file = time() . '.' . $other_file_extension;
+                                $other_file->move(public_path("archivos/anexo"), $name_other_file);
+                                $other_name = "archivos/pdf/" . $name_other_file;
+                            }
+                            else
+                                $other_name = null;
 
-                        Alert::success('Éxito', 'Factura guardada correctamente');
-                        return redirect()->back();
+                            //Guardar la factura en la base de datos
+                            $invoice = new Invoice();
+                            $invoice -> owner_id = $search_owner->id;
+                            $invoice -> provider_id = $search_provider->id;
+                            $invoice -> uuid = $uuid;
+                            $invoice -> pdf = $pdf_name;
+                            $invoice -> xml = $xml_name;
+                            $invoice -> other = $other_name;
+                            $invoice -> save();
+
+                            Alert::success('Éxito', 'Factura guardada correctamente');
+                            return redirect()->back();
+                        }
+                        else {
+                            $provider = new Provider();
+                            $provider -> rfc = $provider_rfc;
+                            $provider -> nombre = Jesus::getNameOwnerXML($xml);
+                            $provider -> save();
+
+                            Alert::success('Éxito', 'Factura guardada correctamente');
+                            return redirect()->back();
+                        }
                     }
-                    else { //mi meet decicidió morir D,:
-                        // JAJAJAJA
-                        Alert::success('Advertencia', 'El RFC del proveedor no se encuentra registrado en el sistema');
+                    else {
+                        Alert::error('Error', 'Está factura ya se había registrado anteriormente');
                         return redirect()->back();
                     }
                 }
@@ -324,7 +320,7 @@ class JesusController extends Controller
                 }
             }
             else {
-                Alert::warning('Advertencia', 'Los archivos deben tener formato PDF y XML');
+                Alert::warning('Advertencia', 'Los archivos no tienen el formato solicitado');
                 return redirect()->back();
             }
         }

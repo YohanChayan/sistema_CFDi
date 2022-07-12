@@ -54,9 +54,9 @@ class YohanController extends Controller
         $filesCompared = Jesus::compareFiles($convertedPDF, $convertedXML);
 
             if($filesCompared){ // archivos iguales
-                $uuid = Jesus::getUUID($convertedXML);   //Obtiene el UUID del archivo xml
-                $provider_rfc = Jesus::getProviderRFC($convertedXML);   //Obtiene el RFC del emisor
-                $owner_rfc = Jesus::getOwnerRFC($convertedXML);   //Obtiene el RFC del emisor
+                $uuid = Jesus::getUUIDXML($convertedXML);   //Obtiene el UUID del archivo xml
+                $provider_rfc = Jesus::getProviderRFCXML($convertedXML);   //Obtiene el RFC del emisor
+                $owner_rfc = Jesus::getOwnerRFCXML($convertedXML);   //Obtiene el RFC del emisor
 
                 $new_invoice = new Invoice();
 

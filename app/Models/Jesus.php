@@ -74,19 +74,23 @@ class Jesus extends Model
         return $flag;   //Retorna verdadero o falso dependiendo si los archivos contienen el mismo UUID
     }
 
-    public static function getUUID($xml) {
+    public static function getUUIDXML($xml) {
         return $xml["TimbreFiscalDigital"][0]["@attributes"]["UUID"];   //Obtiene el UUID del archivo xml
     }
 
-    public static function getProviderRFC($xml) {
-        return $xml["Emisor"][0]["@attributes"]["Rfc"];   //Obtiene el RFC del emisor
+    public static function getProviderRFCXML($xml) {
+        return $xml["Emisor"][0]["@attributes"]["Rfc"];   //Obtiene el RFC del emisor (proveedor) del archivo xml
     }
 
-    public static function getOwnerRFC($xml) {
-        return $xml["Receptor"][0]["@attributes"]["Rfc"];   //Obtiene el RFC del emisor
+    public static function getOwnerRFCXML($xml) {
+        return $xml["Receptor"][0]["@attributes"]["Rfc"];   //Obtiene el RFC del receptor (propietario) del archivo xml
     }
 
     public static function getNameProviderXML($xml) {
-        return $xml["Emisor"][0]["@attributes"]["Nombre"];
+        return $xml["Emisor"][0]["@attributes"]["Nombre"];   //Obtiene el Nombre del emisor (proveedor) del archivo xml
+    }
+
+    public static function getNameOwnerXML($xml) {
+        return $xml["Receptor"][0]["@attributes"]["Nombre"];   //Obtiene el Nombre del emisor (propietario) del archivo xml
     }
 }
