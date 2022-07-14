@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<cfdi:Comprobante xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd http://www.sat.gob.mx/implocal http://www.sat.gob.mx/sitio_internet/cfd/implocal/implocal.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:implocal="http://www.sat.gob.mx/implocal" Version="3.3" Serie="EXPA" Folio="52852" Fecha="2022-07-05T14:01:54" Sello="S9Ibx1zoaMM63PoQ7uIHGV9SG2zUCHPAvzFzob2EMuM1fi5Apro2zXFQHr0o7pDNXg45qZhFnUUC8VrR0XdQEdKLsEwAcW+7Cz7doWSYEZ70VGavgbifFfOtCxdQqq1nLPXEpno/BcexbLiR8UPnL7hDWJPVryVSFTMqGZv6fZIk+eI5+ggjGaJ1wm7Q9ITQ+Dra+1HgYuxAzR6/FmT3lA9P4Kjk8a2ptZ/oVux9nX/iO8RKRWl957hcEQTJRWK6eOEdTbUqIPQy21ZnXN0goX/nvRNKV4ORuf6V6klElXzLl0DedI3L8wja22fepm66nHxwAkJ84mLgf6TObgXQgg==" FormaPago="28" NoCertificado="00001000000504579496" Certificado="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" SubTotal="2498.00" Descuento="0.00" Moneda="MXN" TipoCambio="1" Total="2947.64" TipoDeComprobante="I" MetodoPago="PUE" LugarExpedicion="94299">
+  <cfdi:Emisor Rfc="PHV980313PU8" Nombre="Promotora Hotelera de Veracruz SA DE CV" RegimenFiscal="601" />
+  <cfdi:Receptor Rfc="GFR090108SM5" Nombre="GRUPO FRUTIORO SPR DE RL" UsoCFDI="G03" />
+  <cfdi:Conceptos>
+    <cfdi:Concepto ClaveProdServ="90111501" Cantidad="1" ClaveUnidad="E48" Unidad="E48" Descripcion="Renta Habitacion          (  2)" ValorUnitario="2498.00" Importe="2498.00" Descuento="0.00">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="2498.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="399.68" />
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="399.68">
+    <cfdi:Traslados>
+      <cfdi:Traslado Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="399.68" />
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <implocal:ImpuestosLocales version="1.0" TotaldeRetenciones="0.00" TotaldeTraslados="49.96">
+      <implocal:TrasladosLocales ImpLocTrasladado="ISH" TasadeTraslado="2" Importe="49.96" />
+    </implocal:ImpuestosLocales>
+    <tfd:TimbreFiscalDigital UUID="974c1dd9-d311-4cee-a904-633913c0960d" FechaTimbrado="2022-07-05T14:02:01" Version="1.1" SelloCFD="S9Ibx1zoaMM63PoQ7uIHGV9SG2zUCHPAvzFzob2EMuM1fi5Apro2zXFQHr0o7pDNXg45qZhFnUUC8VrR0XdQEdKLsEwAcW+7Cz7doWSYEZ70VGavgbifFfOtCxdQqq1nLPXEpno/BcexbLiR8UPnL7hDWJPVryVSFTMqGZv6fZIk+eI5+ggjGaJ1wm7Q9ITQ+Dra+1HgYuxAzR6/FmT3lA9P4Kjk8a2ptZ/oVux9nX/iO8RKRWl957hcEQTJRWK6eOEdTbUqIPQy21ZnXN0goX/nvRNKV4ORuf6V6klElXzLl0DedI3L8wja22fepm66nHxwAkJ84mLgf6TObgXQgg==" NoCertificadoSAT="00001000000505563741" SelloSAT="SnGtRMBrLaRBofkp2ZyJng4PXfmFF2OReJzUTOCO8NF+quctKEFTXWi1bWgksVeQluQf2VzCzgbuotM82su3evT3JW13yAY0W9UWXGmrGqpYpU3U7RjfS+m3J8KTS2ldpcBX6TStdVTnvkhZoXRS8awqf1IB69bTQRmFrjf1VXrqqA4sVqrC7ta2lBPZ4Zvn1t1MUoX8WdC6qp2Nno0gZ02fDqFq37knlX5tD6cYupNmQKvemnnV41SQl8cffF7AG80Z9Yil+SbbNQVKNLpfOjQQ9mb/SpMLgvrJyot4IZHGsZZ9LjM9gD2NpzEjkN2Iy/Sxrp2iuvMlqenWcvUpZg==" RfcProvCertif="MIS1112095W0" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/timbrefiscaldigital/TimbreFiscalDigitalv11.xsd" />
+  </cfdi:Complemento>
+  <cfdi:Addenda xmlns:ecfd="http://www.edxsolutions.com/schemas/strict" xsi:schemaLocation="http://www.edxsolutions.com/schemas/strict http://www.edxsolutions.com/schemas/strict/ecfd.xsd">
+    <ecfd:ECFD version="1.0">
+      <ecfd:Documento ID="T33EXPA52852">
+        <ecfd:Encabezado>
+          <ecfd:IdDoc>
+            <ecfd:NroAprob>1</ecfd:NroAprob>
+            <ecfd:AnoAprob>1900</ecfd:AnoAprob>
+            <ecfd:Tipo>33</ecfd:Tipo>
+            <ecfd:Serie>EXPA</ecfd:Serie>
+            <ecfd:Folio>52852</ecfd:Folio>
+            <ecfd:Estado>ORIGINAL</ecfd:Estado>
+            <ecfd:FechaEmis>2022-07-05T14:01:54</ecfd:FechaEmis>
+            <ecfd:FormaPago>PUE</ecfd:FormaPago>
+            <ecfd:MedioPago>28</ecfd:MedioPago>
+            <ecfd:LugarExpedicion>94299</ecfd:LugarExpedicion>
+            <ecfd:TermPagoCdg>1</ecfd:TermPagoCdg>
+          </ecfd:IdDoc>
+          <ecfd:ExEmisor>
+            <ecfd:RFCEmisor>PHV980313PU8</ecfd:RFCEmisor>
+            <ecfd:NmbEmisor>Promotora Hotelera de Veracruz SA DE CV</ecfd:NmbEmisor>
+            <ecfd:CodigoExEmisor>
+              <ecfd:TpoCdgIntEmisor>INT</ecfd:TpoCdgIntEmisor>
+            </ecfd:CodigoExEmisor>
+            <ecfd:DomFiscal>
+              <ecfd:Calle>Avenida Morelos 225</ecfd:Calle>
+              <ecfd:Colonia>Centro</ecfd:Colonia>
+              <ecfd:Municipio>Veracruz</ecfd:Municipio>
+              <ecfd:Estado>Veracruz</ecfd:Estado>
+              <ecfd:Pais>MEX</ecfd:Pais>
+              <ecfd:CodigoPostal>91700</ecfd:CodigoPostal>
+            </ecfd:DomFiscal>
+            <ecfd:LugarExped>
+              <ecfd:Calle>Blvd. Adolfo Ruiz Cortines No. 4298</ecfd:Calle>
+              <ecfd:Colonia>Costa de Oro</ecfd:Colonia>
+              <ecfd:Municipio>Boca del Rio</ecfd:Municipio>
+              <ecfd:Estado>Veracruz</ecfd:Estado>
+              <ecfd:Pais>MEX</ecfd:Pais>
+              <ecfd:CodigoPostal>94299</ecfd:CodigoPostal>
+            </ecfd:LugarExped>
+          </ecfd:ExEmisor>
+          <ecfd:ExReceptor>
+            <ecfd:RFCRecep>GFR090108SM5</ecfd:RFCRecep>
+            <ecfd:NmbRecep>GRUPO FRUTIORO SPR DE RL</ecfd:NmbRecep>
+            <ecfd:CodigoExReceptor>
+              <ecfd:CdgIntRecep>31948643</ecfd:CdgIntRecep>
+            </ecfd:CodigoExReceptor>
+            <ecfd:UsoCFDI>G03</ecfd:UsoCFDI>
+            <ecfd:DomFiscalRcp>
+              <ecfd:Calle>J. PUNTO INES MORENO PEREZ</ecfd:Calle>
+              <ecfd:Colonia>LA PRESA</ecfd:Colonia>
+              <ecfd:Municipio>Ixtlahuacan</ecfd:Municipio>
+              <ecfd:Estado>CM</ecfd:Estado>
+              <ecfd:Pais>MX</ecfd:Pais>
+              <ecfd:CodigoPostal>28705</ecfd:CodigoPostal>
+            </ecfd:DomFiscalRcp>
+            <ecfd:LugarRecep>
+              <ecfd:Calle>J. PUNTO INES MORENO PEREZ</ecfd:Calle>
+              <ecfd:Colonia>LA PRESA</ecfd:Colonia>
+              <ecfd:Municipio>Ixtlahuacan</ecfd:Municipio>
+              <ecfd:Estado>CM</ecfd:Estado>
+              <ecfd:Pais>MEXICO</ecfd:Pais>
+              <ecfd:CodigoPostal>28705</ecfd:CodigoPostal>
+            </ecfd:LugarRecep>
+          </ecfd:ExReceptor>
+          <ecfd:Totales>
+            <ecfd:Moneda>MXN</ecfd:Moneda>
+            <ecfd:FctConv>1</ecfd:FctConv>
+            <ecfd:SubTotal>2498.00</ecfd:SubTotal>
+            <ecfd:MntDcto>0.00</ecfd:MntDcto>
+            <ecfd:MntBase>2498.00</ecfd:MntBase>
+            <ecfd:MntImp>399.68</ecfd:MntImp>
+            <ecfd:VlrPagar>2947.64</ecfd:VlrPagar>
+            <ecfd:VlrPalabras>DOS MIL NOVECIENTOS CUARENTA Y SIETE PESOS 64/100 M.N.</ecfd:VlrPalabras>
+          </ecfd:Totales>
+          <ecfd:ExImpuestos>
+            <ecfd:TipoImp>002</ecfd:TipoImp>
+            <ecfd:TipoFactor>Tasa</ecfd:TipoFactor>
+            <ecfd:TasaImp>0.160000</ecfd:TasaImp>
+            <ecfd:MontoImp>399.68</ecfd:MontoImp>
+          </ecfd:ExImpuestos>
+        </ecfd:Encabezado>
+        <ecfd:Detalle>
+          <ecfd:NroLinDet>1</ecfd:NroLinDet>
+          <ecfd:DscLang>ES</ecfd:DscLang>
+          <ecfd:ClaveProdServ>90111501</ecfd:ClaveProdServ>
+          <ecfd:DscItem>Renta Habitacion          (  2)</ecfd:DscItem>
+          <ecfd:QtyItem>1</ecfd:QtyItem>
+          <ecfd:ClaveUnidad>E48</ecfd:ClaveUnidad>
+          <ecfd:UnmdItem>E48</ecfd:UnmdItem>
+          <ecfd:PrcBrutoItem>2897.68</ecfd:PrcBrutoItem>
+          <ecfd:PrcNetoItem>2498.00</ecfd:PrcNetoItem>
+          <ecfd:DescuentoMonto>0.00</ecfd:DescuentoMonto>
+          <ecfd:ImpuestosDet>
+            <ecfd:TipoImp>002</ecfd:TipoImp>
+            <ecfd:TasaImp>0.160000</ecfd:TasaImp>
+            <ecfd:MontoImp>399.68</ecfd:MontoImp>
+            <ecfd:MontoBaseImp>2498.00</ecfd:MontoBaseImp>
+            <ecfd:TipoFactor>Tasa</ecfd:TipoFactor>
+          </ecfd:ImpuestosDet>
+          <ecfd:MontoBrutoItem>2897.68</ecfd:MontoBrutoItem>
+          <ecfd:MontoNetoItem>2498.00</ecfd:MontoNetoItem>
+          <ecfd:MontoTotalItem>2897.68</ecfd:MontoTotalItem>
+        </ecfd:Detalle>
+        <ecfd:TimeStamp>2022-07-05T14:01:51</ecfd:TimeStamp>
+      </ecfd:Documento>
+      <ecfd:Personalizados>
+        <ecfd:campoString name="edx_version">cfdi_opera_20120417</ecfd:campoString>
+        <ecfd:campoString name="Fuente">opera</ecfd:campoString>
+        <ecfd:campoString name="eFactu">3.14</ecfd:campoString>
+        <ecfd:campoString name="habitacion">809</ecfd:campoString>
+        <ecfd:campoString name="checkin">04-07-22</ecfd:campoString>
+        <ecfd:campoString name="checkout">05-07-22</ecfd:campoString>
+        <ecfd:campoString name="EMail">M.JUAREZH@FRUTIORO.COM.MX, M.JUAREZ.H@HOTMAIL.COM</ecfd:campoString>
+        <ecfd:campoString name="Printer">NO</ecfd:campoString>
+        <ecfd:campoString name="pNombreVendedor" />
+        <ecfd:campoString name="SI_ZZZ1">DOS MIL NOVECIENTOS CUARENTA Y SIETE PESOS 64/100 M.N.</ecfd:campoString>
+        <ecfd:campoString name="SI_ZZZ">DOS MIL NOVECIENTOS CUARENTA Y SIETE PESOS 64/100 M.N.</ecfd:campoString>
+        <ecfd:campoString name="tipopago1">tarjeta debito  - Manual ****5081 (MXN)</ecfd:campoString>
+        <ecfd:campoString name="tipopago2" />
+        <ecfd:campoString name="tipopago3" />
+        <ecfd:campoString name="tipopago4" />
+        <ecfd:campoString name="NombreHuesped">Ruiz Orozco, Ramon</ecfd:campoString>
+        <ecfd:campoString name="pasaporte" />
+        <ecfd:campoString name="MetodoPago">28 Tarjeta de debito</ecfd:campoString>
+        <ecfd:campoString name="NumCuenta" />
+        <ecfd:campoString name="RegimenFiscal">601</ecfd:campoString>
+        <ecfd:campoString name="LugarDeExpedicion">94299</ecfd:campoString>
+        <ecfd:campoNumero name="folioopera">130101</ecfd:campoNumero>
+        <ecfd:campoNumero name="VlrPagarMasPropinas">2947.64</ecfd:campoNumero>
+        <ecfd:campoNumero name="Propinas">0.00</ecfd:campoNumero>
+        <ecfd:campoNumero name="PaidOuts">0.00</ecfd:campoNumero>
+        <ecfd:campoNumero name="Otros">0.00</ecfd:campoNumero>
+        <ecfd:campoNumero name="pago1">2947.64</ecfd:campoNumero>
+        <ecfd:campoNumero name="pago2">0.00</ecfd:campoNumero>
+        <ecfd:campoNumero name="pago3">0.00</ecfd:campoNumero>
+        <ecfd:campoNumero name="pago4">0.00</ecfd:campoNumero>
+        <ecfd:campoNumero name="TASAISH">2</ecfd:campoNumero>
+        <ecfd:campoNumero name="TASAIVA">16</ecfd:campoNumero>
+        <ecfd:campoNumero name="IMPISH">49.96</ecfd:campoNumero>
+        <ecfd:campoNumero name="IMPIVA">399.68</ecfd:campoNumero>
+        <ecfd:CustDetalle>
+          <ecfd:CustDetNroLin>1</ecfd:CustDetNroLin>
+          <ecfd:CustDetNUE_01>1</ecfd:CustDetNUE_01>
+        </ecfd:CustDetalle>
+      </ecfd:Personalizados>
+    </ecfd:ECFD>
+  </cfdi:Addenda>
+</cfdi:Comprobante>
