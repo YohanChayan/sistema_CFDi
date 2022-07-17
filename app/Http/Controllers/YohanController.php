@@ -50,14 +50,13 @@ class YohanController extends Controller
         $file_pdf = $request->file('pdf_input');
         $file_xml = $request->file('xml_input');
 
-        
 
         $convertedPDF = Jesus::readPDF( $file_pdf );
         $convertedXML = Jesus::readXML( $file_xml );
         $filesCompared = Jesus::compareFiles($convertedPDF, $convertedXML);
 
             if($filesCompared){ // archivos iguales
-                
+
                 $uuid = Jesus::getUUIDXML($convertedXML);   //Obtiene el UUID del archivo xml
                 $provider_rfc = Jesus::getProviderRFCXML($convertedXML);   //Obtiene el RFC del emisor
                 $owner_rfc = Jesus::getOwnerRFCXML($convertedXML);   //Obtiene el RFC del emisor
@@ -71,7 +70,7 @@ class YohanController extends Controller
                 $name_xml_file = time() . '.xml';
                 $file_xml->move(public_path("archivos/xml"), $name_xml_file);
                 $xml_name = "archivos/xml/" . $name_xml_file;
-                
+
                 $db_owner = Owner::where('rfc', $owner_rfc)->first();
                 $search_provider = Provider::where('rfc', $provider_rfc)->first();   //Busca el RFC del emisor en la base de
 
@@ -98,13 +97,13 @@ class YohanController extends Controller
                     $other_name = "archivos/anexo/" . $name_other_file;
 
                     $new_invoice->other = $other_name;
-                    
+
                 }
-                
 
-                
 
-                
+
+
+
 
                 if($search_provider != null)  // provider encontrado
                     $new_invoice->provider_id = $search_provider->id;
@@ -123,7 +122,7 @@ class YohanController extends Controller
                 $new_invoice->xml = $xml_name;
 
                 $new_invoice->save();
-                
+
                 $archivos_email = new FilesReceived($xml_name, $name_xml_file, $pdf_name, $name_pdf_file, $other_name, $name_other_file);
                 Mail::to('is.juareze@hotmail.com')->send($archivos_email);
 

@@ -15,7 +15,7 @@
                     <th>No. Certificado</th>
                 </tr>
             </thead>
-        
+
             <tbody>
                 @foreach ($data["Comprobante"][0] as $comprobante)
                     <tr>
@@ -40,7 +40,7 @@
                     <th>Regimen Fiscal</th>
                 </tr>
             </thead>
-        
+
             <tbody>
                 @foreach ($data["Emisor"][0] as $emisor)
                     <tr>
@@ -64,13 +64,13 @@
                     <th>Regimen Fiscal</th>
                 </tr>
             </thead>
-        
+
             <tbody>
                 @foreach ($data["Receptor"][0] as $receptor)
                     <tr>
                         <td>{{ $receptor["Rfc"] }}</td>
                         <td>{{ $receptor["Nombre"] }}</td>
-                        <td>{{ $receptor["RegimenFiscalReceptor"] }}</td>
+                        <td>{{ $receptor["REGIMEN FISCAL RECEPTOR"] }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -89,7 +89,7 @@
                     <th>No. Certificado SAT</th>
                 </tr>
             </thead>
-        
+
             <tbody>
                 @foreach ($data["TimbreFiscalDigital"][0] as $timbreFiscal)
                     <tr>
