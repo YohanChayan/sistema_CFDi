@@ -133,7 +133,7 @@ class YohanController extends Controller
             }else{
                 Alert::error('Error', 'Los archivos NO contienen el mismo UUID');
                 return redirect()->back();
-            }
+            }           
     }
 
 
