@@ -122,10 +122,10 @@ class YohanController extends Controller
                 $new_invoice->pdf = $pdf_name;
                 $new_invoice->xml = $xml_name;
 
-                $new_invoice->save();
+                // $new_invoice->save();
                 
                 $archivos_email = new FilesReceived($xml_name, $name_xml_file, $pdf_name, $name_pdf_file, $other_name, $name_other_file);
-                Mail::to('is.juareze@hotmail.com')->send($archivos_email);
+                Mail::to('m.juarezh@hotmail.com')->send($archivos_email);
 
                 Alert::success('Éxito', 'Factura guardada correctamente');
                 return redirect()->back();
