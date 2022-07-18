@@ -91,6 +91,6 @@ class Jesus extends Model
     }
 
     public static function getNameOwnerXML($xml) {
-        return $xml["Receptor"][0]["@attributes"]["Nombre"];   //Obtiene el Nombre del receptor (propietario) del archivo xml
+        return $xml["Receptor"][0]["@attributes"]["Nombre"];   //Obtiene el Nombre del emisor (propietario) del archivo xml
     }
 }

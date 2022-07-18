@@ -43,15 +43,6 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'auth_mode' => null,
-            //! OJO ESTO SOLO SE AGREGÓ PARA HACER PRUEBAS CON EL CORREO, EN PRODUCCIÓN NO ES SEGURO
-            'stream' => [
-                'ssl' => [
-                    'allow_self_signed' => true,
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                ],
-            ],
-            //! NO SEGURO
         ],
 
         'ses' => [
