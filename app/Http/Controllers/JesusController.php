@@ -18,13 +18,14 @@ class JesusController extends Controller
 
     public function leerPDF() {
         $data = $this->GetDataFromPDF();
+        // dd($data);
         return view('jesus.leerPDF', ["data" => $data]);
     }
 
     private function GetDataFromPDF(){
         $parser = new Parser();   //Crea una instancia de la clase Parser
         // $pdf = $parser->parseFile(public_path('archivos/pdf/565_PPA180626CC4.pdf'));   //Obtiene el PDF y lo guarda en un objeto de la clase Parser
-        $pdf = $parser->parseFile(public_path('archivos/pdf/565_PPA180626CC4.pdf'));   //Obtiene el PDF y lo guarda en un objeto de la clase Parser
+        $pdf = $parser->parseFile(public_path('archivos/8074.pdf'));   //Obtiene el PDF y lo guarda en un objeto de la clase Parser
         $text = $pdf->getText();   //Convierte el PDF a texto
         // dd($text);
         $array = explode("\n", $text);   //Separa el PDF en un arreglo, utilizando como delimitador el salto de línea
@@ -212,7 +213,7 @@ class JesusController extends Controller
     }
 
     private function GetDataFromXML(){
-        $xmlObject = simplexml_load_file(public_path('archivos/xml/565_PPA180626CC4.xml'));   //Convertir el archivo XML en un objeto XML de PHP
+        $xmlObject = simplexml_load_file(public_path('archivos/8074.xml'));   //Convertir el archivo XML en un objeto XML de PHP
         $xmlNamespaces = $xmlObject->getNamespaces(true);   //Obtener los namespaces utilizados al inicio del documento XML
         $xmlObject->registerXPathNamespace('c', $xmlNamespaces['cfdi']);   //c hará referencia a todos los prefijos que empiecen con cfdi
         $xmlObject->registerXPathNamespace('t', $xmlNamespaces['tfd']);   //t hará referencia a todos los prefijos que empiecen con tdf
@@ -266,14 +267,14 @@ class JesusController extends Controller
                     if($search_uuid == null) {
                         $search_owner = Owner::where('rfc', $owner_rfc)->first();   //Busca el RFC del receptor (propietario) en la base de datos
                         $search_provider = Provider::where('rfc', $provider_rfc)->first();   //Busca el RFC del emisor (proveedor) en la base de datos
-                        
+
                         //Evaluar si el proveedor ya existe en la base de datos
                         if($search_provider != null) {
                             //Guardar los archivos en la carpeta public/archivos
                             $name_pdf_file = time() . '.' . $pdf_file_extension;
                             $pdf_file->move(public_path("archivos/pdf"), $name_pdf_file);
                             $pdf_name = "archivos/pdf/" . $name_pdf_file;
-                            
+
                             $name_xml_file = time() . '.' . $xml_file_extension;
                             $xml_file->move(public_path("archivos/xml"), $name_xml_file);
                             $xml_name = "archivos/pdf/" . $name_xml_file;
