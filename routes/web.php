@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\YohanController;
@@ -28,9 +29,17 @@ use App\Http\Controllers\InvoiceController;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::group(['middleware' => ['auth'] ], function(){
+// Route::group(['middleware' => ['auth'] ], function(){
 
-    Route::resource('invoices', InvoiceController::class);
+//     Route::resource('invoices', InvoiceController::class);
 
-});
+// });
 
+Route::get('/invoice/index', [InvoiceController::class, 'index'])->name('invoices.index');
+Route::get('invoice/create', [InvoiceController::class, 'create'])->name('invoices.create');
+Route::post('invoice/store', [InvoiceController::class, 'store'])->name('invoices.store');
+Route::get('invoice/show/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
+
+//* Rutas de administradores
+
+Route::get('administrador/', [AdminController::class, 'index'])->name('admin.index');

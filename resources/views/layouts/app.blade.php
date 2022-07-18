@@ -14,16 +14,22 @@
 </head>
 <body>
     <div id="app">
-        @if(!Auth::Check())
-            {{-- Bootstrap default Login --}}
+        {{-- Bootstrap default Login --}}
+        {{-- @include('layouts.navbar')
+        <main class="py-5">
+            @yield('content')
+        </main> --}}
+        {{-- @if(!Auth::Check())
+            Bootstrap default Login
             @include('layouts.navbar')
             <main class="py-5">
                 @yield('content')
             </main>
         @else
-            {{-- Template --}}
+            Template
             @include('layouts.main')
-        @endif
+        @endif --}}
+        @include('layouts.main')
     </div>
     @include('sweetalert::alert')
 </body>
