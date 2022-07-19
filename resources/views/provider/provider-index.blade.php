@@ -1,4 +1,4 @@
-<h1 class="text-center mt-2">Fruti Oro</h1>
+<h1 class="text-center mt-2">Frutioro</h1>
 <p class="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium facere itaque ea
     molestiae? Neque voluptatum eaque incidunt nobis eos blanditiis explicabo ad magnam provident suscipit.
     Accusantium magni expedita laboriosam odit.</p>

@@ -17,6 +17,7 @@ class CreateProvidersTable extends Migration
             $table->id();
             $table->string("rfc");
             $table->string("nombre");
+            $table->string('password');
             $table->timestamps();
         });
     }
