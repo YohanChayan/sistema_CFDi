@@ -100,11 +100,6 @@ class YohanController extends Controller
 
                 }
 
-
-
-
-
-
                 if($search_provider != null)  // provider encontrado
                     $new_invoice->provider_id = $search_provider->id;
                 else{
