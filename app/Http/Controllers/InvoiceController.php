@@ -274,22 +274,51 @@ class InvoiceController extends Controller
             'xml_input' => 'file|required|mimes:xml',
             'other' => 'file'
         ]);
-        // dd('passed');
-        $file_pdf = $request->file('pdf_input');
-        $file_xml = $request->file('xml_input');
+        
+        $file_pdf = $request->file('pdf_input');       // Obtiene el archivo pdf
+        $file_xml = $request->file('xml_input');       // Obtiene el archivo xml
+        $file_other = $request->file('other_input');   // Obtiene el archivo anexo
 
-        $convertedPDF = Invoice::readPDF( $file_pdf );
-        $convertedXML = Invoice::readXML( $file_xml );
-        $filesCompared = Invoice::compareFiles($convertedPDF, $convertedXML);
+        $convertedPDF = Invoice::readPDF($file_pdf);   // Lee el archivo pdf
+        $convertedXML = Invoice::readXML($file_xml);   // Lee el archivo xml
+        $filesCompared = Invoice::compareFiles($convertedPDF, $convertedXML);   // Compara los archivos pdf y xml, devolviendo un valor booleano
 
-            if($filesCompared){ // archivos iguales
+        if($filesCompared) {   // Archivos iguales
 
-                $uuid = Invoice::getUUIDXML($convertedXML);   //Obtiene el UUID del archivo xml
-                $provider_rfc = Invoice::getProviderRFCXML($convertedXML);   //Obtiene el RFC del emisor
-                $owner_rfc = Invoice::getOwnerRFCXML($convertedXML);   //Obtiene el RFC del emisor
+            /**************************************************/
+            /*         Obtener datos del archivo xml          */
+            /**************************************************/
+            
+            $uuid = Invoice::getUUIDXML($convertedXML);                  // Obtiene el UUID del archivo xml
+            $provider_rfc = Invoice::getProviderRFCXML($convertedXML);   // Obtiene el RFC del emisor
+            $owner_rfc = Invoice::getOwnerRFCXML($convertedXML);         // Obtiene el RFC del receptor
 
-                $new_invoice = new Invoice();
+            /**************************************************/
+            /*    Validar que exista el receptor en la BD     */
+            /**************************************************/
 
+            $search_owner = Owner::where('rfc', $owner_rfc)->first();
+
+            if($search_owner == null){
+                Alert::error('Error', 'El RFC del receptor no coincide con ninguna empresa');
+                return redirect()->back();
+            }
+
+            /**************************************************/
+            /*   Validar que no exista la factura en la BD    */
+            /**************************************************/
+
+            $invoice_uuid = Invoice::where('uuid', $uuid)->first();   // 
+
+            if ($invoice_uuid != null) {
+                Alert::error('Error', 'El UUID ya se encuentra registrado');
+                return redirect()->back();
+            }
+
+            $search_provider = Provider::where('rfc', $provider_rfc)->first();   // Busca el RFC del emisor en la base de datos
+
+            if($search_provider != null) {   // Proveedor encontrado
+                
                 $name_pdf_file = time() . '.pdf';
                 $file_pdf->move(public_path("archivos/pdf"), $name_pdf_file);
                 $pdf_name = "archivos/pdf/" . $name_pdf_file;
@@ -298,65 +327,41 @@ class InvoiceController extends Controller
                 $file_xml->move(public_path("archivos/xml"), $name_xml_file);
                 $xml_name = "archivos/xml/" . $name_xml_file;
 
-                $db_owner = Owner::where('rfc', $owner_rfc)->first();
-                $search_provider = Provider::where('rfc', $provider_rfc)->first();   //Busca el RFC del emisor en la base de
-
-                $invoice_uuid = Invoice::where('uuid', $uuid)->first();
-
-                if($db_owner == null){
-                    Alert::error('Error', 'El RFC del receptor no coincide con ninguna empresa');
-                    return redirect()->back();
-                }
-
-                if ($invoice_uuid != null) {
-                    Alert::error('Error', 'El UUID ya se encuentra registrado');
-                    return redirect()->back();
-                }
-
-                $other_name = '';
                 $name_other_file = '';
-                if ($request->file('other') != null) {
-                    $other_file = $request->file('other');
-                    $other_file_aux = $other_file->getClientOriginalName();
+                if ($file_other != null) {
+                    $other_file_aux = $file_other->getClientOriginalName();
 
                     $name_other_file = time() . '.' . pathinfo($other_file_aux, PATHINFO_EXTENSION);
-                    $other_file->move(public_path("archivos/anexo"), $name_other_file);
+                    $file_other->move(public_path("archivos/anexo"), $name_other_file);
                     $other_name = "archivos/anexo/" . $name_other_file;
-
-                    $new_invoice->other = $other_name;
-
                 }
 
-                if($search_provider != null)  // provider encontrado
-                    $new_invoice->provider_id = $search_provider->id;
-                else{
-                    $newProvider = new Provider();
-                    $newProvider->nombre = Invoice::getNameProviderXML($convertedXML);
-                    $newProvider->rfc = $provider_rfc;
-                    $newProvider->save();
-
-                    $new_invoice->provider_id = $newProvider->id;
-                }
-
-                $new_invoice->owner_id = $db_owner->id;
+                $new_invoice = new Invoice();
+                $new_invoice->provider_id = $search_provider->id;
+                $new_invoice->owner_id = $search_owner->id;
                 $new_invoice->uuid = $uuid;
                 $new_invoice->pdf = $pdf_name;
                 $new_invoice->xml = $xml_name;
-
+                $new_invoice->other = ($name_other_file == '') ? null : $other_name;
                 $new_invoice->save();
-
-                // $archivos_email = new FilesReceived($xml_name, $name_xml_file, $pdf_name, $name_pdf_file, $other_name, $name_other_file);
-                // Mail::to('is.juareze@hotmail.com')->send($archivos_email);
-
-                Alert::success('Éxito', 'Factura guardada correctamente');
-                return redirect()->back();
-
-            }else{
-                Alert::error('Error', 'Los archivos NO contienen el mismo UUID');
-                return redirect()->back();
+            }
+            else {   //Crear proveedor
+                $newProvider = new Provider();
+                $newProvider->nombre = Invoice::getNameProviderXML($convertedXML);
+                $newProvider->rfc = $provider_rfc;
+                $newProvider->save();
             }
 
+            // $archivos_email = new FilesReceived($xml_name, $name_xml_file, $pdf_name, $name_pdf_file, $other_name, $name_other_file);
+            // Mail::to('is.juareze@hotmail.com')->send($archivos_email);
 
+            Alert::success('Éxito', 'Factura guardada correctamente');
+            return redirect()->back();
+        }
+        else {
+            Alert::error('Error', 'Los archivos NO contienen el mismo UUID');
+            return redirect()->back();
+        }
     }
 
     /**

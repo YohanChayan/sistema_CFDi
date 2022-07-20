@@ -17,6 +17,7 @@ class ProviderSeeder extends Seeder
         Provider::factory()->create([
             'rfc' => 'HPA0406153A6',
             'nombre' => 'HORTALIZAS LA PALMITA',
+            'password' => '1234',
         ]);
     }
 }

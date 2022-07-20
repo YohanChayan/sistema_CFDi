@@ -1,3 +1,7 @@
+@extends('layouts.app')
+
+@section('content')
+
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-sm-6 col-xl-3">
@@ -193,13 +197,7 @@
     <div class="bg-light rounded-top p-4">
         <div class="row">
             <div class="col-12 col-sm-6 text-center text-sm-start">
-                &copy; <a href="#">Your Site Name</a>, All Right Reserved.
-            </div>
-            <div class="col-12 col-sm-6 text-center text-sm-end">
-                <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-            </br>
-            Distributed By <a class="border-bottom" href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                &copy; <a href="#">Frutioro</a> 2022. All Right Reserved.
             </div>
         </div>
     </div>
@@ -207,3 +205,98 @@
 <!-- Footer End -->
 
 </div>
+
+@section('my_scripts')
+<script>
+
+    const providers_vs_invoices = @json($providers_vs_invoices);
+    const arrayLabel_SingleBar = [];
+    const arrayData_SingleBar = [];
+
+    let i = 0;
+    for( p of providers_vs_invoices){
+        arrayLabel_SingleBar[i] = p['nombre_proveedor'];
+        arrayData_SingleBar[i] = p['facturas'];
+        i++;
+    }
+
+
+    // Single Bar Chart
+    var ctx4 = $("#bar-chart").get(0).getContext("2d");
+    var myChart4 = new Chart(ctx4, {
+        type: "bar",
+        data: {
+            labels: ["#1", "#2", "#3", "#4", "#5"],
+            // labels: arrayLabel_SingleBar,
+            datasets: [{
+                label: "Facturas",
+                backgroundColor: [
+                    "rgba(0, 156, 255, .7)",
+                    "rgba(0, 156, 255, .6)",
+                    "rgba(0, 156, 255, .5)",
+                    "rgba(0, 156, 255, .4)",
+                    "rgba(0, 156, 255, .3)"
+                ],
+                data: arrayData_SingleBar
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins:{
+                tooltip:{
+                    callbacks:{
+                        title: function(context){
+                            return ` ${arrayLabel_SingleBar[context[0].dataIndex]} `;
+                        }
+                    }
+                }
+            }
+        }
+
+    });
+
+
+    const arrayMonthsLabel = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'];
+
+    const invoices_vs_months = @json($invoices_vs_months);
+
+    // Single Line Chart
+    var ctx3 = $("#line-chart").get(0).getContext("2d");
+    var myChart3 = new Chart(ctx3, {
+        type: "line",
+        data: {
+            // labels: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
+            labels: arrayMonthsLabel,
+            datasets: [{
+                label: "Facturas",
+                fill: false,
+                backgroundColor: "rgba(0, 156, 255, .3)",
+                // data: [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 11]
+                data: invoices_vs_months
+            }]
+        },
+        options: {
+            responsive: true
+        },
+        scales:{
+            y:{
+                beginAtZero: true
+            }
+        }
+    });
+</script>
+@endsection
+
+@endsection

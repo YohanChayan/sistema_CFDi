@@ -3,7 +3,8 @@
         <a href="{{ route('login') }}" class="navbar-brand mx-4 mb-3">
             <h3 class="text-primary">
                 <img src="{{ asset('favicon/papaya.png') }}" alt="" class="w-25">
-                Sistema CDFI</h3>
+                Sistema CFDI
+            </h3>
         </a>
         @if (Auth::Check())
             <div class="d-flex align-items-center ms-4 mb-4">
