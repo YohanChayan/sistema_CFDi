@@ -39,6 +39,7 @@ Route::get('/invoice/index', [InvoiceController::class, 'index'])->name('invoice
 Route::get('invoice/create', [InvoiceController::class, 'create'])->name('invoices.create');
 Route::post('invoice/store', [InvoiceController::class, 'store'])->name('invoices.store');
 Route::get('invoice/show/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
+Route::get('invoice/validateProvider', [InvoiceController::class, 'validateProvider'])->name('invoices.validateProvider');
 
 //* Rutas de administradores
 

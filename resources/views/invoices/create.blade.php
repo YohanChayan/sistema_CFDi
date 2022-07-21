@@ -50,7 +50,7 @@
 
                         <div class="row g-3 justify-content-center">
                             <div class="mb-3 col-md-8">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Subir</button>
+                                <button type="button" class="btn btn-primary" onclick="registerCreateInvoiceData();">Subir</button>
                             </div>
                         </div>
                     </form>
@@ -60,7 +60,6 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="registerModalLabel">Registro</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-floating mb-3">

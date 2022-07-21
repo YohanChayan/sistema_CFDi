@@ -17,11 +17,6 @@ use App\Mail\FilesReceived;
 
 class InvoiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $invoices = DB::table('invoices as i')
@@ -251,29 +246,18 @@ class InvoiceController extends Controller
         return $data;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('invoices.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $validateData = $this->validate($request,[
+        /*$validateData = $this->validate($request,[
             'pdf_input' => 'file|required|mimes:pdf',
             'xml_input' => 'file|required|mimes:xml',
             'other' => 'file'
-        ]);
+        ]);*/
         
         $file_pdf = $request->file('pdf_input');       // Obtiene el archivo pdf
         $file_xml = $request->file('xml_input');       // Obtiene el archivo xml
@@ -364,48 +348,32 @@ class InvoiceController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
     public function show(Invoice $invoice)
     {
         return view('invoices.show')->with('invoice', $invoice);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Invoice $invoice)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Invoice $invoice)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Invoice $invoice)
     {
         //
+    }
+
+    public function validateProvider(Request $request) {
+        $rfc = $request->get('rfc');
+        $search_provider = Provider::where('rfc', $rfc)->first();   // Busca el RFC del emisor en la base de datos
+        if($search_provider == null)
+            return 0;
+        else
+            return 1;
     }
 }
