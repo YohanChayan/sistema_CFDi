@@ -1,10 +1,12 @@
 var rfc = '';
+var nombre = '';
 
 $("#xml_input").change(function() {
     let file = document.getElementById("xml_input").files[0];
     let reader = new FileReader();
-    let exp = /<cfdi:emisor(.*)>/;
-    let exp2 = /rfc="(.*?)"/;
+    let exp_emisor = /<cfdi:emisor(.*)>/;
+    let exp_rfc = /rfc="(.*?)"/;
+    let exp_nombre = /nombre="(.*?)"/;
     
     reader.readAsText(file);
     reader.onloadend = function() {
@@ -17,14 +19,49 @@ $("#xml_input").change(function() {
             }
         }
 
-        let result = data.match(exp);
-        let result2 = result[0].match(exp2);
-        rfc = result2[1];
+        let result = data.match(exp_emisor);
+        let result_rfc = result[0].match(exp_rfc);
+        let result_nombre = result[0].match(exp_nombre);
+        rfc = result_rfc[1];
+        nombre = result_nombre[1];
+
         console.log(rfc);
+        console.log(nombre);
     };
 });
 
-function cancelCreateInvoiceData() {
+//Registrar factura
+function registerCreateInvoiceData() {
+    //Obtener los nombres de los archivos
+    let pdf_file = $('#pdf_input').val();
+    let xml_file = $('#xml_input').val();
+
+    //Obtener la extensión de los archivos
+    let pdf_extension = pdf_file.substring(pdf_file.lastIndexOf('.')).toLowerCase();
+    let xml_extension = xml_file.substring(xml_file.lastIndexOf('.')).toLowerCase();
+
+    if(pdf_extension == '.pdf' && xml_extension == '.xml') {
+        $.ajax({
+            url: '/invoice/validateProvider',
+            data: {rfc: rfc},
+            success: function(data) {
+                if(data == 1) {   //Enviar formulario
+                    $('#formulario').submit();
+                }
+                else {   //Abrir modal para crear un nuevo proveedor
+                    let myModal = new bootstrap.Modal(document.getElementById('registerModal'));
+                    myModal.show();
+                }
+            }
+        });
+    }
+    else {
+        Swal.fire('Advertencia', 'Es necesario que cargues los formatos señalados en el formulario.', 'warning');
+    }
+}
+
+//Cancelar datos capturados cuando se abre el modal
+function cancelDataNewProvider() {
     Swal.fire({
         title: '¿Estás seguro?',
         text: 'Se borrarán los datos capturados en esta ventana.',
@@ -55,31 +92,64 @@ function cancelCreateInvoiceData() {
     });
 }
 
-function registerCreateInvoiceData() {
-    //Obtener los nombres de los archivos
-    let pdf_file = $('#pdf_input').val();
-    let xml_file = $('#xml_input').val();
+//Registrar nuevo proveedor
+function registerDataNewProvider() {
+    let password = $('#password').val();
 
-    //Obtener la extensión de los archivos
-    let pdf_extension = pdf_file.substring(pdf_file.lastIndexOf('.')).toLowerCase();
-    let xml_extension = xml_file.substring(xml_file.lastIndexOf('.')).toLowerCase();
-
-    if(pdf_extension == '.pdf' && xml_extension == '.xml') {
+    if(validateDataNewProvider() == 0) {
         $.ajax({
-            url: '/invoice/validateProvider',
-            data: {rfc: rfc},
+            url: '/invoice/createNewProvider',
+            data: {
+                rfc: rfc,
+                nombre: nombre,
+                password: password,
+            },
             success: function(data) {
-                if(data == 1) {
-                    $('#formulario').submit();
-                }
-                else {
-                    let myModal = new bootstrap.Modal(document.getElementById('registerModal'));
-                    myModal.show();
-                }
+                $('#formulario').submit();
             }
         });
     }
-    else {
-        Swal.fire('Advertencia', 'Es necesario que cargues los formatos señalados en el formulario.', 'warning');
+}
+
+//Validar las contraseñas del modal
+function validateDataNewProvider() {
+    let errors = 0;
+
+    if($('input[name=password]').val() == '') {
+        $('#password').addClass('is-invalid');
+        $('#error-password').text('Ingresa una contraseña');
+        errors++;
     }
+    else {
+        $('#password').removeClass('is-invalid');
+        $('#error-password').text('');
+    }
+
+    if($('input[name=confirm_password]').val() == '') {
+        $('#confirm_password').addClass('is-invalid');
+        $('#error-confirm-password').text('Ingresa una contraseña');
+        errors++;
+    }
+    else {
+        $('#confirm_password').removeClass('is-invalid');
+        $('#error-confirm-password').text('');
+    }
+
+    if(errors == 0) {
+        if($('input[name=password]').val() != $('input[name=confirm_password]').val()) {
+            $('#password').addClass('is-invalid');
+            $('#error-password').text('Las contraseñas no coinciden');
+            $('#confirm_password').addClass('is-invalid');
+            $('#error-confirm-password').text('Las contraseñas no coinciden');
+            errors++;
+        }
+        else {
+            $('#password').removeClass('is-invalid');
+            $('#error-password').text('');
+            $('#confirm_password').removeClass('is-invalid');
+            $('#error-confirm-password').text('');
+        }
+    }
+
+    return errors;
 }

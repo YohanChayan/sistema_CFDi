@@ -369,11 +369,25 @@ class InvoiceController extends Controller
     }
 
     public function validateProvider(Request $request) {
-        $rfc = $request->get('rfc');
+        $rfc = $request->get('rfc');   //Obtiene el rfc que se le pasa por el método get desde ajax
         $search_provider = Provider::where('rfc', $rfc)->first();   // Busca el RFC del emisor en la base de datos
         if($search_provider == null)
             return 0;
         else
             return 1;
+    }
+
+    public function createNewProvider(Request $request) {
+        //Datos obtenidos de ajax
+        $data = $request->all();
+        
+        //Creación de un nuevo proveedor
+        $proveedor = new Provider();
+        $proveedor -> rfc = $data['rfc'];
+        $proveedor -> nombre = $data['nombre'];
+        $proveedor -> password = $data['password'];
+        $proveedor -> save();
+
+        return 1;
     }
 }

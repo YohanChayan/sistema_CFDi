@@ -65,16 +65,17 @@
                                     <div class="form-floating mb-3">
                                         <input class="form-control" type="password" name="password" id="password" placeholder="Contraseña">
                                         <label for="password">Contraseña</label>
+                                        <div class="text-danger" id="error-password"></div>
                                     </div>
-                                    <br>
                                     <div class="form-floating mb-3">
                                         <input class="form-control" type="password" name="confirm_password" id="confirm_password" placeholder="Confirmar Contraseña">
                                         <label for="confirm_password">Confirmar Contraseña</label>
+                                        <div class="text-danger" id="error-confirm-password"></div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" onclick="cancelCreateInvoiceData();">Cancelar</button>
-                                    <button type="button" class="btn btn-primary">Registrar</button>
+                                    <button type="button" class="btn btn-danger" onclick="cancelDataNewProvider();">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" onclick="registerDataNewProvider();">Registrar</button>
                                 </div>
                             </div>
                         </div>
