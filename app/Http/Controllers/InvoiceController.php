@@ -300,6 +300,15 @@ class InvoiceController extends Controller
             }
 
             $search_provider = Provider::where('rfc', $provider_rfc)->first();   // Busca el RFC del emisor en la base de datos
+            $xml_name = '';
+            $name_xml_file = '';
+            $pdf_name = '';
+            $name_pdf_file = '';
+            $other_name = '';
+            $name_other_file = '';
+            $name_provider = '';
+            $other_file_aux = '';
+            $name_provider = Invoice::getNameProviderXML($convertedXML);
 
             if($search_provider != null) {   // Proveedor encontrado
                 
@@ -327,16 +336,19 @@ class InvoiceController extends Controller
                 $new_invoice->pdf = $pdf_name;
                 $new_invoice->xml = $xml_name;
                 $new_invoice->other = ($name_other_file == '') ? null : $other_name;
+                
                 $new_invoice->save();
+                
+                
             }
             else {   //Crear proveedor
                 $newProvider = new Provider();
-                $newProvider->nombre = Invoice::getNameProviderXML($convertedXML);
+                $newProvider->nombre = $name_provider;
                 $newProvider->rfc = $provider_rfc;
                 $newProvider->save();
             }
-
-            // $archivos_email = new FilesReceived($xml_name, $name_xml_file, $pdf_name, $name_pdf_file, $other_name, $name_other_file);
+            
+            // $archivos_email = new FilesReceived($xml_name, $name_xml_file, $pdf_name, $name_pdf_file, $other_name, $name_other_file, $name_provider, $other_file_aux);
             // Mail::to('is.juareze@hotmail.com')->send($archivos_email);
 
             Alert::success('Éxito', 'Factura guardada correctamente');
