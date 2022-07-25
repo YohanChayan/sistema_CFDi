@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Smalot\PdfParser\Parser;
@@ -46,9 +47,18 @@ class Invoice extends Model
 
     public static function readPDF($file) {
         $parser = new Parser();   //Crea una instancia de la clase Parser
-        $pdf = $parser->parseFile($file);   //Obtiene el PDF y lo guarda en un objeto de la clase Parser
-        $text = $pdf->getText();   //Convierte el PDF a texto
-        $data = explode("\n", $text);   //Separa el PDF en un arreglo, utilizando como delimitador el salto de línea
+        
+        //Se utiliza un try-catch para evaluar el posible caso de que no pueda leer el pdf por alguna razón
+        try {
+            $pdf = $parser->parseFile($file);   //Obtiene el PDF y lo guarda en un objeto de la clase Parser
+            $text = $pdf->getText();   //Convierte el PDF a texto
+            if($text != "")
+                $data = explode("\n", $text);   //Separa el PDF en un arreglo, utilizando como delimitador el salto de línea
+            else
+                $data = -1;
+        } catch (Exception $e) {
+            $data = -1;
+        }
 
         return $data;   //Retorna los datos como un arreglo
     }

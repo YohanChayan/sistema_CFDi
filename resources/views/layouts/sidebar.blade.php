@@ -25,8 +25,7 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Facturas</a>
                     <div class="dropdown-menu bg-transparent border-0">
                         <a href="{{route('invoices.create')}}" class="dropdown-item">Crear nueva factura</a>
-                        
-                        {{-- <a href="#" class="dropdown-item">Other Elements</a> --}}
+                        <a href="{{route('invoices.readPdf')}}" class="dropdown-item">Test PDF</a>
                     </div>
                 </div>
             @else

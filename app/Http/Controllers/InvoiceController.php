@@ -26,7 +26,7 @@ class InvoiceController extends Controller
         ->get();
 
         // dd($invoices);
-        return view('invoices.index')->with('invoices', $invoices);
+        return view('app.invoices.index')->with('invoices', $invoices);
     }
 
     public function leerPDF($id) {
@@ -248,7 +248,7 @@ class InvoiceController extends Controller
 
     public function create()
     {
-        return view('invoices.create');
+        return view('app.invoices.create');
     }
 
     public function store(Request $request)
@@ -265,7 +265,10 @@ class InvoiceController extends Controller
 
         $convertedPDF = Invoice::readPDF($file_pdf);   // Lee el archivo pdf
         $convertedXML = Invoice::readXML($file_xml);   // Lee el archivo xml
-        $filesCompared = Invoice::compareFiles($convertedPDF, $convertedXML);   // Compara los archivos pdf y xml, devolviendo un valor booleano
+        if($convertedPDF != -1)                        //En caso de que el pdf no se pueda leer
+            $filesCompared = Invoice::compareFiles($convertedPDF, $convertedXML);   // Compara los archivos pdf y xml, devolviendo un valor booleano
+        else
+            $filesCompared = true;   //La comparación la forzamos a que sea verdadera
 
         if($filesCompared) {   // Archivos iguales
 
@@ -348,8 +351,8 @@ class InvoiceController extends Controller
                 $newProvider->save();
             }
             
-            // $archivos_email = new FilesReceived($xml_name, $name_xml_file, $pdf_name, $name_pdf_file, $other_name, $name_other_file, $name_provider, $other_file_aux);
-            // Mail::to('is.juareze@hotmail.com')->send($archivos_email);
+            //$archivos_email = new FilesReceived($xml_name, $name_xml_file, $pdf_name, $name_pdf_file, $other_name, $name_other_file, $name_provider, $other_file_aux);
+            //Mail::to('m.juarezh@hotmail.com')->send($archivos_email);
 
             Alert::success('Éxito', 'Factura guardada correctamente');
             return redirect()->back();
@@ -362,7 +365,7 @@ class InvoiceController extends Controller
 
     public function show(Invoice $invoice)
     {
-        return view('invoices.show')->with('invoice', $invoice);
+        return view('app.invoices.show')->with('invoice', $invoice);
     }
 
     public function edit(Invoice $invoice)
@@ -401,5 +404,16 @@ class InvoiceController extends Controller
         $proveedor -> save();
 
         return 1;
+    }
+
+    public function readPdf() {
+        return view("app.invoices.readPdf");
+    }
+
+    public function readPdfTest(Request $request) {
+        $pdf = $request->file('pdf_input');
+
+        $pdf_procesado = Invoice::readPDF($pdf);
+        dd($pdf_procesado);
     }
 }
