@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\YohanController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\ProviderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +46,12 @@ Route::get('invoice/validateProvider', [InvoiceController::class, 'validateProvi
 Route::get('invoice/createNewProvider', [InvoiceController::class, 'createNewProvider'])->name('invoices.createNewProvider');
 Route::get('/invoice/test', [InvoiceController::class, 'readPDF'])->name('invoices.readPdf');
 Route::post('invoice/test/store', [InvoiceController::class, 'readPdfTest'])->name('invoices.readPdfTest');
+
+//* Rutas de providers
+Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');
+
+//* Rutas de owners
+Route::get('/owners/index', [OwnerController::class, 'index'])->name('owners.index');
 
 //* Rutas de administradores
 

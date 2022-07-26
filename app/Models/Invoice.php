@@ -19,11 +19,11 @@ class Invoice extends Model
     ];
 
     public function owner() {
-        return $this->belongsTo(Owner::class);
+        return $this->belongsTo(Owner::class, 'owner_id');
     }
 
     public function provider() {
-        return $this->hasOne(Provider::class);
+        return $this->belongsTo(Provider::class, 'provider_id');
     }
 
     public static function readXML($file) {

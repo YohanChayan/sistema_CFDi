@@ -9,7 +9,7 @@
                 <i class="fa fa-chart-line fa-3x text-primary"></i>
                 <div class="ms-3">
                     <p class="mb-2">Total proveedores registrados</p>
-                    <h6 class="mb-0">{{$providers_count}}</h6>
+                    <h6 class="mb-0">{{ $providers_count }}</h6>
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
                 <i class="fa fa-chart-bar fa-3x text-primary"></i>
                 <div class="ms-3">
                     <p class="mb-2">Total de facturas generadas</p>
-                    <h6 class="mb-0">{{$invoices_count}}</h6>
+                    <h6 class="mb-0">{{ $invoices_count }}</h6>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <i class="fa fa-chart-area fa-3x text-primary"></i>
                 <div class="ms-3">
                     <p class="mb-2">Total de facturas generadas hoy</p>
-                    <h6 class="mb-0">{{$invoices_today}}</h6>
+                    <h6 class="mb-0">{{ $invoices_today }}</h6>
                 </div>
             </div>
         </div>
@@ -36,16 +36,14 @@
                 <i class="fa fa-chart-pie fa-3x text-primary"></i>
                 <div class="ms-3">
                     <p class="mb-2">Total de usuarios registrados</p>
-                    <h6 class="mb-0">{{$users_count}}</h6>
+                    <h6 class="mb-0">{{ $users_count }}</h6>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Sale & Revenue End -->
 
 
-<!-- Sales Chart Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-sm-12 col-xl-6">
@@ -68,57 +66,26 @@
         </div>
     </div>
 </div>
-<!-- Sales Chart End -->
 
-<!-- Widgets Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-sm-12 col-md-6 col-xl-4">
             <div class="h-100 bg-light rounded p-4">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h6 class="mb-0">Messages</h6>
-                    <a href="">Show All</a>
+                <div class="d-flex align-items-center justify-content-left mb-2">
+                    <h6 class="mb-0">Facturas Recientes</h6>
                 </div>
-                <div class="d-flex align-items-center border-bottom py-3">
-                    <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-0">Jhon Doe</h6>
-                            <small>15 minutes ago</small>
+                @foreach($invoices as $invoice)
+                    <div class="d-flex align-items-center border-bottom py-3">
+                        <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
+                        <div class="w-100 ms-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-0">{{ $invoice->provider->nombre }}</h6>
+                                <small>{{ $invoice->created_at->diffForHumans() }}</small>
+                            </div>
+                            <span>Ha subido {{ $invoice->other != '' ? '3' : '2' }} archivos</span>
                         </div>
-                        <span>Short message goes here...</span>
                     </div>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-3">
-                    <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-0">Jhon Doe</h6>
-                            <small>15 minutes ago</small>
-                        </div>
-                        <span>Short message goes here...</span>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-3">
-                    <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-0">Jhon Doe</h6>
-                            <small>15 minutes ago</small>
-                        </div>
-                        <span>Short message goes here...</span>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center pt-3">
-                    <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-0">Jhon Doe</h6>
-                            <small>15 minutes ago</small>
-                        </div>
-                        <span>Short message goes here...</span>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
         <div class="col-sm-12 col-md-6 col-xl-4">
