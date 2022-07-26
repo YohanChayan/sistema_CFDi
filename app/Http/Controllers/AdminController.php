@@ -25,9 +25,11 @@ class AdminController extends Controller
 
     public function index()
     {
+        $invoices = Invoice::with('owner', 'provider')->get();
+
         // counts
         $providers_count = Provider::count();
-        $invoices_count = Invoice::count();
+        $invoices_count = count($invoices);
         $invoices_today = Invoice::whereDate('created_at', Carbon::today() )->count();
         $users_count = User::count();
 
@@ -68,6 +70,7 @@ class AdminController extends Controller
         ksort($arr); //ordena los index tal que enero=0, feb=1, etc.
 
         return view('app.admin.admin-index')
+        ->with('invoices', $invoices)
         ->with('providers_count', $providers_count)
         ->with('invoices_count', $invoices_count)
         ->with('invoices_today', $invoices_today)

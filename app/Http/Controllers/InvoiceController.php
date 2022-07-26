@@ -19,13 +19,7 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = DB::table('invoices as i')
-        ->join('providers as p', 'p.id', '=', 'i.provider_id')
-        ->join('owners as o', 'o.id', '=', 'i.owner_id')
-        ->select('i.id as id','p.nombre as nombre_proveedor', 'p.rfc AS RFC_proveedor', 'o.nombre AS nombre_empresa', 'o.rfc AS RFC_empresa' , 'i.created_at as fecha_creacion')
-        ->get();
-
-        // dd($invoices);
+        $invoices = Invoice::with('owner', 'provider')->get();
         return view('app.invoices.index')->with('invoices', $invoices);
     }
 
