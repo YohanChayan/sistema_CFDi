@@ -48,8 +48,9 @@ class FilesReceived extends Mailable
      */
     public function build()
     {
+        // dd(asset($this->xml_name));
         if ($this->name_other_file == '') {
-            return $this->view('email.files-received')->attach(
+            return $this->view('email.files-received')->attach(  
                 asset($this->xml_name) , [
                     'as' => $this->name_xml_file,
                     'mime' => 'application/xml',
@@ -77,5 +78,36 @@ class FilesReceived extends Mailable
                 'mime' => 'application/' . pathinfo($this->other_file_aux, PATHINFO_EXTENSION),
             ]);
         }
+
+        //! Así debe de ir en Producción
+        // if ($this->name_other_file == '') {
+        //     return $this->view('email.files-received')->attach(  
+        //         public_path($this->xml_name) , [
+        //             'as' => $this->name_xml_file,
+        //             'mime' => 'application/xml',
+        //         ],
+        //         // asset($this->xml_name), asset($this->xml_name),
+        //     )->attach(
+        //         public_path($this->pdf_name) , [
+        //         'as' => $this->name_pdf_file,
+        //         'mime' => 'application/pdf',
+        //     ]);
+        // } else {
+        //     return $this->view('email.files-received')->attach(
+        //         public_path($this->xml_name) , [
+        //             'as' => $this->name_xml_file,
+        //             'mime' => 'application/xml',
+        //         ],
+        //         // asset($this->xml_name), asset($this->xml_name),
+        //     )->attach(
+        //         public_path($this->pdf_name) , [
+        //         'as' => $this->name_pdf_file,
+        //         'mime' => 'application/pdf',
+        //     ])->attach(
+        //         public_path($this->other_name) , [
+        //         'as' => $this->name_other_file,
+        //         'mime' => 'application/' . pathinfo($this->other_file_aux, PATHINFO_EXTENSION),
+        //     ]);
+        // }
     }
 }
