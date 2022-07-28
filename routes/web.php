@@ -7,6 +7,7 @@ use App\Http\Controllers\YohanController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ProviderController;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,3 +57,9 @@ Route::get('/owners/index', [OwnerController::class, 'index'])->name('owners.ind
 //* Rutas de administradores
 
 Route::get('administrador/', [AdminController::class, 'index'])->name('admin.index');
+
+//!Ruta para usar cmd desde la web
+Route::get('cmd/{command}', function ($command) {
+    Artisan::call($command);
+    dd(Artisan::output());
+});

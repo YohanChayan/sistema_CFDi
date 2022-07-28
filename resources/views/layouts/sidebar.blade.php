@@ -3,7 +3,7 @@
         <a href="@if(!Auth::Check()) {{ route('home') }} @elseif(Auth::id() == 1) {{ route('admin.index') }} @else {{ route('home') }} @endif" class="navbar-brand mx-4 mb-3">
             <h3 class="text-primary">
                 <img src="{{ asset('favicon/papaya.png') }}" alt="" class="w-25">
-                Sistema CFDI
+                Frutioro
             </h3>
         </a>
         @if (Auth::Check())
@@ -24,8 +24,8 @@
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Facturas</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="{{ route('invoices.create') }}" class="dropdown-item">Crear nueva factura</a>
-                        <a href="{{ route('invoices.readPdf') }}" class="dropdown-item">Test PDF</a>
+                        <a href="{{ route('invoices.create') }}" class="dropdown-item">Subir nueva factura</a>
+                        {{-- <a href="{{ route('invoices.readPdf') }}" class="dropdown-item">Test PDF</a> --}}
                     </div>
                 </div>
             @else
