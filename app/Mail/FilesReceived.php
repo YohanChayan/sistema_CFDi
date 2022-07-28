@@ -83,29 +83,29 @@ class FilesReceived extends Mailable
         // if ($this->name_other_file == '') {
         //     return $this->view('email.files-received')->attach(  
         //         public_path($this->xml_name) , [
-        //             'as' => $this->name_xml_file,
+        //             'as' => $this->xml_original_name,
         //             'mime' => 'application/xml',
         //         ],
         //         // asset($this->xml_name), asset($this->xml_name),
         //     )->attach(
         //         public_path($this->pdf_name) , [
-        //         'as' => $this->name_pdf_file,
+        //         'as' => $this->pdf_original_name,
         //         'mime' => 'application/pdf',
         //     ]);
         // } else {
         //     return $this->view('email.files-received')->attach(
         //         public_path($this->xml_name) , [
-        //             'as' => $this->name_xml_file,
+        //             'as' => $this->xml_original_name,
         //             'mime' => 'application/xml',
         //         ],
         //         // asset($this->xml_name), asset($this->xml_name),
         //     )->attach(
         //         public_path($this->pdf_name) , [
-        //         'as' => $this->name_pdf_file,
+        //         'as' => $this->pdf_original_name,
         //         'mime' => 'application/pdf',
         //     ])->attach(
         //         public_path($this->other_name) , [
-        //         'as' => $this->name_other_file,
+        //         'as' => $this->other_file_aux,
         //         'mime' => 'application/' . pathinfo($this->other_file_aux, PATHINFO_EXTENSION),
         //     ]);
         // }
