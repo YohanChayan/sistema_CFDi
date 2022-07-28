@@ -36,8 +36,8 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{{$inv->owner->nombre}}</td>
-                      <td>{{$inv->owner->rfc}}</td>
+                      <td>{{ $inv->owner->nombre }}</td>
+                      <td>{{ $inv->owner->rfc }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -53,21 +53,83 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{{$inv->provider->nombre}}</td>
-                      <td>{{$inv->provider->rfc}}</td>
+                      <td>{{ $inv->provider->nombre }}</td>
+                      <td>{{ $inv->provider->rfc }}</td>
                     </tr>
                   </tbody>
                 </table>
               </td>
 
               <td class="text-center">
-                  {{-- <a href="{{ route('invoices.show', $inv->id) }}" class="btn btn-sm btn-primary">Detalles</a> --}}
+                  <a href="#" data-bs-toggle="modal" data-bs-target="#paymentsModal" class="btn btn-sm btn-primary">Pagos</a>
                   <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-sm btn-primary">Detalles</a>
               </td>
             </tr>
           @endforeach
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <div class="modal  fade" id="paymentsModal" tabindex="-1" aria-labelledby="paymentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="paymentsModalLabel">Pagos</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <label for="date">Fecha</label>
+              <input class="form-control" type="date" name="date" id="date">
+            </div>
+            <div class="col-lg-6">
+              <label for="payment">Monto</label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input class="form-control" type="number" name="payment" id="payment" min="0">
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-lg-12">
+              <a class="text-primary" data-bs-toggle="collapse" data-bs-target="#paymentsHistory" aria-expanded="false" aria-controls="paymentsHistory" style="cursor: pointer">
+                Historial de pagos
+              </a>
+              <div class="collapse" id="paymentsHistory">
+                <div class="table-responsive mt-3">
+                  <table class="table text-start align-middle table-bordered mb-0">
+                    <thead>
+                      <tr>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Monto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="text-center">01/01/2000</td>
+                        <td class="text-center">$500.00</td>
+                      </tr>
+                      
+                      <tr>
+                        <td class="text-center border border-3"><b>Saldo pendiente</b></td>
+                        <td class="text-center border border-3">$100.00</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary">Agregar</button>
+        </div>
+      </div>
     </div>
   </div>
 

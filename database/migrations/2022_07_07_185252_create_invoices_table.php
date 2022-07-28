@@ -18,6 +18,9 @@ class CreateInvoicesTable extends Migration
             $table->foreignId("provider_id")->constrained("providers", "id");
             $table->foreignId("owner_id")->constrained("owners", "id");
             $table->string("uuid");
+            $table->integer("total")->unsigned()->nullable();
+            $table->string("status", 40)->default("Pendiente")->comment("Pendiente, Pagado");
+
             $table->string("pdf")->comment("Url del archivo pdf");
             $table->string("xml")->comment("Url del archivo xml");
             $table->string("other")->nullable()->comment("Url de un posible tercer archivo");
