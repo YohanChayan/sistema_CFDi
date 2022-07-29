@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\Invoice;
 use App\Models\Owner;
 use App\Models\Provider;
+use App\Models\PaymentHistory;
 use Illuminate\Support\Facades\DB;
 
 use Smalot\PdfParser\Parser;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FilesReceived;
-
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
@@ -247,12 +248,6 @@ class InvoiceController extends Controller
 
     public function store(Request $request)
     {
-        /*$validateData = $this->validate($request,[
-            'pdf_input' => 'file|required|mimes:pdf',
-            'xml_input' => 'file|required|mimes:xml',
-            'other' => 'file'
-        ]);*/
-        
         $file_pdf = $request->file('pdf_input');       // Obtiene el archivo pdf
         $file_xml = $request->file('xml_input');       // Obtiene el archivo xml
         $file_other = $request->file('other_input');   // Obtiene el archivo anexo
@@ -273,6 +268,7 @@ class InvoiceController extends Controller
             $uuid = Invoice::getUUIDXML($convertedXML);                  // Obtiene el UUID del archivo xml
             $provider_rfc = Invoice::getProviderRFCXML($convertedXML);   // Obtiene el RFC del emisor
             $owner_rfc = Invoice::getOwnerRFCXML($convertedXML);         // Obtiene el RFC del receptor
+            $total = Invoice::getTotalXML($convertedXML);                // Obtiene el Total de la factura
 
             /**************************************************/
             /*    Validar que exista el receptor en la BD     */
@@ -289,12 +285,16 @@ class InvoiceController extends Controller
             /*   Validar que no exista la factura en la BD    */
             /**************************************************/
 
-            $invoice_uuid = Invoice::where('uuid', $uuid)->first();   // 
+            $invoice_uuid = Invoice::where('uuid', $uuid)->first();
 
             if ($invoice_uuid != null) {
                 Alert::error('Error', 'El UUID ya se encuentra registrado');
                 return redirect()->back();
             }
+
+            /**************************************************/
+            /*             Registro de la factura             */
+            /**************************************************/
 
             $search_provider = Provider::where('rfc', $provider_rfc)->first();   // Busca el RFC del emisor en la base de datos
             $xml_name = '';
@@ -307,44 +307,36 @@ class InvoiceController extends Controller
             $other_file_aux = '';
             $name_provider = Invoice::getNameProviderXML($convertedXML);
 
-            if($search_provider != null) {   // Proveedor encontrado
-                
-                $name_pdf_file = time() . '.pdf';
-                $file_pdf->move(public_path("archivos/pdf"), $name_pdf_file);
-                $pdf_name = "archivos/pdf/" . $name_pdf_file;
+            // Mover archivos a la carpeta pública
+            $name_pdf_file = time() . '.pdf';
+            $file_pdf->move(public_path("archivos/pdf"), $name_pdf_file);
+            $pdf_name = "archivos/pdf/" . $name_pdf_file;
 
-                $name_xml_file = time() . '.xml';
-                $file_xml->move(public_path("archivos/xml"), $name_xml_file);
-                $xml_name = "archivos/xml/" . $name_xml_file;
+            $name_xml_file = time() . '.xml';
+            $file_xml->move(public_path("archivos/xml"), $name_xml_file);
+            $xml_name = "archivos/xml/" . $name_xml_file;
 
-                $name_other_file = '';
-                if ($file_other != null) {
-                    $other_file_aux = $file_other->getClientOriginalName();
+            $name_other_file = '';
+            if ($file_other != null) {
+                $other_file_aux = $file_other->getClientOriginalName();
 
-                    $name_other_file = time() . '.' . pathinfo($other_file_aux, PATHINFO_EXTENSION);
-                    $file_other->move(public_path("archivos/anexo"), $name_other_file);
-                    $other_name = "archivos/anexo/" . $name_other_file;
-                }
-
-                $new_invoice = new Invoice();
-                $new_invoice->provider_id = $search_provider->id;
-                $new_invoice->owner_id = $search_owner->id;
-                $new_invoice->uuid = $uuid;
-                $new_invoice->pdf = $pdf_name;
-                $new_invoice->xml = $xml_name;
-                $new_invoice->other = ($name_other_file == '') ? null : $other_name;
-                
-                $new_invoice->save();
-                
-                
+                $name_other_file = time() . '.' . pathinfo($other_file_aux, PATHINFO_EXTENSION);
+                $file_other->move(public_path("archivos/anexo"), $name_other_file);
+                $other_name = "archivos/anexo/" . $name_other_file;
             }
-            else {   //Crear proveedor
-                $newProvider = new Provider();
-                $newProvider->nombre = $name_provider;
-                $newProvider->rfc = $provider_rfc;
-                $newProvider->save();
-            }
+
+            // Crear la factura en la base de datos
+            $new_invoice = new Invoice();
+            $new_invoice->provider_id = $search_provider->id;
+            $new_invoice->owner_id = $search_owner->id;
+            $new_invoice->uuid = $uuid;
+            $new_invoice->total = $total;
+            $new_invoice->pdf = $pdf_name;
+            $new_invoice->xml = $xml_name;
+            $new_invoice->other = ($name_other_file == '') ? null : $other_name;
+            $new_invoice->save();
             
+            // Enviar correo electrónico
             $pdf_original_name = $file_pdf->getClientOriginalName();
             $xml_original_name = $file_xml->getClientOriginalName();
             $archivos_email = new FilesReceived($xml_name, $xml_original_name, $pdf_name, $pdf_original_name, $other_name, $name_other_file, $name_provider, $other_file_aux);
@@ -411,5 +403,34 @@ class InvoiceController extends Controller
 
         $pdf_procesado = Invoice::readPDF($pdf);
         dd($pdf_procesado);
+    }
+
+    public function modalPayment(Request $request) {
+        $id = $request->get('id');
+        $invoice = Invoice::with('payments')->where('id', $id)->first();
+        return view('app.invoices.ajax.modalPayment')->with('invoice', $invoice);
+    }
+
+    public function addPayment(Request $request) {
+        $id = $request->get('id');
+        $date = $request->get('date');
+        $amount = $request->get('amount');
+
+        $invoice = Invoice::find($id);
+        $subtotal = PaymentHistory::where('invoice_id', $id)->sum('payment');
+
+        if($subtotal + $amount > $invoice->total) {
+            return 0;
+        }
+        else {
+            $payment = new PaymentHistory();
+            $payment -> user_id = Auth::id();
+            $payment -> invoice_id = $id;
+            $payment -> date = $date;
+            $payment -> payment = $amount;
+            $payment -> save();
+
+            return 1;
+        }
     }
 }

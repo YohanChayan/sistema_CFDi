@@ -47,6 +47,8 @@ Route::get('invoice/validateProvider', [InvoiceController::class, 'validateProvi
 Route::get('invoice/createNewProvider', [InvoiceController::class, 'createNewProvider'])->name('invoices.createNewProvider');
 Route::get('/invoice/test', [InvoiceController::class, 'readPDF'])->name('invoices.readPdf');
 Route::post('invoice/test/store', [InvoiceController::class, 'readPdfTest'])->name('invoices.readPdfTest');
+Route::get('/invoice/modalPayment', [InvoiceController::class, 'modalPayment'])->name('invoices.modalPayment');
+Route::get('/invoice/addPayment', [InvoiceController::class, 'addPayment'])->name('invoices.addPayment');
 
 //* Rutas de providers
 Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');

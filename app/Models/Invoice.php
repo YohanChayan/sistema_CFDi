@@ -26,6 +26,10 @@ class Invoice extends Model
         return $this->belongsTo(Provider::class, 'provider_id');
     }
 
+    public function payments() {
+        return $this->hasMany(PaymentHistory::class, 'invoice_id');
+    }
+
     public static function readXML($file) {
         $xmlObject = simplexml_load_file($file);   //Convertir el archivo XML en un objeto XML de PHP
         $xmlNamespaces = $xmlObject->getNamespaces(true);   //Obtener los namespaces utilizados al inicio del documento XML
@@ -117,5 +121,9 @@ class Invoice extends Model
 
     public static function getNameOwnerXML($xml) {
         return $xml["Receptor"][0]["@attributes"]["Nombre"];   //Obtiene el Nombre del emisor (propietario) del archivo xml
+    }
+
+    public static function getTotalXML($xml) {
+        return $xml["Comprobante"][0]["@attributes"]["Total"];   //Obtiene el Total de la factura del archivo xml
     }
 }
