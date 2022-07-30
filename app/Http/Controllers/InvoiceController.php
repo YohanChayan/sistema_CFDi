@@ -269,6 +269,7 @@ class InvoiceController extends Controller
             $provider_rfc = Invoice::getProviderRFCXML($convertedXML);   // Obtiene el RFC del emisor
             $owner_rfc = Invoice::getOwnerRFCXML($convertedXML);         // Obtiene el RFC del receptor
             $total = Invoice::getTotalXML($convertedXML);                // Obtiene el Total de la factura
+            $folio = Invoice::getFolio($convertedXML);
 
             /**************************************************/
             /*    Validar que exista el receptor en la BD     */
@@ -330,6 +331,7 @@ class InvoiceController extends Controller
             $new_invoice->provider_id = $search_provider->id;
             $new_invoice->owner_id = $search_owner->id;
             $new_invoice->uuid = $uuid;
+            $new_invoice->folio = $folio;
             $new_invoice->total = $total;
             $new_invoice->pdf = $pdf_name;
             $new_invoice->xml = $xml_name;
@@ -432,5 +434,28 @@ class InvoiceController extends Controller
 
             return 1;
         }
+    }
+
+    public function paymentsBulkUpload() {
+        $owners = Owner::all();
+        $providers = Provider::all();
+        $invoices = Invoice::with("provider", "payments")->get();
+        return view('app.invoices.paymentsBulkUpload')
+            ->with('owners', $owners)
+            ->with('providers', $providers)
+            ->with('invoices', $invoices);
+    }
+
+    public function providersDatalist(Request $request) {
+        $id = $request->get('owner');
+        $invoices = Invoice::where('owner_id', $id)->get();
+        return view('app.invoices.ajax.providersDatalist')->with('invoices', $invoices);
+    }
+
+    public function pendingPaymentsTable(Request $request) {
+        $owner_id = $request->get('owner');
+        $provider_id = $request->get('provider');
+        $invoices = Invoice::where([['owner_id', $owner_id], ['provider_id', $provider_id]])->get();
+        return view('app.invoices.ajax.pendingPaymentsTable')->with('invoices', $invoices);
     }
 }

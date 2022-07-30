@@ -64,3 +64,47 @@ function cleanPayment() {
     $('#date').val('');
     $('#payment').val('');
 }
+
+function changeOwner() {
+    let owner = datalist_id('owner', 'owners_list');
+    $.ajax({
+        'url': './providersDatalist',
+        data: {owner: owner},
+        success: function(data) {
+            $('#alert_user').show();
+            $('#providers_list').html(data);
+        }
+    });
+}
+
+function changeProvider() {
+    let owner = datalist_id('owner', 'owners_list');
+    let provider = datalist_id('provider', 'providers_list');
+    
+    $.ajax({
+        'url': './pendingPaymentsTable',
+        data: {
+            owner: owner,
+            provider: provider
+        },
+        success: function(data) {
+            if(provider == -1)
+                $('#alert_user').show();
+            else
+                $('#alert_user').hide();
+            $('#table_pending_payments').html(data);
+        }
+    });
+}
+
+function datalist_id(datalist, lista){
+    var id = document.getElementById(datalist).value;
+    var findId = -1;
+    $('#' + lista + '> option').each(function() {
+        if ($(this).attr("value") == id) {
+            findId = $(this).attr("id");
+            return findId;
+        }
+    });
+    return findId;
+}

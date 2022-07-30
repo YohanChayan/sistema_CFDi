@@ -20,7 +20,7 @@
         @endif
         <div class="navbar-nav w-100">
             <a href="@if(!Auth::Check()) {{ route('home') }} @elseif(Auth::id() == 1) {{ route('admin.index') }} @else {{ route('home') }} @endif" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Inicio</a>
-            @if (!Auth::Check())
+            @if(!Auth::Check())
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Facturas</a>
                     <div class="dropdown-menu bg-transparent border-0">
@@ -33,6 +33,7 @@
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Facturas</a>
                 <div class="dropdown-menu bg-transparent border-0">
                     <a href="{{ route('invoices.index') }}" class="dropdown-item ms-4">Consultar</a>
+                    <a href="{{ route('invoices.paymentsBulkUpload') }}" class="dropdown-item ms-4">Carga masiva de pagos</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
