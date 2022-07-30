@@ -34,9 +34,4 @@
       </button>
   </div>
 </div>
-
-
-    
-
-
 @endsection

@@ -340,7 +340,7 @@ class InvoiceController extends Controller
             $pdf_original_name = $file_pdf->getClientOriginalName();
             $xml_original_name = $file_xml->getClientOriginalName();
             $archivos_email = new FilesReceived($xml_name, $xml_original_name, $pdf_name, $pdf_original_name, $other_name, $name_other_file, $name_provider, $other_file_aux);
-            Mail::to('proveedoresfrutioro@gmail.com')->send($archivos_email);
+            Mail::to('proveedoresfrutioro@hotmail.com')->send($archivos_email);
 
             Alert::success('Éxito', 'Factura guardada correctamente');
             return redirect()->back();
