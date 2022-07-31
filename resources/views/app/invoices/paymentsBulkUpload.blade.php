@@ -10,10 +10,8 @@
   <div class="bg-light rounded p-4">
     <div class="d-flex align-items-center justify-content-between">
       <h2 class="mb-0">Facturas</h2>
-      <div id="alert_user">
-        <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
-          <i class="fa fa-exclamation-circle me-2"></i>Digite el RFC de su empresa y del proveedor
-        </div>
+      <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert" id="div_alert">
+        <i class="fa fa-exclamation-circle me-2" id="icon_alert"></i><span id="text_alert">Ingrese el RFC de su empresa y del proveedor</span>
       </div>
     </div>
 
@@ -41,28 +39,7 @@
     <br>
 
     <div class="table-responsive" id="table_pending_payments">
-      <table class="table text-start align-middle table-bordered mb-0">
-        <thead>
-          <tr class="text-dark">
-            <th scope="col" class="text-center">UUID</th>
-            <th scope="col" class="text-center">Folio</th>
-            <th scope="col" class="text-center">Nombre</th>
-            <th scope="col" class="text-center">Importe</th>
-            <th scope="col" class="text-center">Saldo</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($invoices as $inv)
-            <tr>
-              <td class="text-center">{{ $inv->uuid }}</td>
-              <td class="text-center">{{ $inv->folio }}</td>
-              <td class="text-center">{{ $inv->provider->nombre }}</td>
-              <td class="text-center">${{ number_format($inv->total, 2) }}</td>
-              <td class="text-center">${{ number_format($inv->payments->sum('payment'), 2) }}</td>
-            </tr>
-          @endforeach
-        </tbody>
-      </table>
+      
     </div>
   </div>
 

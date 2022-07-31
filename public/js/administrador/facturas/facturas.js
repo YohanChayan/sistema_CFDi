@@ -1,5 +1,7 @@
 var invoice_id = -1;
 
+changeProvider();
+
 function validatePayment() {
     let errors = 0;
 
@@ -71,8 +73,14 @@ function changeOwner() {
         'url': './providersDatalist',
         data: {owner: owner},
         success: function(data) {
-            $('#alert_user').show();
-            $('#providers_list').html(data);
+            if(owner == -1) {
+                $('#provider').val('');
+                $('#providers_list').html('');
+                changeProvider();
+            }
+            else {
+                $('#providers_list').html(data);
+            }
         }
     });
 }
@@ -88,13 +96,82 @@ function changeProvider() {
             provider: provider
         },
         success: function(data) {
-            if(provider == -1)
-                $('#alert_user').show();
-            else
-                $('#alert_user').hide();
+            if(provider == -1) {
+                changeAlert('warning');
+            }
+            else {
+                changeAlert('success');
+            }
             $('#table_pending_payments').html(data);
         }
     });
+}
+
+function saveAll() {
+    let payments = JSON.parse($('#paymentsFiltered').val());
+    let pendingPayments = [];
+    let flag = false;
+    let cont = 0;
+
+    for(let i = 0; i < payments.length; i++) {
+        let id = payments[i]['id'];
+        let date = $('#date_' + id).val();
+        let payment = $('#payment_' + id).val();
+
+        if(date == '' || payment == '') {
+            flag = true;
+            cont++;
+        }
+        else {
+            pendingPayments.push({
+                'invoice_id': id,
+                'date': date,
+                'payment': payment
+            });
+        }
+    }
+
+    if(cont == payments.length) {
+        Swal.fire(
+            'Error',
+            'Debes ingresar datos de al menos una factura que quieras guardar',
+            'error'
+        );
+    }
+    else if(flag) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Solo de guardarán los registros que tengan una fecha y un monto de pago',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if(result.isConfirmed) {
+                $('#pendingPayments').val(JSON.stringify(pendingPayments));
+                $('#paymentsForm').submit();
+            }
+          });
+    }
+}
+
+function changeAlert(type) {
+    if(type == 'warning') {
+        $('#div_alert').removeClass('alert-success');
+        $('#div_alert').addClass('alert-warning');
+        $('#icon_alert').removeClass('fa-check');
+        $('#icon_alert').addClass('fa-exclamation-circle');
+        $('#text_alert').text('Ingrese el RFC de su empresa y del proveedor');
+    }
+    else {
+        $('#div_alert').removeClass('alert-warning');
+        $('#div_alert').addClass('alert-success');
+        $('#icon_alert').removeClass('fa-exclamation-circle');
+        $('#icon_alert').addClass('fa-check');
+        $('#text_alert').text('Facturas filtradas por empresa y proveedor');
+    }
 }
 
 function datalist_id(datalist, lista){

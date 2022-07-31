@@ -52,6 +52,7 @@ Route::get('/invoice/addPayment', [InvoiceController::class, 'addPayment'])->nam
 Route::get('/invoice/paymentsBulkUpload', [InvoiceController::class, 'paymentsBulkUpload'])->name('invoices.paymentsBulkUpload');
 Route::get('/invoice/providersDatalist', [InvoiceController::class, 'providersDatalist'])->name('invoices.providersDatalist');
 Route::get('/invoice/pendingPaymentsTable', [InvoiceController::class, 'pendingPaymentsTable'])->name('invoices.pendingPaymentsTable');
+Route::post('/invoice/addFilteredPayments', [InvoiceController::class, 'addFilteredPayments'])->name('invoices.addFilteredPayments');
 
 //* Rutas de providers
 Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');

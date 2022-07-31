@@ -1,3 +1,3 @@
-@foreach($invoices as $invoice)
-    <option id="{{ $invoice->provider->id }}" value="{{ $invoice->provider->rfc }}"></option>
+@foreach($providers as $provider)
+    <option id="{{ $provider->id }}" value="{{ $provider->rfc }}"></option>
 @endforeach

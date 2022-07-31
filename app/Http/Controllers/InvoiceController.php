@@ -449,13 +449,40 @@ class InvoiceController extends Controller
     public function providersDatalist(Request $request) {
         $id = $request->get('owner');
         $invoices = Invoice::where('owner_id', $id)->get();
-        return view('app.invoices.ajax.providersDatalist')->with('invoices', $invoices);
+        $provider_ids = [];
+        foreach($invoices as $invoice) {
+            array_push($provider_ids, $invoice->provider_id);
+        }
+        $providers = Provider::whereIn('id', $provider_ids)->get();
+        return view('app.invoices.ajax.providersDatalist')->with('providers', $providers);
     }
 
     public function pendingPaymentsTable(Request $request) {
         $owner_id = $request->get('owner');
         $provider_id = $request->get('provider');
-        $invoices = Invoice::where([['owner_id', $owner_id], ['provider_id', $provider_id]])->get();
-        return view('app.invoices.ajax.pendingPaymentsTable')->with('invoices', $invoices);
+        if($owner_id == -1 || $provider_id == -1) {
+            $invoices = Invoice::with("provider", "payments")->get();
+            return view('app.invoices.ajax.paymentsTable')->with('invoices', $invoices);
+        }
+        else {
+            $invoices = Invoice::where([['owner_id', $owner_id], ['provider_id', $provider_id]])->get();
+            return view('app.invoices.ajax.pendingPaymentsTable')->with('invoices', $invoices);
+        }
+    }
+
+    public function addFilteredPayments(Request $request) {
+        $pendingPayments = json_decode($request->post('pendingPayments'));
+
+        foreach($pendingPayments as $pendingPayment) {
+            $payment = new PaymentHistory();
+            $payment -> user_id = Auth::id();
+            $payment -> invoice_id = $pendingPayment->invoice_id;
+            $payment -> date = $pendingPayment->date;
+            $payment -> payment = $pendingPayment->payment;
+            $payment -> save();
+        }
+
+        Alert::success('Éxito', 'Pagos guardados correctamente');
+        return redirect()->route('invoices.paymentsBulkUpload');
     }
 }
