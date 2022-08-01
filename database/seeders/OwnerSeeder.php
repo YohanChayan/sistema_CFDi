@@ -35,7 +35,7 @@ class OwnerSeeder extends Seeder
         ]);
 
         Owner::factory()->create([
-            'rfc' => 'PENDIENTE',
+            'rfc' => 'PCR150716ET3',
             'nombre' => 'PAPAYAS CAMPO REAL',
         ]);
     }
