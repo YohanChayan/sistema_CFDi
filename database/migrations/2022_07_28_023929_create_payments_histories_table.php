@@ -18,7 +18,7 @@ class CreatePaymentsHistoriesTable extends Migration
             $table->foreignId("user_id")->constrained("users", "id");
             $table->foreignId("invoice_id")->constrained("invoices", "id");
             $table->date("date");
-            $table->integer("payment");
+            $table->double("payment", 8, 2);
             $table->timestamps();
         });
     }

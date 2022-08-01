@@ -439,11 +439,9 @@ class InvoiceController extends Controller
     public function paymentsBulkUpload() {
         $owners = Owner::all();
         $providers = Provider::all();
-        $invoices = Invoice::with("provider", "payments")->get();
         return view('app.invoices.paymentsBulkUpload')
             ->with('owners', $owners)
-            ->with('providers', $providers)
-            ->with('invoices', $invoices);
+            ->with('providers', $providers);
     }
 
     public function providersDatalist(Request $request) {
@@ -461,11 +459,11 @@ class InvoiceController extends Controller
         $owner_id = $request->get('owner');
         $provider_id = $request->get('provider');
         if($owner_id == -1 || $provider_id == -1) {
-            $invoices = Invoice::with("provider", "payments")->get();
+            $invoices = Invoice::with("provider", "payments")->where('status', 'Pendiente')->get();
             return view('app.invoices.ajax.paymentsTable')->with('invoices', $invoices);
         }
         else {
-            $invoices = Invoice::where([['owner_id', $owner_id], ['provider_id', $provider_id]])->get();
+            $invoices = Invoice::where([['owner_id', $owner_id], ['provider_id', $provider_id], ['status', 'Pendiente']])->get();
             return view('app.invoices.ajax.pendingPaymentsTable')->with('invoices', $invoices);
         }
     }
@@ -480,6 +478,12 @@ class InvoiceController extends Controller
             $payment -> date = $pendingPayment->date;
             $payment -> payment = $pendingPayment->payment;
             $payment -> save();
+
+            $invoice = Invoice::with('payments')->where('id', $payment->invoice_id)->first();
+            if($invoice->total == $invoice->payments->sum('payment')) {
+                $invoice -> status = 'Pagado';
+                $invoice -> save();
+            }
         }
 
         Alert::success('Éxito', 'Pagos guardados correctamente');

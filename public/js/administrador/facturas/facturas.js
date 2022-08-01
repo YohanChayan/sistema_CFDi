@@ -110,7 +110,8 @@ function changeProvider() {
 function saveAll() {
     let payments = JSON.parse($('#paymentsFiltered').val());
     let pendingPayments = [];
-    let flag = false;
+    let emptyInput = false;
+    let higherPayment = false;
     let cont = 0;
 
     for(let i = 0; i < payments.length; i++) {
@@ -118,9 +119,18 @@ function saveAll() {
         let date = $('#date_' + id).val();
         let payment = $('#payment_' + id).val();
 
+        let pendingMoney = payments[i]['total'];
+        for(let j = 0; j < payments[i]['payments'].length; j++) {
+            pendingMoney -= payments[i]['payments'][j]['payment'];
+        }
+
         if(date == '' || payment == '') {
-            flag = true;
+            emptyInput = true;
             cont++;
+        }
+        else if(pendingMoney != 0 && payment > pendingMoney) {
+            higherPayment = true;
+            break;
         }
         else {
             pendingPayments.push({
@@ -134,14 +144,21 @@ function saveAll() {
     if(cont == payments.length) {
         Swal.fire(
             'Error',
-            'Debes ingresar datos de al menos una factura que quieras guardar',
+            'Debes ingresar los datos de al menos una factura que quieras guardar.',
             'error'
         );
     }
-    else if(flag) {
+    else if(higherPayment) {
+        Swal.fire(
+            'Error',
+            'No es posible ingresar una cantidad mayor a la que queda en el saldo.',
+            'error'
+        );
+    }
+    else if(emptyInput) {
         Swal.fire({
             title: '¿Estás seguro?',
-            text: 'Solo de guardarán los registros que tengan una fecha y un monto de pago',
+            text: 'Solo de guardarán los registros que tengan una fecha y un monto de pago asignados.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -154,6 +171,10 @@ function saveAll() {
                 $('#paymentsForm').submit();
             }
           });
+    }
+    else {
+        $('#pendingPayments').val(JSON.stringify(pendingPayments));
+        $('#paymentsForm').submit();
     }
 }
 

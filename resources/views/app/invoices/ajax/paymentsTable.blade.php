@@ -15,7 +15,7 @@
           <td class="text-center">{{ $inv->folio }}</td>
           <td class="text-center">{{ $inv->provider->nombre }}</td>
           <td class="text-center">${{ number_format($inv->total, 2) }}</td>
-          <td class="text-center">${{ number_format($inv->payments->sum('payment'), 2) }}</td>
+          <td class="text-center">${{ number_format($inv->total - $inv->payments->sum('payment'), 2) }}</td>
         </tr>
       @endforeach
     </tbody>

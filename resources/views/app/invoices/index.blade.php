@@ -10,16 +10,18 @@
   <div class="bg-light text-center rounded p-4">
     <div class="d-flex align-items-center justify-content-between mbp-4">
       <h2 class="mb-0">Facturas</h2>
-      <a href="">Mostrar todos</a>
     </div>
+
+    <br>
+    
     <div class="table-responsive">
       <table class="table text-start align-middle table-bordered mb-0">
         <thead>
           <tr class="text-dark">
-            <th scope="col" class="text-center">Fecha de creación</th>
-            <th scope="col" class="text-center">Empresa registrada</th>
-            <th scope="col" class="text-center">Proveedor</th>
-            <th scope="col" class="text-center">Acciones</th>
+            <th scope="col" class="text-center" style="width: 15%;">Fecha de creación</th>
+            <th scope="col" class="text-center" style="width: 35%;">Empresa registrada</th>
+            <th scope="col" class="text-center" style="width: 35%;">Proveedor</th>
+            <th scope="col" class="text-center" style="width: 15%;">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -33,8 +35,8 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">Nombre</th>
-                      <th scope="col">RFC</th>
+                      <th scope="col" style="width: 75%;">Nombre</th>
+                      <th scope="col" style="width: 25%;">RFC</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -50,8 +52,8 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">Nombre</th>
-                      <th scope="col">RFC</th>
+                      <th scope="col" style="width: 75%;">Nombre</th>
+                      <th scope="col" style="width: 25%;">RFC</th>
                     </tr>
                   </thead>
                   <tbody>
