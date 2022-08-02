@@ -20,48 +20,37 @@
         @endif
         <div class="navbar-nav w-100">
             <a href="@if(!Auth::Check()) {{ route('home') }} @elseif(Auth::id() == 1) {{ route('admin.index') }} @else {{ route('home') }} @endif" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Inicio</a>
-            @if(!Auth::Check())
+            
+            @if(!Auth::Check() || auth()->user()->type == "P")
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Facturas</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="{{ route('invoices.create') }}" class="dropdown-item ms-4">Subir nueva factura</a>
-                        {{-- <a href="{{ route('invoices.readPdf') }}" class="dropdown-item">Test PDF</a> --}}
+                            <a href="{{ route('invoices.create') }}" class="dropdown-item ms-4">Subir nueva factura</a>
+                            <a href="{{ route('invoices.myInvoices') }}" class="dropdown-item ms-4">Mis Facturas</a>
+                        </div>
+                    </div> 
+            @endif 
+            @if(Auth::Check() && auth()->user()->type == "A")
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Facturas</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="{{ route('invoices.index') }}" class="dropdown-item ms-4">Consultar</a>
+                        <a href="{{ route('invoices.paymentsBulkUpload') }}" class="dropdown-item ms-4">Carga masiva de pagos</a>
                     </div>
                 </div>
-            @else
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Facturas</a>
-                <div class="dropdown-menu bg-transparent border-0">
-                    <a href="{{ route('invoices.index') }}" class="dropdown-item ms-4">Consultar</a>
-                    <a href="{{ route('invoices.paymentsBulkUpload') }}" class="dropdown-item ms-4">Carga masiva de pagos</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-address-book me-2"></i>Proveedores</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="{{ route('providers.index') }}" class="dropdown-item ms-4">Consultar</a>
+                    </div>
                 </div>
-            </div>
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-address-book me-2"></i>Proveedores</a>
-                <div class="dropdown-menu bg-transparent border-0">
-                    <a href="{{ route('providers.index') }}" class="dropdown-item ms-4">Consultar</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-building me-2"></i>Mi Empresa</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="{{ route('owners.index') }}" class="dropdown-item ms-4">Consultar</a>
+                    </div>
                 </div>
-            </div>
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-building me-2"></i>Mi Empresa</a>
-                <div class="dropdown-menu bg-transparent border-0">
-                    <a href="{{ route('owners.index') }}" class="dropdown-item ms-4">Consultar</a>
-                </div>
-            </div>
             @endif
-            {{-- <a href="#" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets -</a>
-            <a href="#" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms -</a>
-            <a href="#" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables -</a>
-            <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts -</a>
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages -</a>
-                <div class="dropdown-menu bg-transparent border-0">
-                    <a href="#" class="dropdown-item">Sign In</a>
-                    <a href="#" class="dropdown-item">Sign Up</a>
-                    <a href="#" class="dropdown-item">404 Error</a>
-                    <a href="#" class="dropdown-item">Blank Page</a>
-                </div>
-            </div> --}}
         </div>
     </nav>
 </div>

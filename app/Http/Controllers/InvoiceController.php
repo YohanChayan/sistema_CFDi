@@ -353,26 +353,6 @@ class InvoiceController extends Controller
         }
     }
 
-    public function show(Invoice $invoice)
-    {
-        return view('app.invoices.show')->with('invoice', $invoice);
-    }
-
-    public function edit(Invoice $invoice)
-    {
-        //
-    }
-
-    public function update(Request $request, Invoice $invoice)
-    {
-        //
-    }
-
-    public function destroy(Invoice $invoice)
-    {
-        //
-    }
-
     public function validateProvider(Request $request) {
         $rfc = $request->get('rfc');   //Obtiene el rfc que se le pasa por el método get desde ajax
         $search_provider = Provider::where('rfc', $rfc)->first();   // Busca el RFC del emisor en la base de datos
@@ -390,7 +370,7 @@ class InvoiceController extends Controller
         $proveedor = new Provider();
         $proveedor -> rfc = $data['rfc'];
         $proveedor -> nombre = $data['nombre'];
-        $proveedor -> password = $data['password'];
+        $proveedor -> password = bcrypt($data['password']);
         $proveedor -> save();
 
         return 1;
@@ -488,5 +468,9 @@ class InvoiceController extends Controller
 
         Alert::success('Éxito', 'Pagos guardados correctamente');
         return redirect()->route('invoices.paymentsBulkUpload');
+    }
+
+    public function myInvoices() {
+        
     }
 }

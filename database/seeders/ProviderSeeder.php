@@ -17,19 +17,19 @@ class ProviderSeeder extends Seeder
         Provider::factory()->create([
             'rfc' => 'HPA0406153A6',
             'nombre' => 'HORTALIZAS LA PALMITA',
-            'password' => '1234',
+            'password' => bcrypt('1234'),
         ]);
 
         Provider::factory()->create([
             'rfc' => 'RIVC910116Q75',
             'nombre' => 'CRISTINA IRAIS RIVERO VAZQUEZ',
-            'password' => '1234',
+            'password' => bcrypt('1234'),
         ]);
 
         Provider::factory()->create([
             'rfc' => 'CEO110827HA7',
             'nombre' => 'COMERCIALIZADORA DE EMPAQUES DE OCCIDENTE S DE RL DE CV',
-            'password' => '1234',
+            'password' => bcrypt('1234'),
         ]);
     }
 }

@@ -28,44 +28,49 @@ Route::get('/jesus/leerPDF', [App\Http\Controllers\JesusController::class, 'leer
 //
 // Route::resource('yohan', YohanController::class);
 
-
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-// Route::group(['middleware' => ['auth'] ], function(){
+Route::get('/loginProvider', [ProviderController::class, 'login'])->name('login.provider');
+Route::post('/loginProvider', [ProviderController::class, 'loginProvider'])->name('loginProvider');
 
-//     Route::resource('invoices', InvoiceController::class);
-
-// });
-
-//* Rutas de invoices
-Route::get('/invoice/index', [InvoiceController::class, 'index'])->name('invoices.index');
-Route::get('invoice/create', [InvoiceController::class, 'create'])->name('invoices.create');
-Route::post('invoice/store', [InvoiceController::class, 'store'])->name('invoices.store');
-Route::get('invoice/show/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
-Route::get('invoice/validateProvider', [InvoiceController::class, 'validateProvider'])->name('invoices.validateProvider');
-Route::get('invoice/createNewProvider', [InvoiceController::class, 'createNewProvider'])->name('invoices.createNewProvider');
-Route::get('/invoice/test', [InvoiceController::class, 'readPDF'])->name('invoices.readPdf');
-Route::post('invoice/test/store', [InvoiceController::class, 'readPdfTest'])->name('invoices.readPdfTest');
-Route::get('/invoice/modalPayment', [InvoiceController::class, 'modalPayment'])->name('invoices.modalPayment');
-Route::get('/invoice/addPayment', [InvoiceController::class, 'addPayment'])->name('invoices.addPayment');
-Route::get('/invoice/paymentsBulkUpload', [InvoiceController::class, 'paymentsBulkUpload'])->name('invoices.paymentsBulkUpload');
-Route::get('/invoice/providersDatalist', [InvoiceController::class, 'providersDatalist'])->name('invoices.providersDatalist');
-Route::get('/invoice/pendingPaymentsTable', [InvoiceController::class, 'pendingPaymentsTable'])->name('invoices.pendingPaymentsTable');
-Route::post('/invoice/addFilteredPayments', [InvoiceController::class, 'addFilteredPayments'])->name('invoices.addFilteredPayments');
-
-//* Rutas de providers
-Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');
-
-//* Rutas de owners
-Route::get('/owners/index', [OwnerController::class, 'index'])->name('owners.index');
+//* Rutas públicas de invoices
+Route::group(['prefix' => '/invoice'], function() {
+    Route::get('/create', [InvoiceController::class, 'create'])->name('invoices.create');
+    Route::post('/store', [InvoiceController::class, 'store'])->name('invoices.store');
+    Route::get('/validateProvider', [InvoiceController::class, 'validateProvider'])->name('invoices.validateProvider');
+    Route::get('/createNewProvider', [InvoiceController::class, 'createNewProvider'])->name('invoices.createNewProvider');
+    Route::get('/modalPayment', [InvoiceController::class, 'modalPayment'])->name('invoices.modalPayment');
+});
 
 //* Rutas de administradores
+Route::group(['prefix' => 'administrador', 'middleware' => ['auth']], function() {
+    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
 
-Route::get('administrador/', [AdminController::class, 'index'])->name('admin.index');
+    //* Rutas de invoices
+    Route::prefix('/invoice', function() {
+        Route::get('/index', [InvoiceController::class, 'index'])->name('invoices.index');
+        Route::get('/addPayment', [InvoiceController::class, 'addPayment'])->name('invoices.addPayment');
+        Route::get('/paymentsBulkUpload', [InvoiceController::class, 'paymentsBulkUpload'])->name('invoices.paymentsBulkUpload');
+        Route::get('/providersDatalist', [InvoiceController::class, 'providersDatalist'])->name('invoices.providersDatalist');
+        Route::get('/pendingPaymentsTable', [InvoiceController::class, 'pendingPaymentsTable'])->name('invoices.pendingPaymentsTable');
+        Route::post('/addFilteredPayments', [InvoiceController::class, 'addFilteredPayments'])->name('invoices.addFilteredPayments');
+    });
+
+    //* Rutas de providers
+    Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');
+
+    //* Rutas de owners
+    Route::get('/owners/index', [OwnerController::class, 'index'])->name('owners.index');
+});
+
+//* Rutas de proveedores
+Route::group(['middleware' => ['is_provider'] ], function() {
+    Route::get('/invoice/myInvoices', [InvoiceController::class, 'myInvoices'])->name('invoices.myInvoices');
+});
 
 //!Ruta para usar cmd desde la web
-Route::get('cmd/{command}', function ($command) {
-    Artisan::call($command);
-    dd(Artisan::output());
-});
+// Route::get('cmd/{command}', function ($command) {
+//     Artisan::call($command);
+//     dd(Artisan::output());
+// });
