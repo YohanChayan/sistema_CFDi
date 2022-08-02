@@ -7,7 +7,7 @@
             <h1 class="display-1 fw-bold">404 Error</h1>
             <h1 class="mb-4">La página no ha sido encontrada</h1>
             {{-- <p class="mb-4">Comuníquese con control escolar para dar solución a esta problemática.</p> --}}
-            <a class="btn btn-primary rounded-pill py-3 px-5" href="{{route('home')}}">Inicio</a>
+            <a class="btn btn-primary rounded-pill py-3 px-5" href="{{route('dashboard')}}">Inicio</a>
         </div>
     </div>
 </div>

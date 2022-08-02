@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Invoice;
 use App\Models\Owner;
 use App\Models\Provider;
+use App\Models\User;
 use App\Models\PaymentHistory;
 use Illuminate\Support\Facades\DB;
 
@@ -373,6 +374,15 @@ class InvoiceController extends Controller
         $proveedor -> password = bcrypt($data['password']);
         $proveedor -> save();
 
+        // Creacion de un provider USER
+        // $proveedor_user = User::create([
+        //     'name' => $data['nombre'],
+        //     'rfc' => $data['rfc'],
+        //     'password' => bcrypt($data['password']),
+        //     'type' => 'A',
+        // ]);
+        
+
         return 1;
     }
 
@@ -471,6 +481,7 @@ class InvoiceController extends Controller
     }
 
     public function myInvoices() {
+        // dd('myInvoices');
         
     }
 }

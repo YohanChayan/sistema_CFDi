@@ -2,30 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 use App\Models\Admin;
 use App\Models\Invoice;
 use App\Models\Provider;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class UniversalDashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+    public function index(){
 
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+        $user_type = auth()->user()->type;
 
-    public function index()
-    {
-        $invoices = Invoice::with('owner', 'provider')->get();
+        if($user_type == 'A'){ //admin dashboard
+            $invoices = Invoice::with('owner', 'provider')->get();
 
         // counts
         $providers_count = Provider::count();
@@ -79,71 +73,11 @@ class AdminController extends Controller
         ->with('invoices_vs_months', $invoices_vs_months)
         ->with('invoices_vs_months', $arr)
         ;
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+        }else if($user_type == 'P'){ //provider dashboard
+            return view('home');
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Admin $admin)
-    {
-        //
     }
 }

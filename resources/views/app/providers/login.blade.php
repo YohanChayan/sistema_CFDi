@@ -28,7 +28,7 @@
                             </a>
                             <h3>Iniciar Sesión</h3>
                         </div>
-                        <form method="POST" action="{{ route('loginProvider') }}">
+                        <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="form-floating mb-3">
                                 <input id="rfc" type="string" class="form-control @error('rfc') is-invalid @enderror" name="rfc" value="{{ old('rfc') }}" required autocomplete="rfc" autofocus placeholder="RFC">
