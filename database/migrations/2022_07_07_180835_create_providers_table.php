@@ -18,6 +18,8 @@ class CreateProvidersTable extends Migration
             $table->string("rfc");
             $table->string("nombre");
             $table->string('password');
+            
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

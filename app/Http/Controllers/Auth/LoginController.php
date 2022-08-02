@@ -58,15 +58,15 @@ class LoginController extends Controller
         return $fieldName;
     }
 
-    protected function sendFailedLoginResponse(Request $request)
-    {
-        $request->session()->flash('login_error', trans('auth.failed'));
-        throw ValidationException::withMessages(
-            [
-                'login_error' => [trans('auth.failed')],
-            ]
-        );
-    }
+    // protected function sendFailedLoginResponse(Request $request)
+    // {
+    //     $request->session()->flash('login_error', trans('auth.failed'));
+    //     throw ValidationException::withMessages(
+    //         [
+    //             'login_error' => [trans('auth.failed')],
+    //         ]
+    //     );
+    // }
 
 
 

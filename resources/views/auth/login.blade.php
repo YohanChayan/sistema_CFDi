@@ -49,7 +49,7 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                                {{-- <label for="floatingPassword">Password</label> --}}
+                                <!-- <label for="floatingPassword">Password</label> -->
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <div class="form-check">
@@ -59,7 +59,7 @@
                                 <a href="#">Olvidé mi contraseña</a>
                             </div>
                             <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Iniciar Sesión</button>
-                            {{-- <p class="text-center mb-0">Don't have an Account? <a href="">Sign Up</a></p> --}}
+                            <!-- <p class="text-center mb-0">Don't have an Account? <a href="">Sign Up</a></p> -->
                         </form>
                     </div>
                 </div>
@@ -67,7 +67,6 @@
         </div>
         <!-- Sign In End -->
     </div>
-
 
     {{-- <div class="container">
         <div class="row justify-content-center">

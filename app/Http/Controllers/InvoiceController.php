@@ -368,19 +368,22 @@ class InvoiceController extends Controller
         $data = $request->all();
         
         //Creación de un nuevo proveedor
+
+        $proveedor_user = User::create([
+            'name' => $data['nombre'],
+            'rfc' => $data['rfc'],
+            'password' => bcrypt($data['password']),
+            'type' => 'P',
+        ]);
+
         $proveedor = new Provider();
         $proveedor -> rfc = $data['rfc'];
         $proveedor -> nombre = $data['nombre'];
         $proveedor -> password = bcrypt($data['password']);
+        $proveedor -> user_id = $proveedor_user->id;
         $proveedor -> save();
 
         // Creacion de un provider USER
-        // $proveedor_user = User::create([
-        //     'name' => $data['nombre'],
-        //     'rfc' => $data['rfc'],
-        //     'password' => bcrypt($data['password']),
-        //     'type' => 'A',
-        // ]);
         
 
         return 1;
@@ -481,7 +484,7 @@ class InvoiceController extends Controller
     }
 
     public function myInvoices() {
-        // dd('myInvoices');
         
+        dd('nothing here');
     }
 }

@@ -28,7 +28,16 @@
                 </div>
                 <div class="ms-3">                                            
                     <h6 class="mb-0"> {{ Auth()->user()->name }} </h6>                    
-                    <span>Role</span>
+                    <span>
+                        @if(Auth()->user()->type == 'A')
+                            Administrador
+                        @elseif(Auth()->user()->type == 'P')
+                            Proveedor
+                        @else
+                            Usuario sin permiso.
+                        @endif
+                            
+                    </span>
                 </div>
             </div>
         @endif

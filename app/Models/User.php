@@ -25,6 +25,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'rfc',
         'email',
         'password',
     ];
@@ -58,4 +59,8 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function provider(){
+        return $this->hasOne(Provider::class);
+    }
 }
