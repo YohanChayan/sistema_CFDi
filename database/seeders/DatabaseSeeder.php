@@ -14,28 +14,42 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //Usuario 1
         User::factory()->create([
             'name' => 'Administrador',
-            'rfc' => 'rfc1',
             'email' => 'administrador@frutioro.com',
+            'rfc' => null,
             'password' => bcrypt('123456'),
             'type' => 'A',
         ]);
 
-        //Usuario 2
         User::factory()->create([
             'name' => 'Pagos Frutioro',
-            'rfc' => 'GFR090108SM5',
             'email' => 'proveedoresfrutioro@hotmail.com',
+            'rfc' => 'GFR090108SM5',
             'password' => bcrypt('Fruoro01'),
             'type' => 'A',
         ]);
 
-        //Usuario 3
         User::factory()->create([
             'name' => 'Provider1',
+            'email' => null,
             'rfc' => 'HPA0406153A6',
+            'password' => bcrypt('1234'),
+            'type' => 'P',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Provider2',
+            'email' => null,
+            'rfc' => 'RIVC910116Q75',
+            'password' => bcrypt('1234'),
+            'type' => 'P',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Provider3',
+            'email' => null,
+            'rfc' => 'CEO110827HA7',
             'password' => bcrypt('1234'),
             'type' => 'P',
         ]);

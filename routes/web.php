@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Artisan;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/loginProvider', [ProviderController::class, 'login'])->name('login.provider');
+Route::get('/loginProvider', [ProviderController::class, 'loginProviderView'])->name('loginProviderView');
 Route::post('/loginProvider', [ProviderController::class, 'loginProvider'])->name('loginProvider');
 
 //* Rutas públicas de invoices
@@ -44,11 +44,7 @@ Route::group(['prefix' => '/invoice'], function() {
     Route::get('/modalPayment', [InvoiceController::class, 'modalPayment'])->name('invoices.modalPayment');
 });
 
-// Route::group(['middleware' => ['auth']], function() {
-    // });
-    
-    
-    //* Ruta de dashboard Universal (auth)
+//* Ruta de dashboard Universal (auth)
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/dashboard', [UniversalDashboardController::class, 'index'])->name('dashboard');
 });
@@ -75,6 +71,7 @@ Route::group(['middleware' => ['is_admin'] ], function() {
 //* Rutas de proveedores
 Route::group(['middleware' => ['is_provider'] ], function() {
     Route::get('/invoice/myInvoices', [InvoiceController::class, 'myInvoices'])->name('invoices.myInvoices');
+    Route::get('/invoice/myInvoicesTable', [InvoiceController::class, 'myInvoicesTable'])->name('invoices.myInvoicesTable');
 });
 
 

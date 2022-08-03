@@ -15,11 +15,10 @@ class CreateProvidersTable extends Migration
     {
         Schema::create('providers', function (Blueprint $table) {
             $table->id();
-            $table->string("rfc");
-            $table->string("nombre");
+            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->string('rfc');
+            $table->string('nombre');
             $table->string('password');
-            
-            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

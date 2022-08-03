@@ -45,12 +45,11 @@ class LoginController extends Controller
 
     public function username()
     {
-        $is_identityEmail  = request()->input('email');
-        $is_identityRFC  = request()->input('rfc');
+        $is_identityEmail = request()->input('email');
+        $is_identityRFC = request()->input('rfc');
 
-        // revisa los 2 valores dependiendo de que POST viene: (loginProvider-blade o default login-blade)
-        $identity = is_null($is_identityEmail) ? $identity = $is_identityRFC : $identity = $is_identityEmail;
-        // dd($identity);
+        // Revisa los 2 valores dependiendo de que POST viene: (login de proveedores o login de administradores)
+        $identity = is_null($is_identityEmail) ? $is_identityRFC : $is_identityEmail;
 
         $fieldName = filter_var($identity, FILTER_VALIDATE_EMAIL) ? 'email' : 'rfc';
 

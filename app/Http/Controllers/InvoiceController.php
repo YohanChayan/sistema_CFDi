@@ -368,23 +368,18 @@ class InvoiceController extends Controller
         $data = $request->all();
         
         //Creación de un nuevo proveedor
+        $user = new User();
+        $user -> name = $data['nombre'];
+        $user -> rfc = $data['rfc'];
+        $user -> password = bcrypt($data['password']);
+        $user -> save();
 
-        $proveedor_user = User::create([
-            'name' => $data['nombre'],
-            'rfc' => $data['rfc'],
-            'password' => bcrypt($data['password']),
-            'type' => 'P',
-        ]);
-
-        $proveedor = new Provider();
-        $proveedor -> rfc = $data['rfc'];
-        $proveedor -> nombre = $data['nombre'];
-        $proveedor -> password = bcrypt($data['password']);
-        $proveedor -> user_id = $proveedor_user->id;
-        $proveedor -> save();
-
-        // Creacion de un provider USER
-        
+        $provider = new Provider();
+        $provider -> user_id = $user->id;
+        $provider -> rfc = $data['rfc'];
+        $provider -> nombre = $data['nombre'];
+        $provider -> password = bcrypt($data['password']);
+        $provider -> save();
 
         return 1;
     }
@@ -484,7 +479,19 @@ class InvoiceController extends Controller
     }
 
     public function myInvoices() {
+        return view('app.providers.invoices.index');
+    }
+
+    public function myInvoicesTable(Request $request) {
+        $filter = $request->get('filter');
+
+        if($filter == 'TO')
+            $invoices = Invoice::where('provider_id', auth()->user()->provider->id)->get();
+        else if($filter == 'PE')
+            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['status', 'Pendiente']])->get();
+        else if($filter == 'PA')
+            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['status', 'Pagado']])->get();
         
-        dd('nothing here');
+        return view('app.providers.invoices.ajax.myInvoicesTable')->with('invoices', $invoices);
     }
 }

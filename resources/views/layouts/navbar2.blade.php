@@ -2,17 +2,15 @@
     <a href="{{ url('/') }}" class="navbar-brand d-flex d-lg-none me-4">
         <h2 class="text-primary mb-0">
             <img src="{{ asset('favicon/papaya.png') }}" alt="" class="w-75">
-        
         </h2>
     </a>
     <a href="#" class="sidebar-toggler flex-shrink-0">
         <i class="fa fa-bars"></i>
     </a>
-    <form class="d-none d-md-flex ms-4">
-        <input class="form-control border-0" type="search" placeholder="Search">
-    </form>
     <div class="navbar-nav align-items-center ms-auto">
         
+        {{-- Barra superior --}}
+
         @if (!Auth::Check())
             <div class="nav-item dropdown">
                 <a href="{{ route('login') }}" class="btn btn-success m-2">Iniciar Sesión</a>
@@ -60,7 +58,7 @@
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <i class="fa fa-bell me-lg-2"></i>
-                    <span class="d-none d-lg-inline-flex">Notificatin</span>
+                    <span class="d-none d-lg-inline-flex">Notification</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                     <a href="#" class="dropdown-item">
@@ -83,27 +81,22 @@
             </div>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <img class="rounded-circle me-lg-2 border border-dark" src="{{ auth()->user()->profile_photo_path == null ? \App\Models\User::find(auth()->user()->id)->profile_photo_url : asset(auth()->user()->profile_photo_path) }}" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">{{Auth()->user()->name}}</span>
+                    <img class="rounded-circle me-lg-2 border border-dark" src="{{ (auth()->user()->profile_photo_path) == null ? \App\Models\User::find(auth()->user()->id)->profile_photo_url : asset(auth()->user()->profile_photo_path) }}" alt="" style="width: 40px; height: 40px;">
+                    <span class="d-none d-lg-inline-flex">{{ auth()->user()->name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
     
                     {{-- <a href="#" class="dropdown-item">My Profile</a> --}}
     
                     <a class="dropdown-item p-2" href="{{ route('logout') }}"
-                       onclick="event.preventDefault();
-                                     document.getElementById('logout-form').submit();">
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         {{ __('Cerrar sesión') }}
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
                     </form>
-    
                 </div>
             </div>
         @endif
-        
-
-        
     </div>
 </nav>

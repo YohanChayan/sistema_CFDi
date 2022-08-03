@@ -13,7 +13,7 @@ class ProviderController extends Controller
         return view('app.providers.index')->with('providers', $providers);
     }
     
-    public function login() {
+    public function loginProviderView() {
         return view('app.providers.login');
     }
 

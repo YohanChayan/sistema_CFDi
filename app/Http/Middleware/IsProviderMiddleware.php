@@ -18,7 +18,7 @@ class IsProviderMiddleware
     public function handle(Request $request, Closure $next)
     {
         if(!Auth::check()) {
-            return redirect()->route('login.provider');
+            return redirect()->route('loginProviderView');
         }
         else if(auth()->user()->type == 'A') {
             abort(403);

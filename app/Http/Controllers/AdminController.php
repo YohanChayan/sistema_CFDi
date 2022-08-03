@@ -69,7 +69,7 @@ class AdminController extends Controller
         }
         ksort($arr); //ordena los index tal que enero=0, feb=1, etc.
 
-        return view('app.admin.admin-index')
+        return view('app.admin.index')
         ->with('invoices', $invoices)
         ->with('providers_count', $providers_count)
         ->with('invoices_count', $invoices_count)
@@ -77,8 +77,7 @@ class AdminController extends Controller
         ->with('users_count', $users_count)
         ->with('providers_vs_invoices', $providers_vs_invoices)
         ->with('invoices_vs_months', $invoices_vs_months)
-        ->with('invoices_vs_months', $arr)
-        ;
+        ->with('invoices_vs_months', $arr);
     }
 
     /**
