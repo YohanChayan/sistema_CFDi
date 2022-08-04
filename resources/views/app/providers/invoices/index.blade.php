@@ -21,14 +21,6 @@
           <option value="PA">Pagadas</option>
         </select>
       </div>
-      <div class="col-md-3" id="div_start_date">
-        <label for="start_date">Fecha de inicio</label>
-        <input class="form-control" type="date" name="start_date" id="start_date">
-      </div>
-      <div class="col-md-3" id="div_end_date">
-        <label for="end_date">Fecha de fin</label>
-        <input class="form-control" type="date" name="end_date" id="end_date">
-      </div>
     </div>
 
     <br>

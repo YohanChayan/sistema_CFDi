@@ -35,10 +35,18 @@
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Facturas</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{ route('invoices.create') }}" class="dropdown-item ms-4">Subir nueva factura</a>
-                            <a href="{{ route('invoices.myInvoices') }}" class="dropdown-item ms-4">Mis Facturas</a>
+                        <a href="{{ route('invoices.create') }}" class="dropdown-item ms-4">Subir nueva factura</a>
+                        <a href="{{ route('invoices.myInvoices') }}" class="dropdown-item ms-4">Mis Facturas</a>
+                    </div>
+                </div>
+                @if(Auth::Check())
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-money-bill-alt me-2"></i>Pagos</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="{{ route('invoices.myPayments') }}" class="dropdown-item ms-4">Mis Pagos</a>
                         </div>
-                    </div> 
+                    </div>
+                @endif
             @endif 
             @if(Auth::Check() && auth()->user()->type == "A")
                 <div class="nav-item dropdown">
@@ -58,6 +66,12 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-building me-2"></i>Mi Empresa</a>
                     <div class="dropdown-menu bg-transparent border-0">
                         <a href="{{ route('owners.index') }}" class="dropdown-item ms-4">Consultar</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-pdf me-2"></i>Reportes</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="{{ route('reports.payments') }}" class="dropdown-item ms-4">Pagos</a>
                     </div>
                 </div>
             @endif

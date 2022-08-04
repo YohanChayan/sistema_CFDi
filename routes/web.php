@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\YohanController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\PaymentHistoryController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UniversalDashboardController;
 use Illuminate\Support\Facades\Artisan;
 
@@ -59,19 +61,30 @@ Route::group(['middleware' => ['is_admin'] ], function() {
         Route::get('/providersDatalist', [InvoiceController::class, 'providersDatalist'])->name('invoices.providersDatalist');
         Route::get('/pendingPaymentsTable', [InvoiceController::class, 'pendingPaymentsTable'])->name('invoices.pendingPaymentsTable');
         Route::post('/addFilteredPayments', [InvoiceController::class, 'addFilteredPayments'])->name('invoices.addFilteredPayments');
+        
     });
-    
+
+    Route::group(['prefix' => '/reports'], function() {
+        Route::get('/payments', [ReportsController::class, 'payments'])->name('reports.payments');
+        Route::get('/paymentsTable', [ReportsController::class, 'paymentsTable'])->name('reports.paymentsTable');
+        Route::get('/paymentsPDFReport', [ReportsController::class, 'paymentsPDFReport'])->name('reports.paymentsPDFReport');
+    });
+
     //* Rutas de providers
     Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');
     
     //* Rutas de owners
     Route::get('/owners/index', [OwnerController::class, 'index'])->name('owners.index');
+    
 });
 
 //* Rutas de proveedores
 Route::group(['middleware' => ['is_provider'] ], function() {
     Route::get('/invoice/myInvoices', [InvoiceController::class, 'myInvoices'])->name('invoices.myInvoices');
     Route::get('/invoice/myInvoicesTable', [InvoiceController::class, 'myInvoicesTable'])->name('invoices.myInvoicesTable');
+
+    Route::get('/payments/myPayments', [PaymentHistoryController::class, 'myPayments'])->name('invoices.myPayments');
+    Route::get('/payments/myPaymentsTable', [PaymentHistoryController::class, 'myPaymentsTable'])->name('invoices.myPaymentsTable');
 });
 
 

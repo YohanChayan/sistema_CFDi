@@ -24,11 +24,15 @@
                 <td class="text-center">
                     <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input class="form-control" type="number" name="payment_{{ $inv->id }}" id="payment_{{ $inv->id }}" min="0">
+                        <input class="form-control" type="number" name="payment_{{ $inv->id }}" id="payment_{{ $inv->id }}" min="0" onchange="payment();">
                     </div>
                 </td>
             </tr>
         @endforeach
+        <tr>
+            <th class="text-end fs-5" colspan="6">Monto Total</th>
+            <td class="text-center fs-5" id="total">$0.00</td>
+        </tr>
     </tbody>
 </table>
 

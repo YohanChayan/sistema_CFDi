@@ -206,3 +206,16 @@ function datalist_id(datalist, lista){
     });
     return findId;
 }
+
+function payment() {
+    let payments = JSON.parse($('#paymentsFiltered').val());
+    let sum = 0;
+
+    for(let i = 0; i < payments.length; i++) {
+        if($('#payment_' + payments[i]['id']).val() != '') {
+            sum += parseFloat($('#payment_' + payments[i]['id']).val());
+        }
+    }
+
+    $('#total').text('$' + sum.toFixed(2));
+}

@@ -64,7 +64,7 @@ class UniversalDashboardController extends Controller
             }
             ksort($arr); //ordena los index tal que enero=0, feb=1, etc.
 
-            return view('app.admin.admin-index')
+            return view('app.admin.index')
             ->with('invoices', $invoices)
             ->with('providers_count', $providers_count)
             ->with('invoices_count', $invoices_count)
