@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Admin;
 use App\Models\Invoice;
+use App\Models\PaymentHistory;
 use App\Models\Provider;
 use App\Models\User;
 use Carbon\Carbon;
@@ -21,6 +22,8 @@ class UniversalDashboardController extends Controller
         // Admin dashboard
         if($user_type == 'A') {
             $invoices = Invoice::with('owner', 'provider')->get();
+            $recent_invoices = $invoices->sortBy('created_at')->take(5);
+            $recent_payments = PaymentHistory::with('invoice')->get()->sortByDesc('date')->take(5);
 
             // Counts
             $providers_count = Provider::count();
@@ -66,6 +69,8 @@ class UniversalDashboardController extends Controller
 
             return view('app.admin.index')
             ->with('invoices', $invoices)
+            ->with('recent_invoices', $recent_invoices)
+            ->with('recent_payments', $recent_payments)
             ->with('providers_count', $providers_count)
             ->with('invoices_count', $invoices_count)
             ->with('invoices_today', $invoices_today)

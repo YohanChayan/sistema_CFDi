@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Invoice;
+use App\Models\PaymentHistory;
 use App\Models\Provider;
 use App\Models\User;
 use Carbon\Carbon;
@@ -26,6 +27,8 @@ class AdminController extends Controller
     public function index()
     {
         $invoices = Invoice::with('owner', 'provider')->get();
+        $recent_invoices = $invoices->sortByDesc('created_at')->take(5);
+        $recent_payments = PaymentHistory::with('invoice')->get()->sortByDesc('date')->take(5);
 
         // counts
         $providers_count = Provider::count();
@@ -71,6 +74,8 @@ class AdminController extends Controller
 
         return view('app.admin.index')
         ->with('invoices', $invoices)
+        ->with('recent_invoices', $recent_invoices)
+        ->with('recent_payments', $recent_payments)
         ->with('providers_count', $providers_count)
         ->with('invoices_count', $invoices_count)
         ->with('invoices_today', $invoices_today)

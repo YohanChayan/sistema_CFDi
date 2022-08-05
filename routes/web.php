@@ -68,6 +68,10 @@ Route::group(['middleware' => ['is_admin'] ], function() {
         Route::get('/payments', [ReportsController::class, 'payments'])->name('reports.payments');
         Route::get('/paymentsTable', [ReportsController::class, 'paymentsTable'])->name('reports.paymentsTable');
         Route::get('/paymentsPDFReport', [ReportsController::class, 'paymentsPDFReport'])->name('reports.paymentsPDFReport');
+
+        Route::get('/invoices', [ReportsController::class, 'invoices'])->name('reports.invoices');
+        Route::get('/invoicesTable', [ReportsController::class, 'invoicesTable'])->name('reports.invoicesTable');
+        Route::get('/invoicesPDFReport', [ReportsController::class, 'invoicesPDFReport'])->name('reports.invoicesPDFReport');
     });
 
     //* Rutas de providers

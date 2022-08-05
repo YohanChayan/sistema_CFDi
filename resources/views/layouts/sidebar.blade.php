@@ -72,6 +72,7 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-pdf me-2"></i>Reportes</a>
                     <div class="dropdown-menu bg-transparent border-0">
                         <a href="{{ route('reports.payments') }}" class="dropdown-item ms-4">Pagos</a>
+                        <a href="{{ route('reports.invoices') }}" class="dropdown-item ms-4">Facturas</a>
                     </div>
                 </div>
             @endif

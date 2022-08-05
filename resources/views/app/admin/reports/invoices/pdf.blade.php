@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reporte De Pagos</title>
+    <title>Reporte De Facturas</title>
 
     <style>
         img {
@@ -66,7 +66,7 @@
     <img src="{{ asset('favicon/papaya.png') }}" alt=""><span>Frutioro</span>
     
     <div class="text-center">
-        <h1>Reporte de pagos</h1>
+        <h1>Reporte de facturas</h1>
     </div>
 
     <div class="text-right">
@@ -81,18 +81,20 @@
             <tr>
                 <th style="width: 10%;" class="text-center">#</th>
                 <th style="width: 15%;" class="text-center">Fecha</th>
-                <th style="width: 50%;" class="text-center">UUID</th>
-                <th style="width: 25%;" class="text-center">Pago</th>
+                <th style="width: 25%;" class="text-center">Proveedor</th>
+                <th style="width: 25%;" class="text-center">UUID</th>
+                <th style="width: 25%;" class="text-center">Total</th>
             </tr>
         </thead>
         <tbody>
-            @if(count($payments) > 0)
-                @foreach($payments as $key => $payment)
+            @if(count($invoices) > 0)
+                @foreach($invoices as $key => $invoice)
                     <tr>
                         <td class="text-center">{{ $key+1 }}</td>
-                        <td class="text-center">{{ date("d-m-Y", strtotime($payment->date)) }}</td>
-                        <td class="text-center">{{ $payment->invoice->uuid }}</td>
-                        <td class="text-center">${{ number_format($payment->payment, 2) }}</td>
+                        <td class="text-center">{{ date("d-m-Y", strtotime($invoice->created_at)) }}</td>
+                        <td class="text-center">{{ $invoice->provider->nombre }}</td>
+                        <td class="text-center">{{ $invoice->uuid }}</td>
+                        <td class="text-center">${{ number_format($invoice->total, 2) }}</td>
                     </tr>
                 @endforeach
             @else

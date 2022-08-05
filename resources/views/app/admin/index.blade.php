@@ -74,15 +74,34 @@
                 <div class="d-flex align-items-center justify-content-left mb-2">
                     <h6 class="mb-0">Facturas Recientes</h6>
                 </div>
-                @foreach($invoices as $invoice)
+                @foreach($recent_invoices as $invoice)
                     <div class="d-flex align-items-center border-bottom py-3">
                         <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
                         <div class="w-100 ms-3">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-0">{{ $invoice->provider->nombre }}</h6>
-                                <small>{{ $invoice->created_at->diffForHumans() }}</small>
+                            <div class="row">
+                                <h6 class="mb-0 col-8">{{ $invoice->provider->nombre }}</h6>
+                                <small class="col-4 text-end">{{ $invoice->created_at->diffForHumans() }}</small>
                             </div>
                             <span>Ha subido {{ $invoice->other != '' ? '3' : '2' }} archivos</span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-xl-4">
+            <div class="h-100 bg-light rounded p-4">
+                <div class="d-flex align-items-center justify-content-left mb-2">
+                    <h6 class="mb-0">Pagos Recientes</h6>
+                </div>
+                @foreach($recent_payments as $payment)
+                    <div class="d-flex align-items-center border-bottom py-3">
+                        <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
+                        <div class="w-100 ms-3">
+                            <div class="row">
+                                <h6 class="mb-0 col-8">{{ $payment->invoice->provider->nombre }}</h6>
+                                <small class="col-4 text-end">{{ $payment->created_at->diffForHumans() }}</small>
+                            </div>
+                            <span>Ha pagado ${{ number_format($payment->payment, 2) }}</span>
                         </div>
                     </div>
                 @endforeach
@@ -95,63 +114,6 @@
                     <a href="">Show All</a>
                 </div>
                 <div id="calender"></div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-xl-4">
-            <div class="h-100 bg-light rounded p-4">
-                <div class="d-flex align-items-center justify-content-between mb-4">
-                    <h6 class="mb-0">To Do List</h6>
-                    <a href="">Show All</a>
-                </div>
-                <div class="d-flex mb-2">
-                    <input class="form-control bg-transparent" type="text" placeholder="Enter task">
-                    <button type="button" class="btn btn-primary ms-2">Add</button>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-2">
-                    <input class="form-check-input m-0" type="checkbox">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 align-items-center justify-content-between">
-                            <span>Short task goes here...</span>
-                            <button class="btn btn-sm"><i class="fa fa-times"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-2">
-                    <input class="form-check-input m-0" type="checkbox">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 align-items-center justify-content-between">
-                            <span>Short task goes here...</span>
-                            <button class="btn btn-sm"><i class="fa fa-times"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-2">
-                    <input class="form-check-input m-0" type="checkbox" checked>
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 align-items-center justify-content-between">
-                            <span><del>Short task goes here...</del></span>
-                            <button class="btn btn-sm text-primary"><i class="fa fa-times"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-2">
-                    <input class="form-check-input m-0" type="checkbox">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 align-items-center justify-content-between">
-                            <span>Short task goes here...</span>
-                            <button class="btn btn-sm"><i class="fa fa-times"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center pt-2">
-                    <input class="form-check-input m-0" type="checkbox">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 align-items-center justify-content-between">
-                            <span>Short task goes here...</span>
-                            <button class="btn btn-sm"><i class="fa fa-times"></i></button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
