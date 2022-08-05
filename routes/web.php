@@ -61,7 +61,9 @@ Route::group(['middleware' => ['is_admin'] ], function() {
         Route::get('/providersDatalist', [InvoiceController::class, 'providersDatalist'])->name('invoices.providersDatalist');
         Route::get('/pendingPaymentsTable', [InvoiceController::class, 'pendingPaymentsTable'])->name('invoices.pendingPaymentsTable');
         Route::post('/addFilteredPayments', [InvoiceController::class, 'addFilteredPayments'])->name('invoices.addFilteredPayments');
-        
+
+        Route::get('/downloadfile/{id}',[InvoiceController::class, 'download'])->name('invoices.download');
+
     });
 
     Route::group(['prefix' => '/reports'], function() {
@@ -76,10 +78,10 @@ Route::group(['middleware' => ['is_admin'] ], function() {
 
     //* Rutas de providers
     Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');
-    
+
     //* Rutas de owners
     Route::get('/owners/index', [OwnerController::class, 'index'])->name('owners.index');
-    
+
 });
 
 //* Rutas de proveedores

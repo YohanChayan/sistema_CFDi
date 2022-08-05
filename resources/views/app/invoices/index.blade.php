@@ -13,7 +13,7 @@
     </div>
 
     <br>
-    
+
     <div class="table-responsive">
       <table class="table text-start align-middle table-bordered mb-0">
         <thead>
@@ -66,8 +66,15 @@
               </td>
 
               <td class="text-center">
-                  <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#paymentsModal" onclick="modalPayment({{ $inv->id }});">Pagos</a>
-                  <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Detalles</a>
+                <div class="row d-flex flex-column align-items-center ">
+                    <div class="col-md-6 mx-auto p-0 my-1">
+                      <a class="btn btn-sm btn-primary link-center" data-bs-toggle="modal" data-bs-target="#paymentsModal" onclick="modalPayment({{ $inv->id }});">Pagos</a>
+                    </div>
+                    <div class="col-md-6 mx-auto p-0 my-1">
+                      <a class="btn btn-sm btn-success " href="{{route('invoices.download', $inv->id )}}">Descargar</a>
+                    </div>
+                </div>
+
               </td>
             </tr>
           @endforeach
@@ -105,7 +112,7 @@
                             Historial de pagos
                         </a>
                         <div class="collapse" id="paymentsHistory">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -120,7 +127,7 @@
 </div>
 
 
-  <div class="modal  fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  {{-- <div class="modal  fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -135,7 +142,6 @@
                   <p class="fw-bolder mb-0">Ejemplo</p>
                 </div>
                 <div class="card-body">
-                  {{-- <h5 class="card-title">Special title treatment</h5> --}}
                   <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
 
                   <div class="btn-group dropend">
@@ -183,7 +189,6 @@
                   <p class="fw-bolder mb-0">Ejemplo</p>
                 </div>
                 <div class="card-body">
-                  {{-- <h5 class="card-title">Special title treatment</h5> --}}
                   <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
 
                   <div class="btn-group dropend">
@@ -206,7 +211,6 @@
                   <p class="fw-bolder mb-0">Ejemplo</p>
                 </div>
                 <div class="card-body">
-                  {{-- <h5 class="card-title">Special title treatment</h5> --}}
                   <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
 
                   <div class="btn-group dropend">
@@ -231,7 +235,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> --}}
 </div>
 
 @endsection

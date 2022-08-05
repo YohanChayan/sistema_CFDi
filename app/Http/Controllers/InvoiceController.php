@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\FilesReceived;
 use Illuminate\Support\Facades\Auth;
 
+use File;
+use Response;
+
 class InvoiceController extends Controller
 {
     public function index()
@@ -247,6 +250,13 @@ class InvoiceController extends Controller
         return view('app.invoices.create');
     }
 
+    // descarga de factura
+    public function download($id){
+
+        $filepath = Invoice::find($id);
+        return Response::download($filepath->pdf);
+    }
+
     public function store(Request $request)
     {
         $file_pdf = $request->file('pdf_input');       // Obtiene el archivo pdf
@@ -265,7 +275,7 @@ class InvoiceController extends Controller
             /**************************************************/
             /*         Obtener datos del archivo xml          */
             /**************************************************/
-            
+
             $uuid = Invoice::getUUIDXML($convertedXML);                  // Obtiene el UUID del archivo xml
             $provider_rfc = Invoice::getProviderRFCXML($convertedXML);   // Obtiene el RFC del emisor
             $owner_rfc = Invoice::getOwnerRFCXML($convertedXML);         // Obtiene el RFC del receptor
@@ -338,7 +348,7 @@ class InvoiceController extends Controller
             $new_invoice->xml = $xml_name;
             $new_invoice->other = ($name_other_file == '') ? null : $other_name;
             $new_invoice->save();
-            
+
             // Enviar correo electrónico
             $pdf_original_name = $file_pdf->getClientOriginalName();
             $xml_original_name = $file_xml->getClientOriginalName();
@@ -366,7 +376,7 @@ class InvoiceController extends Controller
     public function createNewProvider(Request $request) {
         //Datos obtenidos de ajax
         $data = $request->all();
-        
+
         //Creación de un nuevo proveedor
         $user = new User();
         $user -> name = $data['nombre'];
@@ -491,7 +501,7 @@ class InvoiceController extends Controller
             $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['status', 'Pendiente']])->get();
         else if($filter == 'PA')
             $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['status', 'Pagado']])->get();
-        
+
         return view('app.providers.invoices.ajax.myInvoicesTable')->with('invoices', $invoices);
     }
 }

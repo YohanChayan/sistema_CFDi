@@ -11,7 +11,7 @@
                 <div class="bg-light rounded h-100 p-4">
 
                     <h2 class="mb-4">Nueva Factura</h2>
-                    
+
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul>
@@ -42,8 +42,8 @@
 
                         <div class="row g-3 justify-content-center">
                             <div class="mb-3 col-md-8">
-                            <label for="other" class="form-label">Opcional. Seleccione archivo de cualquier formato</label>
-                            <input type="file" class="form-control" name="other_input" id="other_input">
+                            <label for="other" class="form-label">Seleccione archivo de cualquier formato</label>
+                            <input type="file" class="form-control" name="other_input" id="other_input" required>
                             <div id="otherlHelp" class="form-text">Por favor seleccione archivo (Anexo)</div>
                             </div>
                         </div>

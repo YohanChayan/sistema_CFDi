@@ -7,7 +7,7 @@ $("#xml_input").change(function() {
     let exp_emisor = /<cfdi:emisor(.*)>/;
     let exp_rfc = /rfc="(.*?)"/;
     let exp_nombre = /nombre="(.*?)"/;
-    
+
     reader.readAsText(file);
     reader.onloadend = function() {
         let xmlData = $(reader.result);
@@ -25,8 +25,8 @@ $("#xml_input").change(function() {
         rfc = result_rfc[1];
         nombre = result_nombre[1];
 
-        console.log(rfc);
-        console.log(nombre);
+        // console.log(rfc);
+        // console.log(nombre);
     };
 });
 
@@ -35,12 +35,15 @@ function registerCreateInvoiceData() {
     //Obtener los nombres de los archivos
     let pdf_file = $('#pdf_input').val();
     let xml_file = $('#xml_input').val();
+    let other_file = $('#other_input').val();
+    let hola = 'f';
 
     //Obtener la extensión de los archivos
     let pdf_extension = pdf_file.substring(pdf_file.lastIndexOf('.')).toLowerCase();
     let xml_extension = xml_file.substring(xml_file.lastIndexOf('.')).toLowerCase();
+    let other_file_extension = other_file.substring(other_file.lastIndexOf('.')).toLowerCase();
 
-    if(pdf_extension == '.pdf' && xml_extension == '.xml') {
+    if(pdf_extension == '.pdf' && xml_extension == '.xml' && other_file) {
         $.ajax({
             url: '/invoice/validateProvider',
             data: {rfc: rfc},
