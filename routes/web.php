@@ -56,6 +56,7 @@ Route::group(['middleware' => ['is_admin'] ], function() {
 
     Route::group(['prefix' => '/invoice'], function() {
         Route::get('/index', [InvoiceController::class, 'index'])->name('invoices.index');
+        Route::get('/invoicesTable', [InvoiceController::class, 'invoicesTable'])->name('invoices.invoicesTable');
         Route::get('/addPayment', [InvoiceController::class, 'addPayment'])->name('invoices.addPayment');
         Route::get('/paymentsBulkUpload', [InvoiceController::class, 'paymentsBulkUpload'])->name('invoices.paymentsBulkUpload');
         Route::get('/providersDatalist', [InvoiceController::class, 'providersDatalist'])->name('invoices.providersDatalist');

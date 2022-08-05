@@ -24,8 +24,19 @@ class InvoiceController extends Controller
 {
     public function index()
     {
+        $owners = Owner::all();
         $invoices = Invoice::with('owner', 'provider')->get();
-        return view('app.invoices.index')->with('invoices', $invoices);
+        return view('app.invoices.index')->with('invoices', $invoices)->with('owners', $owners);
+    }
+
+    public function invoicesTable(Request $request) {
+        $owner = $request->get('owner');
+        $start_date = $request->get('start_date');
+        $end_date = $request->get('end_date');
+
+        $invoices = Invoice::whereBetween('created_at', [date('Y-m-d 00:00:00', strtotime($start_date)), date('Y-m-d 23:59:59', strtotime($end_date))])->where('owner_id', $owner)->get();
+
+        return view('app.invoices.ajax.invoicesTable')->with('invoices', $invoices);
     }
 
     public function leerPDF($id) {
@@ -269,7 +280,7 @@ class InvoiceController extends Controller
             $zip->addFile($invoice->xml, $filename_xml);
             $zip->addFile($invoice->other, $filename_other);
             $zip->close();
-            
+
             return Response::download($filename);
         }
         else if($option == 'PDF') {

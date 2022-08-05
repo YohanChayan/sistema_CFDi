@@ -7,79 +7,39 @@
 @section('content')
 
 <div class="container-fluid pt-4 px-4">
-  <div class="bg-light text-center rounded p-4">
-    <div class="d-flex align-items-center justify-content-between mbp-4">
+  <div class="bg-light rounded p-4">
+    <div class="mb-4">
       <h2 class="mb-0">Facturas</h2>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3">
+        <label for="owner">Empresa</label>
+        <select class="form-select" name="owner" id="owner">
+          @foreach($owners as $owner)
+            <option value="{{ $owner->id }}">{{ $owner->rfc }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="start_date">Fecha de inicio</label>
+        <input class="form-control" type="date" name="start_date" id="start_date" value="{{ date("Y-m-d") }}">
+        <div class="text-danger" id="error_start_date"></div>
+      </div>
+      <div class="col-md-3">
+        <label for="end_date">Fecha de fin</label>
+        <input class="form-control" type="date" name="end_date" id="end_date" value="{{ date("Y-m-d") }}">
+        <div class="text-danger" id="error_end_date"></div>
+      </div>
+      <div class="col-md-3">
+        <a class="btn btn-primary text-light mt-4" onclick="filter();"><i class="fas fa-search"></i></a>
+      </div>
     </div>
 
     <br>
 
-    <div class="table-responsive">
-      <table class="table text-start align-middle table-bordered mb-0">
-        <thead>
-          <tr class="text-dark">
-            <th scope="col" class="text-center" style="width: 15%;">Fecha de creación</th>
-            <th scope="col" class="text-center" style="width: 35%;">Empresa registrada</th>
-            <th scope="col" class="text-center" style="width: 35%;">Proveedor</th>
-            <th scope="col" class="text-center" style="width: 15%;">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($invoices as $inv)
-            <tr>
-              <td class="text-center">
-                {{  date("d/m/Y", strtotime($inv->created_at)) }}
-              </td>
-
-              <td>
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col" style="width: 75%;">Nombre</th>
-                      <th scope="col" style="width: 25%;">RFC</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{{ $inv->owner->nombre }}</td>
-                      <td>{{ $inv->owner->rfc }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-
-              <td>
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col" style="width: 75%;">Nombre</th>
-                      <th scope="col" style="width: 25%;">RFC</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{{ $inv->provider->nombre }}</td>
-                      <td>{{ $inv->provider->rfc }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-
-              <td class="text-center">
-                <div class="row d-flex flex-column align-items-center ">
-                    <div class="col-md-6 mx-auto p-0 my-1">
-                      <a class="btn btn-sm btn-primary link-center" data-bs-toggle="modal" data-bs-target="#paymentsModal" onclick="modalPayment({{ $inv->id }});">Pagos</a>
-                    </div>
-                    <div class="col-md-6 mx-auto p-0 my-1">
-                      <a class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#filesModal" onclick="modalFile({{ $inv->id }});">Descargar</a>
-                    </div>
-                </div>
-
-              </td>
-            </tr>
-          @endforeach
-        </tbody>
-      </table>
+    <div class="table-responsive" id="my_invoices_table">
+      
     </div>
   </div>
 

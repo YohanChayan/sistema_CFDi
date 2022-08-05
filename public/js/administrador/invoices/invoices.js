@@ -1,6 +1,6 @@
 var invoice_id = -1;
 
-changeProvider();
+filter();
 
 function validatePayment() {
     let errors = 0;
@@ -22,6 +22,64 @@ function validatePayment() {
     }
 
     return errors;
+}
+
+function validate() {
+    let errors = 0;
+
+    if($('#start_date').val() == '') {
+        $('#start_date').addClass('is-invalid');
+        $('#error_start_date').text('Ingresa una fecha');
+        errors++;
+    }
+    else {
+        $('#start_date').removeClass('is-invalid');
+        $('#error_start_date').text('');
+    }
+
+    if($('#end_date').val() == '') {
+        $('#end_date').addClass('is-invalid');
+        $('#error_end_date').text('Ingresa una fecha');
+        errors++;
+    }
+    else {
+        $('#end_date').removeClass('is-invalid');
+        $('#error_end_date').text('');
+    }
+
+    if(errors == 0) {
+        if($('#start_date').val() > $('#end_date').val()) {
+            $('#start_date').addClass('is-invalid');
+            $('#error_start_date').text('La fecha de inicio es inválida');
+            errors++;
+        }
+        else {
+            $('#start_date').removeClass('is-invalid');
+            $('#error_start_date').text('');
+        }
+    }
+
+    return errors;
+}
+
+function filter() {
+    let owner = $('#owner').val();
+    let start_date = $('#start_date').val();
+    let end_date = $('#end_date').val();
+
+    if(validate() == 0) {
+        $.ajax({
+            url: './invoicesTable',
+            data: {
+                owner: owner,
+                start_date: start_date,
+                end_date: end_date
+            },
+            success: function(data) {
+                $('#my_invoices_table').html(data);
+            }
+        });
+    }
 }
 
 function modalPayment(id) {
@@ -65,159 +123,6 @@ function addPayment() {
 function cleanPayment() {
     $('#date').val('');
     $('#payment').val('');
-}
-
-function changeOwner() {
-    let owner = datalist_id('owner', 'owners_list');
-    $.ajax({
-        'url': './providersDatalist',
-        data: {owner: owner},
-        success: function(data) {
-            if(owner == -1) {
-                $('#provider').val('');
-                $('#providers_list').html('');
-                changeProvider();
-            }
-            else {
-                $('#providers_list').html(data);
-            }
-        }
-    });
-}
-
-function changeProvider() {
-    let owner = datalist_id('owner', 'owners_list');
-    let provider = datalist_id('provider', 'providers_list');
-    
-    $.ajax({
-        'url': './pendingPaymentsTable',
-        data: {
-            owner: owner,
-            provider: provider
-        },
-        success: function(data) {
-            if(provider == -1) {
-                changeAlert('warning');
-            }
-            else {
-                changeAlert('success');
-            }
-            $('#table_pending_payments').html(data);
-        }
-    });
-}
-
-function saveAll() {
-    let payments = JSON.parse($('#paymentsFiltered').val());
-    let pendingPayments = [];
-    let emptyInput = false;
-    let higherPayment = false;
-    let cont = 0;
-
-    for(let i = 0; i < payments.length; i++) {
-        let id = payments[i]['id'];
-        let date = $('#date_' + id).val();
-        let payment = $('#payment_' + id).val();
-
-        let pendingMoney = payments[i]['total'];
-        for(let j = 0; j < payments[i]['payments'].length; j++) {
-            pendingMoney -= payments[i]['payments'][j]['payment'];
-        }
-
-        if(date == '' || payment == '') {
-            emptyInput = true;
-            cont++;
-        }
-        else if(pendingMoney != 0 && payment > pendingMoney) {
-            higherPayment = true;
-            break;
-        }
-        else {
-            pendingPayments.push({
-                'invoice_id': id,
-                'date': date,
-                'payment': payment
-            });
-        }
-    }
-
-    if(cont == payments.length) {
-        Swal.fire(
-            'Error',
-            'Debes ingresar los datos de al menos una factura que quieras guardar.',
-            'error'
-        );
-    }
-    else if(higherPayment) {
-        Swal.fire(
-            'Error',
-            'No es posible ingresar una cantidad mayor a la que queda en el saldo.',
-            'error'
-        );
-    }
-    else if(emptyInput) {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Solo de guardarán los registros que tengan una fecha y un monto de pago asignados.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, guardar',
-            cancelButtonText: 'Cancelar'
-          }).then((result) => {
-            if(result.isConfirmed) {
-                $('#pendingPayments').val(JSON.stringify(pendingPayments));
-                $('#paymentsForm').submit();
-            }
-          });
-    }
-    else {
-        $('#pendingPayments').val(JSON.stringify(pendingPayments));
-        $('#paymentsForm').submit();
-    }
-}
-
-function changeAlert(type) {
-    if(type == 'warning') {
-        $('#div_alert').removeClass('alert-success');
-        $('#div_alert').addClass('alert-warning');
-        $('#icon_alert').removeClass('fa-check');
-        $('#icon_alert').addClass('fa-exclamation-circle');
-        $('#text_alert').text('Ingrese el RFC de su empresa y del proveedor');
-    }
-    else {
-        $('#div_alert').removeClass('alert-warning');
-        $('#div_alert').addClass('alert-success');
-        $('#icon_alert').removeClass('fa-exclamation-circle');
-        $('#icon_alert').addClass('fa-check');
-        $('#text_alert').text('Facturas filtradas por empresa y proveedor');
-    }
-}
-
-function datalist_id(datalist, lista){
-    var id = document.getElementById(datalist).value;
-    var findId = -1;
-    $('#' + lista + '> option').each(function() {
-        if ($(this).attr("value") == id) {
-            findId = $(this).attr("id");
-            return findId;
-        }
-    });
-    return findId;
-}
-
-function payment() {
-    let payments = JSON.parse($('#paymentsFiltered').val());
-    let sum = 0;
-
-    for(let i = 0; i < payments.length; i++) {
-        if($('#payment_' + payments[i]['id']).val() != '') {
-            sum += parseFloat($('#payment_' + payments[i]['id']).val());
-        }
-    }
-
-    $('#total').text('$' + sum.toFixed(2));
 }
 
 function modalFile(id) {

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('my_scripts')
-  <script src="{{ asset("js/administrador/facturas/facturas.js") }}"></script>
+  <script src="{{ asset("js/administrador/invoices/payments.js") }}"></script>
 @endsection
 
 @section('content')

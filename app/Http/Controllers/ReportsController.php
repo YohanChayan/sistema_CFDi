@@ -50,7 +50,7 @@ class ReportsController extends Controller
         }
 
         $owner = Owner::find($id);
-        $payments = PaymentHistory::with('invoice')->whereIn('invoice_id', $invoice_ids)->whereBetween('date', [$start_date, $end_date])->get();
+        $payments = PaymentHistory::with('invoice')->whereIn('invoice_id', $invoice_ids)->whereBetween('date', [date('Y-m-d 00:00:00', strtotime($start_date)), date('Y-m-d 23:59:59', strtotime($end_date))])->get();
 
         $html = view('app.admin.reports.payments.pdf')->with('payments', $payments)->with('date', $date)->with('owner', $owner)->render();
         $name_file = 'pagos_' . time() . '.pdf';
@@ -84,7 +84,7 @@ class ReportsController extends Controller
         $start_date = $request->get('start_date');
         $end_date = $request->get('end_date');
 
-        $invoices = Invoice::whereBetween('created_at', [$start_date, $end_date])->where('owner_id', $owner)->get();
+        $invoices = Invoice::whereBetween('created_at', [date('Y-m-d 00:00:00', strtotime($start_date)), date('Y-m-d 23:59:59', strtotime($end_date))])->where('owner_id', $owner)->get();
 
         return view('app.admin.reports.invoices.ajax.invoicesTable')->with('invoices', $invoices);
     }
@@ -95,7 +95,7 @@ class ReportsController extends Controller
         $end_date = $request->get('end_date');
         $date = date('d/m/Y', strtotime($start_date)) . ' — ' . date('d/m/Y', strtotime($end_date));
 
-        $invoices = Invoice::whereBetween('created_at', [$start_date, $end_date])->where('owner_id', $id)->get();
+        $invoices = Invoice::whereBetween('created_at', [date('Y-m-d 00:00:00', strtotime($start_date)), date('Y-m-d 23:59:59', strtotime($end_date))])->where('owner_id', $id)->get();
         $owner = Owner::find($id);
 
         $html = view('app.admin.reports.invoices.pdf')->with('invoices', $invoices)->with('date', $date)->with('owner', $owner)->render();
