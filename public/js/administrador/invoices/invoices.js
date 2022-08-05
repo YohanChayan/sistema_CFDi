@@ -219,3 +219,21 @@ function payment() {
 
     $('#total').text('$' + sum.toFixed(2));
 }
+
+function modalFile(id) {
+    invoice_id = id;
+}
+
+function downloadFile() {
+    let option = $('input[name=option]:checked').val();
+    if(option != null || option != undefined) {
+        window.location.href = './downloadfile/' + invoice_id + '?option=' + option;
+    }
+    else {
+        Swal.fire(
+            'Advertencia',
+            'Debes de seleccionar una opción.',
+            'warning'
+        );
+    }
+}

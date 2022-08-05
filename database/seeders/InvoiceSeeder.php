@@ -23,6 +23,7 @@ class InvoiceSeeder extends Seeder
             'status' => 'Pendiente',
             'pdf' => 'archivos/pdf/ed62f2d4-a03f-4c82-b075-aaca426826e0.pdf',
             'xml' => 'archivos/xml/ed62f2d4-a03f-4c82-b075-aaca426826e0.xml',
+            'other' => 'archivos/anexo/anexo.png',
         ]);
 
         Invoice::factory()->create([
@@ -34,6 +35,7 @@ class InvoiceSeeder extends Seeder
             'status' => 'Pendiente',
             'pdf' => 'archivos/pdf/c8efd0b8-7509-4bed-a0d6-7bea04bfad06.pdf',
             'xml' => 'archivos/xml/c8efd0b8-7509-4bed-a0d6-7bea04bfad06.xml',
+            'other' => 'archivos/anexo/anexo.png',
         ]);
 
         Invoice::factory()->create([
@@ -45,6 +47,7 @@ class InvoiceSeeder extends Seeder
             'status' => 'Pendiente',
             'pdf' => 'archivos/pdf/25C4B8B8-C429-4A66-B44E-A73639A6D8D5.pdf',
             'xml' => 'archivos/xml/25C4B8B8-C429-4A66-B44E-A73639A6D8D5.xml',
+            'other' => 'archivos/anexo/anexo.png',
         ]);
     }
 }

@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\FilesReceived;
 use Illuminate\Support\Facades\Auth;
 
-use File;
 use Response;
+use ZipArchive;
 
 class InvoiceController extends Controller
 {
@@ -250,11 +250,41 @@ class InvoiceController extends Controller
         return view('app.invoices.create');
     }
 
-    // descarga de factura
-    public function download($id){
+    // Descarga de factura
+    public function download(Request $request, $id) {
+        $option = $request->get('option');
+        $invoice = Invoice::find($id);
 
-        $filepath = Invoice::find($id);
-        return Response::download($filepath->pdf);
+        if($option == 'T') {
+            $filename = 'factura_' . $invoice->uuid . '.zip';
+
+            $filename_pdf = 'factura_' . $invoice->uuid . '.pdf';
+            $filename_xml = 'factura_' . $invoice->uuid . '.xml';
+            preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   //Obtiene la extensión del archivo
+            $filename_other = 'factura_' . $invoice->uuid . $extension[0];
+
+            $zip = new ZipArchive();
+            $zip->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+            $zip->addFile($invoice->pdf, $filename_pdf);
+            $zip->addFile($invoice->xml, $filename_xml);
+            $zip->addFile($invoice->other, $filename_other);
+            $zip->close();
+            
+            return Response::download($filename);
+        }
+        else if($option == 'PDF') {
+            $filename = 'factura_' . $invoice->uuid . '.pdf';
+            return Response::download($invoice->pdf, $filename);
+        }
+        else if($option == 'XML') {
+            $filename = 'factura_' . $invoice->uuid . '.xml';
+            return Response::download($invoice->xml, $filename);
+        }
+        else if($option == 'A') {
+            preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   //Obtiene la extensión del archivo
+            $filename = 'factura_' . $invoice->uuid . $extension[0];
+            return Response::download($invoice->other, $filename);
+        }
     }
 
     public function store(Request $request)
