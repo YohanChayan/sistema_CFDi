@@ -275,6 +275,15 @@ class InvoiceController extends Controller
             $filename_other = 'factura_' . $invoice->uuid . $extension[0];
 
             $zip = new ZipArchive();
+            //!Así debe ir en producción (situación con las rutas)
+            // $zip->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+            // $routePdf = 'laravel/public/' . $invoice->pdf;
+            // $zip->addFile($routePdf, $filename_pdf);
+            // $routeXml = 'laravel/public/' . $invoice->xml;
+            // $zip->addFile($routeXml, $filename_xml);
+            // $routeOther = 'laravel/public/' . $invoice->other;
+            // $zip->addFile($routeOther, $filename_other);
+
             $zip->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
             $zip->addFile($invoice->pdf, $filename_pdf);
             $zip->addFile($invoice->xml, $filename_xml);
@@ -285,15 +294,24 @@ class InvoiceController extends Controller
         }
         else if($option == 'PDF') {
             $filename = 'factura_' . $invoice->uuid . '.pdf';
+            //!Así debe ir en producción (situación con las rutas
+            // $route = 'laravel/public/' . $invoice->pdf;
+            // return Response::download($route, $filename);
             return Response::download($invoice->pdf, $filename);
         }
         else if($option == 'XML') {
             $filename = 'factura_' . $invoice->uuid . '.xml';
+            //!Así debe ir en producción (situación con las rutas
+            // $route = 'laravel/public/' . $invoice->xml;
+            // return Response::download($route, $filename);
             return Response::download($invoice->xml, $filename);
         }
         else if($option == 'A') {
             preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   //Obtiene la extensión del archivo
             $filename = 'factura_' . $invoice->uuid . $extension[0];
+            //!Así debe ir en producción (situación con las rutas
+            // $route = 'laravel/public/' . $invoice->other;
+            // return Response::download($route, $filename);
             return Response::download($invoice->other, $filename);
         }
     }
