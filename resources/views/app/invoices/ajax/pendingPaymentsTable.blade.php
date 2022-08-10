@@ -12,7 +12,6 @@
     </thead>
     <tbody>
         @foreach($invoices as $inv)
-        @if ($inv->statuseliminado != "I")
             <tr>
                 <td class="text-center">{{ $inv->uuid }}</td>
                 <td class="text-center">{{ $inv->folio }}</td>
@@ -29,7 +28,6 @@
                     </div>
                 </td>
             </tr>
-            @endif
         @endforeach
         <tr>
             <th class="text-end fs-5" colspan="6">Monto Total</th>
