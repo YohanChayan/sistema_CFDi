@@ -13,26 +13,21 @@
     </div>
 
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-lg-4">
         <label for="owner">Empresa</label>
-        <select class="form-select" name="owner" id="owner">
+        <input class="form-control" type="text" list="owners_list" name="owner" id="owner" onchange="changeOwner();">
+        <datalist id="owners_list">
           @foreach($owners as $owner)
-            <option value="{{ $owner->id }}">{{ $owner->rfc }}</option>
+            <option id="{{ $owner->id }}" value="{{ $owner->rfc }}"></option>
           @endforeach
-        </select>
+        </datalist>
       </div>
-      <div class="col-md-3">
-        <label for="start_date">Fecha de inicio</label>
-        <input class="form-control" type="date" name="start_date" id="start_date" value="{{ date("Y-m-d") }}">
-        <div class="text-danger" id="error_start_date"></div>
-      </div>
-      <div class="col-md-3">
-        <label for="end_date">Fecha de fin</label>
-        <input class="form-control" type="date" name="end_date" id="end_date" value="{{ date("Y-m-d") }}">
-        <div class="text-danger" id="error_end_date"></div>
-      </div>
-      <div class="col-md-3">
-        <a class="btn btn-primary text-light mt-4" onclick="filter();"><i class="fas fa-search"></i></a>
+      <div class="col-lg-4">
+        <label for="provider">Proveedor</label>
+        <input class="form-control" type="text" list="providers_list" name="provider" id="provider" onchange="filter();">
+        <datalist id="providers_list">
+        
+        </datalist>
       </div>
     </div>
 
@@ -68,7 +63,7 @@
           <br>
           <div class="row">
             <div class="col-lg-12">
-              <a class="text-primary" data-bs-toggle="collapse" data-bs-target="#paymentsHistory" aria-expanded="false" aria-controls="paymentsHistory" style="cursor: pointer">
+              <a class="text-success" data-bs-toggle="collapse" data-bs-target="#paymentsHistory" aria-expanded="false" aria-controls="paymentsHistory" style="cursor: pointer">
                   Historial de pagos
               </a>
               <div class="collapse" id="paymentsHistory">
@@ -80,7 +75,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button id="addPaymentBtn" type="button" class="btn btn-primary">Agregar</button>
+          <button id="addPaymentBtn" type="button" class="btn btn-success">Agregar</button>
         </div>
       </div>
     </div>
@@ -119,7 +114,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-success" onclick="downloadFile();">Descargar</button>
+          <button type="button" class="btn btn-primary" onclick="downloadFile();">Descargar</button>
         </div>
       </div>
     </div>

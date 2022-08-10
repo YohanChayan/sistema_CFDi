@@ -31,10 +31,16 @@ class InvoiceController extends Controller
 
     public function invoicesTable(Request $request) {
         $owner = $request->get('owner');
-        $start_date = $request->get('start_date');
-        $end_date = $request->get('end_date');
+        $provider = $request->get('provider');
 
-        $invoices = Invoice::whereBetween('created_at', [date('Y-m-d 00:00:00', strtotime($start_date)), date('Y-m-d 23:59:59', strtotime($end_date))])->where([['owner_id', $owner], ['status', 'A']])->get();
+        $invoices = Invoice::where('status', 'A')->get();
+
+        if($owner != -1) {
+            $invoices = $invoices->where('owner_id', $owner);
+        }
+        if($provider != -1) {
+            $invoices = $invoices->where('provider_id', $provider);
+        }
 
         return view('app.invoices.ajax.invoicesTable')->with('invoices', $invoices);
     }

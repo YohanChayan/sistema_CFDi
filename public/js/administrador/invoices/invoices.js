@@ -62,18 +62,35 @@ function validate() {
     return errors;
 }
 
+function changeOwner() {
+    let owner = datalist_id('owner', 'owners_list');
+    $.ajax({
+        'url': './providersDatalist',
+        data: {owner: owner},
+        success: function(data) {
+            if(owner == -1) {
+                $('#provider').val('');
+                $('#providers_list').html('');
+            }
+            else {
+                $('#providers_list').html(data);
+            }
+            filter();
+        }
+    });
+}
+
 function filter() {
-    let owner = $('#owner').val();
-    let start_date = $('#start_date').val();
-    let end_date = $('#end_date').val();
+    let owner = datalist_id('owner', 'owners_list');
+    let provider = datalist_id('provider', 'providers_list');
+    console.log(owner, provider);
 
     if(validate() == 0) {
         $.ajax({
             url: './invoicesTable',
             data: {
                 owner: owner,
-                start_date: start_date,
-                end_date: end_date
+                provider: provider
             },
             success: function(data) {
                 $('#my_invoices_table').html(data);
@@ -161,4 +178,16 @@ function deleteInvoice(btn) {
             window.location.href = './delete/' + id;
         }
     })
+}
+
+function datalist_id(datalist, lista){
+    var id = document.getElementById(datalist).value;
+    var findId = -1;
+    $('#' + lista + '> option').each(function() {
+        if ($(this).attr("value") == id) {
+            findId = $(this).attr("id");
+            return findId;
+        }
+    });
+    return findId;
 }

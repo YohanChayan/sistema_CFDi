@@ -74,18 +74,22 @@
                 <div class="d-flex align-items-center justify-content-left mb-2">
                     <h6 class="mb-0">Facturas Recientes</h6>
                 </div>
-                @foreach($recent_invoices as $invoice)
-                    <div class="d-flex align-items-center border-bottom py-3">
-                        <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
-                        <div class="w-100 ms-3">
-                            <div class="row">
-                                <h6 class="mb-0 col-8">{{ $invoice->provider->nombre }}</h6>
-                                <small class="col-4 text-end">{{ $invoice->created_at->diffForHumans() }}</small>
+                @if(count($recent_invoices) > 0)
+                    @foreach($recent_invoices as $invoice)
+                        <div class="d-flex align-items-center border-bottom py-3">
+                            <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
+                            <div class="w-100 ms-3">
+                                <div class="row">
+                                    <h6 class="mb-0 col-8">{{ $invoice->provider->nombre }}</h6>
+                                    <small class="col-4 text-end">{{ $invoice->created_at->diffForHumans() }}</small>
+                                </div>
+                                <span>Ha subido {{ $invoice->other != '' ? '3' : '2' }} archivos</span>
                             </div>
-                            <span>Ha subido {{ $invoice->other != '' ? '3' : '2' }} archivos</span>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @else
+                    No hay facturas recientes.
+                @endif
             </div>
         </div>
         <div class="col-sm-12 col-md-6 col-xl-4">
@@ -93,18 +97,22 @@
                 <div class="d-flex align-items-center justify-content-left mb-2">
                     <h6 class="mb-0">Pagos Recientes</h6>
                 </div>
-                @foreach($recent_payments as $payment)
-                    <div class="d-flex align-items-center border-bottom py-3">
-                        <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
-                        <div class="w-100 ms-3">
-                            <div class="row">
-                                <h6 class="mb-0 col-8">{{ $payment->invoice->provider->nombre }}</h6>
-                                <small class="col-4 text-end">{{ $payment->created_at->diffForHumans() }}</small>
+                @if(count($recent_payments) > 0)
+                    @foreach($recent_payments as $payment)
+                        <div class="d-flex align-items-center border-bottom py-3">
+                            <img class="rounded-circle flex-shrink-0" src="{{asset('custom/img/user.jpg')}}" alt="" style="width: 40px; height: 40px;">
+                            <div class="w-100 ms-3">
+                                <div class="row">
+                                    <h6 class="mb-0 col-8">{{ $payment->invoice->provider->nombre }}</h6>
+                                    <small class="col-4 text-end">{{ $payment->created_at->diffForHumans() }}</small>
+                                </div>
+                                <span>Ha pagado ${{ number_format($payment->payment, 2) }}</span>
                             </div>
-                            <span>Ha pagado ${{ number_format($payment->payment, 2) }}</span>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @else
+                    No hay pagos recientes.
+                @endif
             </div>
         </div>
         <div class="col-sm-12 col-md-6 col-xl-4">
