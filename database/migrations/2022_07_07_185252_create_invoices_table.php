@@ -27,6 +27,7 @@ class CreateInvoicesTable extends Migration
             $table->string("xml")->comment("Url del archivo xml");
             $table->string("other")->nullable()->comment("Url de un posible tercer archivo");
             $table->timestamps();
+            $table->string("statuseliminado", 10)->default("A")->comment("A = Activo", "I = Inactivo")->nullable();
         });
     }
 

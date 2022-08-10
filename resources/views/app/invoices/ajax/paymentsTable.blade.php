@@ -10,6 +10,7 @@
     </thead>
     <tbody>
       @foreach($invoices as $inv)
+      @if ($inv->statuseliminado != "I")
         <tr>
           <td class="text-center">{{ $inv->uuid }}</td>
           <td class="text-center">{{ $inv->folio }}</td>
@@ -17,6 +18,7 @@
           <td class="text-center">${{ number_format($inv->total, 2) }}</td>
           <td class="text-center">${{ number_format($inv->total - $inv->payments->sum('payment'), 2) }}</td>
         </tr>
+        @endif
       @endforeach
     </tbody>
 </table>

@@ -568,7 +568,11 @@ class InvoiceController extends Controller
     }
 
     public function destroy(Invoice $inv) {
-        $inv->delete();
+        // dd($inv);
+        // $inv->delete();
+        $inv->statuseliminado = "I";
+        $inv->save();
+
         Alert::success('Éxito', 'Factura eliminada correctamente');
         return redirect()->route('invoices.index');
     }
