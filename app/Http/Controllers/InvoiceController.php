@@ -22,13 +22,10 @@ use ZipArchive;
 
 class InvoiceController extends Controller
 {
-
-    
-
     public function index()
     {
         $owners = Owner::all();
-        $invoices = Invoice::with('owner', 'provider')->get();
+        $invoices = Invoice::with('owner', 'provider')->where('status', 'A')->get();
         return view('app.invoices.index')->with('invoices', $invoices)->with('owners', $owners);
     }
 
@@ -37,13 +34,13 @@ class InvoiceController extends Controller
         $start_date = $request->get('start_date');
         $end_date = $request->get('end_date');
 
-        $invoices = Invoice::whereBetween('created_at', [date('Y-m-d 00:00:00', strtotime($start_date)), date('Y-m-d 23:59:59', strtotime($end_date))])->where('owner_id', $owner)->get();
+        $invoices = Invoice::whereBetween('created_at', [date('Y-m-d 00:00:00', strtotime($start_date)), date('Y-m-d 23:59:59', strtotime($end_date))])->where([['owner_id', $owner], ['status', 'A']])->get();
 
         return view('app.invoices.ajax.invoicesTable')->with('invoices', $invoices);
     }
 
     public function leerPDF($id) {
-        $invoice =  Invoice::Find($id);
+        $invoice =  Invoice::find($id);
 
         $data = $this->GetDataFromPDF($invoice);
         // return view('jesus.leerPDF', ["data" => $data]);
@@ -506,7 +503,7 @@ class InvoiceController extends Controller
 
     public function providersDatalist(Request $request) {
         $id = $request->get('owner');
-        $invoices = Invoice::where('owner_id', $id)->get();
+        $invoices = Invoice::where([['owner_id', $id], ['status', 'A']])->get();
         $provider_ids = [];
         foreach($invoices as $invoice) {
             array_push($provider_ids, $invoice->provider_id);
@@ -519,11 +516,11 @@ class InvoiceController extends Controller
         $owner_id = $request->get('owner');
         $provider_id = $request->get('provider');
         if($owner_id == -1 || $provider_id == -1) {
-            $invoices = Invoice::with("provider", "payments")->where('status', 'Pendiente')->get();
+            $invoices = Invoice::with("provider", "payments")->where([['payment_status', 'Pendiente'], ['status', 'A']])->get();
             return view('app.invoices.ajax.paymentsTable')->with('invoices', $invoices);
         }
         else {
-            $invoices = Invoice::where([['owner_id', $owner_id], ['provider_id', $provider_id], ['status', 'Pendiente']])->get();
+            $invoices = Invoice::where([['owner_id', $owner_id], ['provider_id', $provider_id], ['payment_status', 'Pendiente'], ['status', 'A']])->get();
             return view('app.invoices.ajax.pendingPaymentsTable')->with('invoices', $invoices);
         }
     }
@@ -541,7 +538,7 @@ class InvoiceController extends Controller
 
             $invoice = Invoice::with('payments')->where('id', $payment->invoice_id)->first();
             if($invoice->total == $invoice->payments->sum('payment')) {
-                $invoice -> status = 'Pagado';
+                $invoice -> payment_status = 'Pagado';
                 $invoice -> save();
             }
         }
@@ -558,20 +555,19 @@ class InvoiceController extends Controller
         $filter = $request->get('filter');
 
         if($filter == 'TO')
-            $invoices = Invoice::where('provider_id', auth()->user()->provider->id)->get();
+            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['status', 'A']])->get();
         else if($filter == 'PE')
-            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['status', 'Pendiente']])->get();
+            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['payment_status', 'Pendiente'], ['status', 'A']])->get();
         else if($filter == 'PA')
-            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['status', 'Pagado']])->get();
+            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['payment_status', 'Pagado'], ['status', 'A']])->get();
 
         return view('app.providers.invoices.ajax.myInvoicesTable')->with('invoices', $invoices);
     }
 
-    public function destroy(Invoice $inv) {
-        // dd($inv);
-        // $inv->delete();
-        $inv->statuseliminado = "I";
-        $inv->save();
+    public function destroy($id) {
+        $invoice = Invoice::find($id);
+        $invoice->status = 'I';
+        $invoice->save();
 
         Alert::success('Éxito', 'Factura eliminada correctamente');
         return redirect()->route('invoices.index');

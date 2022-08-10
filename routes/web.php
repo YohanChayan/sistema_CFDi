@@ -64,8 +64,7 @@ Route::group(['middleware' => ['is_admin'] ], function() {
         Route::post('/addFilteredPayments', [InvoiceController::class, 'addFilteredPayments'])->name('invoices.addFilteredPayments');
 
         Route::get('/downloadfile/{id}',[InvoiceController::class, 'download'])->name('invoices.download');
-        Route::delete('/deletefile/{inv}',[InvoiceController::class, 'destroy'])->name('invoices.destroy');
-
+        Route::get('/delete/{id}',[InvoiceController::class, 'destroy'])->name('invoices.destroy');
     });
 
     Route::group(['prefix' => '/reports'], function() {

@@ -20,14 +20,12 @@ class CreateInvoicesTable extends Migration
             $table->string("uuid");
             $table->string("folio")->nullable();
             $table->double("total", 8, 2);
-            $table->string("status", 40)->default("Pendiente")->comment("Pendiente, Pagado");
-            
-
+            $table->string("payment_status", 40)->default("Pendiente")->comment("Pendiente, Pagado");
             $table->string("pdf")->comment("Url del archivo pdf");
             $table->string("xml")->comment("Url del archivo xml");
             $table->string("other")->nullable()->comment("Url de un posible tercer archivo");
+            $table->char("status", 5)->default("A")->comment("A = Activo", "I = Inactivo");
             $table->timestamps();
-            $table->string("statuseliminado", 10)->default("A")->comment("A = Activo", "I = Inactivo")->nullable();
         });
     }
 
