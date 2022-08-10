@@ -64,6 +64,7 @@ Route::group(['middleware' => ['is_admin'] ], function() {
         Route::post('/addFilteredPayments', [InvoiceController::class, 'addFilteredPayments'])->name('invoices.addFilteredPayments');
 
         Route::get('/downloadfile/{id}',[InvoiceController::class, 'download'])->name('invoices.download');
+        Route::delete('/deletefile/{inv}',[InvoiceController::class, 'destroy'])->name('invoices.destroy');
 
     });
 
@@ -76,6 +77,8 @@ Route::group(['middleware' => ['is_admin'] ], function() {
         Route::get('/invoicesTable', [ReportsController::class, 'invoicesTable'])->name('reports.invoicesTable');
         Route::get('/invoicesPDFReport', [ReportsController::class, 'invoicesPDFReport'])->name('reports.invoicesPDFReport');
     });
+
+    
 
     //* Rutas de providers
     Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');

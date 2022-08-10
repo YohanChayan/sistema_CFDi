@@ -22,6 +22,9 @@ use ZipArchive;
 
 class InvoiceController extends Controller
 {
+
+    
+
     public function index()
     {
         $owners = Owner::all();
@@ -563,4 +566,11 @@ class InvoiceController extends Controller
 
         return view('app.providers.invoices.ajax.myInvoicesTable')->with('invoices', $invoices);
     }
+
+    public function destroy(Invoice $inv) {
+        $inv->delete();
+        Alert::success('Éxito', 'Factura eliminada correctamente');
+        return redirect()->route('invoices.index');
+    }
+    
 }
