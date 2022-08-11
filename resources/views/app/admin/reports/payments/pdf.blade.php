@@ -74,25 +74,40 @@
         <p>Rango De Fechas: {{ $date }}</p>
     </div>
 
-    <br><br>
-
+    <p class="text-right">Monto total: ${{ number_format($totalPayments, 2) }}</p>
+    
     <table>
         <thead>
             <tr>
-                <th style="width: 10%;" class="text-center">#</th>
-                <th style="width: 15%;" class="text-center">Fecha</th>
-                <th style="width: 50%;" class="text-center">UUID</th>
-                <th style="width: 25%;" class="text-center">Pago</th>
+                <th style="width: 5%" class="text-center">#</th>
+                <th style="width: 10%" class="text-center">Fecha</th>
+                <th style="width: 20%" class="text-center">Proveedor</th>
+                <th style="width: 15%" class="text-center">RFC</th>
+                <th style="width: 10%" class="text-center">Folio</th>
+                <th style="width: 30%" class="text-center">UUID</th>
+                <th style="width: 10%" class="text-center">Pago</th>
             </tr>
         </thead>
         <tbody>
             @if(count($payments) > 0)
-                @foreach($payments as $key => $payment)
+                @php $cont = 0; @endphp
+                @foreach($payments as $payment)
+                    @php $total = 0; @endphp
+                    @foreach($payment as $data)
+                        <tr>
+                            <td class="text-center">{{ $cont+1 }}</td>
+                            <td class="text-center">{{ date("d-m-Y", strtotime($data['date'])) }}</td>
+                            <td class="text-center">{{ $data['provider_name'] }}</td>
+                            <td class="text-center">{{ $data['provider_rfc'] }}</td>
+                            <td class="text-center">{{ $data['folio'] }}</td>
+                            <td class="text-center">{{ $data['uuid'] }}</td>
+                            <td class="text-center">${{ number_format($data['payment'], 2) }}</td>
+                        </tr>
+                        @php $cont++; $total += $data['payment']; @endphp
+                    @endforeach
                     <tr>
-                        <td class="text-center">{{ $key+1 }}</td>
-                        <td class="text-center">{{ date("d-m-Y", strtotime($payment->date)) }}</td>
-                        <td class="text-center">{{ $payment->invoice->uuid }}</td>
-                        <td class="text-center">${{ number_format($payment->payment, 2) }}</td>
+                        <td class="text-right" colspan="6"><b>Total</b></td>
+                        <td class="text-center"><b>${{ number_format($total, 2) }}</b></td>
                     </tr>
                 @endforeach
             @else

@@ -79,11 +79,13 @@
     <table>
         <thead>
             <tr>
-                <th style="width: 10%;" class="text-center">#</th>
-                <th style="width: 15%;" class="text-center">Fecha</th>
-                <th style="width: 25%;" class="text-center">Proveedor</th>
-                <th style="width: 25%;" class="text-center">UUID</th>
-                <th style="width: 25%;" class="text-center">Total</th>
+                <th style="width: 5%" class="text-center">#</th>
+                <th style="width: 10%" class="text-center">Fecha</th>
+                <th style="width: 20%" class="text-center">Proveedor</th>
+                <th style="width: 15%" class="text-center">RFC</th>
+                <th style="width: 10%" class="text-center">Folio</th>
+                <th style="width: 30%" class="text-center">UUID</th>
+                <th style="width: 10%" class="text-center">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -91,8 +93,10 @@
                 @foreach($invoices as $key => $invoice)
                     <tr>
                         <td class="text-center">{{ $key+1 }}</td>
-                        <td class="text-center">{{ date("d-m-Y", strtotime($invoice->created_at)) }}</td>
+                        <td class="text-center">{{ date("d-m-Y", strtotime($invoice->date)) }}</td>
                         <td class="text-center">{{ $invoice->provider->nombre }}</td>
+                        <td class="text-center">{{ $invoice->provider->rfc }}</td>
+                        <td class="text-center">{{ $invoice->folio }}</td>
                         <td class="text-center">{{ $invoice->uuid }}</td>
                         <td class="text-center">${{ number_format($invoice->total, 2) }}</td>
                     </tr>

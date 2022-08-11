@@ -50,9 +50,61 @@ class ReportsController extends Controller
         }
 
         $owner = Owner::find($id);
-        $payments = PaymentHistory::with('invoice')->whereIn('invoice_id', $invoice_ids)->whereBetween('date', [date('Y-m-d 00:00:00', strtotime($start_date)), date('Y-m-d 23:59:59', strtotime($end_date))])->get();
+        $payments = PaymentHistory::with('invoice')->whereIn('invoice_id', $invoice_ids)->whereBetween('date', [date('Y-m-d 00:00:00', strtotime($start_date)), date('Y-m-d 23:59:59', strtotime($end_date))])->orderBy('date', 'asc')->get();
 
-        $html = view('app.admin.reports.payments.pdf')->with('payments', $payments)->with('date', $date)->with('owner', $owner)->render();
+        $arreglo = [];
+        $totalPayments = 0;
+        foreach($payments as $payment) {
+            $totalPayments += $payment->payment;
+            
+            if(count($arreglo) == 0) {
+                array_push($arreglo, [[
+                    'date' => $payment->date,
+                    'provider_name' => $payment->invoice->provider->nombre,
+                    'provider_rfc' => $payment->invoice->provider->rfc,
+                    'folio' => $payment->invoice->folio,
+                    'uuid' => $payment->invoice->uuid,
+                    'payment' => $payment->payment,
+                ]]);
+            }
+            else {
+                $bandera = false;
+
+                foreach($arreglo as $key => $datos) {
+                    foreach($datos as $dato) {
+                        if($dato['provider_rfc'] == $payment->invoice->provider->rfc) {
+                            array_push($arreglo[$key], [
+                                'date' => $payment->date,
+                                'provider_name' => $payment->invoice->provider->nombre,
+                                'provider_rfc' => $payment->invoice->provider->rfc,
+                                'folio' => $payment->invoice->folio,
+                                'uuid' => $payment->invoice->uuid,
+                                'payment' => $payment->payment,
+                            ]);
+                            $bandera = true;
+                            break;
+                        }
+                    }
+
+                    if($bandera) {
+                        break;
+                    }
+                }
+
+                if(!$bandera) {
+                    array_push($arreglo, [[
+                        'date' => $payment->date,
+                        'provider_name' => $payment->invoice->provider->nombre,
+                        'provider_rfc' => $payment->invoice->provider->rfc,
+                        'folio' => $payment->invoice->folio,
+                        'uuid' => $payment->invoice->uuid,
+                        'payment' => $payment->payment,
+                    ]]);
+                }
+            }
+        }
+
+        $html = view('app.admin.reports.payments.pdf')->with('payments', $arreglo)->with('date', $date)->with('owner', $owner)->with('totalPayments', $totalPayments)->render();
         $name_file = 'pagos_' . time() . '.pdf';
         $mpdf = new Mpdf([
             'default_font' => 'arial',
