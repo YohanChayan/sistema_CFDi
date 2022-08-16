@@ -30,7 +30,8 @@ class Invoice extends Model
         return $this->hasMany(PaymentHistory::class, 'invoice_id');
     }
 
-    public static function readXML($file) {{{  }}
+    public static function readXML($file) {
+        libxml_use_internal_errors(true);
         $xmlObject = simplexml_load_file($file);   //Convertir el archivo XML en un objeto XML de PHP
         $xmlNamespaces = $xmlObject->getNamespaces(true);   //Obtener los namespaces utilizados al inicio del documento XML
         $xmlObject->registerXPathNamespace('c', $xmlNamespaces['cfdi']);   //c hará referencia a todos los prefijos que empiecen con cfdi
