@@ -15,6 +15,7 @@ use Smalot\PdfParser\Parser;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FilesReceived;
+use App\SAT\ValidateCFDI;
 use Illuminate\Support\Facades\Auth;
 
 use Response;
@@ -346,6 +347,24 @@ class InvoiceController extends Controller
             $owner_rfc = Invoice::getOwnerRFCXML($convertedXML);         // Obtiene el RFC del receptor
             $total = Invoice::getTotalXML($convertedXML);                // Obtiene el Total de la factura
             $folio = Invoice::getFolio($convertedXML);
+
+            /**************************************************/
+            /*           Valida el CFDI ante el SAT           */
+            /**************************************************/
+
+            $validate_cfdi = new ValidateCFDI($provider_rfc, $owner_rfc, $total, $uuid);
+            $sat_response = $validate_cfdi->validate();
+            $status_code = substr(trim($sat_response['CodigoEstatus']), 0, 1);   // Devuelve S si encontró la factura y N si no la encontró
+            $cfdi_status = trim($sat_response['Estado']);   // Devuelve el estado de la factura, ya sea que esté vigente o cancelada
+            
+            if($status_code != 'S') {
+                Alert::warning('Advertencia', 'No pudimos encontrar esta factura en el sistema del SAT');
+                return redirect()->back();
+            }
+            else if($cfdi_status != 'Vigente') {
+                Alert::warning('Advertencia', 'Esta factura está cancelada ante el SAT');
+                return redirect()->back();
+            }
 
             /**************************************************/
             /*    Validar que exista el receptor en la BD     */
