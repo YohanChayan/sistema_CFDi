@@ -1,21 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Invoice;
 use App\Models\Owner;
 use App\Models\Provider;
-use App\Models\User;
 use App\Models\PaymentHistory;
-use Illuminate\Support\Facades\DB;
 
 use Smalot\PdfParser\Parser;
 use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\FilesReceived;
-use App\SAT\ValidateCFDI;
 use Illuminate\Support\Facades\Auth;
 
 use Response;
@@ -27,7 +23,7 @@ class InvoiceController extends Controller
     {
         $owners = Owner::all();
         $invoices = Invoice::with('owner', 'provider')->where('status', 'A')->get();
-        return view('app.invoices.index')->with('invoices', $invoices)->with('owners', $owners);
+        return view('app.admin.invoices.index')->with('invoices', $invoices)->with('owners', $owners);
     }
 
     public function invoicesTable(Request $request) {
@@ -43,7 +39,7 @@ class InvoiceController extends Controller
             $invoices = $invoices->where('provider_id', $provider);
         }
 
-        return view('app.invoices.ajax.invoicesTable')->with('invoices', $invoices);
+        return view('app.admin.invoices.ajax.invoicesTable')->with('invoices', $invoices);
     }
 
     public function leerPDF($id) {
@@ -263,11 +259,6 @@ class InvoiceController extends Controller
         return $data;
     }
 
-    public function create()
-    {
-        return view('app.invoices.create');
-    }
-
     // Descarga de factura
     public function download(Request $request, $id) {
         $option = $request->get('option');
@@ -323,161 +314,6 @@ class InvoiceController extends Controller
         }
     }
 
-    public function store(Request $request)
-    {
-        $file_pdf = $request->file('pdf_input');       // Obtiene el archivo pdf
-        $file_xml = $request->file('xml_input');       // Obtiene el archivo xml
-        $file_other = $request->file('other_input');   // Obtiene el archivo anexo
-
-        $convertedPDF = Invoice::readPDF($file_pdf);   // Lee el archivo pdf
-        $convertedXML = Invoice::readXML($file_xml);   // Lee el archivo xml
-        if($convertedPDF != -1)                        //En caso de que el pdf no se pueda leer
-            $filesCompared = Invoice::compareFiles($convertedPDF, $convertedXML);   // Compara los archivos pdf y xml, devolviendo un valor booleano
-        else
-            $filesCompared = true;   //La comparación la forzamos a que sea verdadera
-
-        if($filesCompared) {   // Archivos iguales
-
-            /**************************************************/
-            /*         Obtener datos del archivo xml          */
-            /**************************************************/
-
-            $uuid = Invoice::getUUIDXML($convertedXML);                  // Obtiene el UUID del archivo xml
-            $provider_rfc = Invoice::getProviderRFCXML($convertedXML);   // Obtiene el RFC del emisor
-            $owner_rfc = Invoice::getOwnerRFCXML($convertedXML);         // Obtiene el RFC del receptor
-            $total = Invoice::getTotalXML($convertedXML);                // Obtiene el Total de la factura
-            $folio = Invoice::getFolio($convertedXML);
-
-            /**************************************************/
-            /*           Valida el CFDI ante el SAT           */
-            /**************************************************/
-
-            $validate_cfdi = new ValidateCFDI($provider_rfc, $owner_rfc, $total, $uuid);
-            $sat_response = $validate_cfdi->validate();
-            $status_code = substr(trim($sat_response['CodigoEstatus']), 0, 1);   // Devuelve S si encontró la factura y N si no la encontró
-            $cfdi_status = trim($sat_response['Estado']);   // Devuelve el estado de la factura, ya sea que esté vigente o cancelada
-            
-            if($status_code != 'S') {
-                Alert::warning('Advertencia', 'No pudimos encontrar esta factura en el sistema del SAT');
-                return redirect()->back();
-            }
-            else if($cfdi_status != 'Vigente') {
-                Alert::warning('Advertencia', 'Esta factura está cancelada ante el SAT');
-                return redirect()->back();
-            }
-
-            /**************************************************/
-            /*    Validar que exista el receptor en la BD     */
-            /**************************************************/
-
-            $search_owner = Owner::where('rfc', $owner_rfc)->first();
-
-            if($search_owner == null){
-                Alert::error('Error', 'El RFC del receptor no coincide con ninguna empresa');
-                return redirect()->back();
-            }
-
-            /**************************************************/
-            /*   Validar que no exista la factura en la BD    */
-            /**************************************************/
-
-            $invoice_uuid = Invoice::where('uuid', $uuid)->first();
-
-            if ($invoice_uuid != null) {
-                Alert::error('Error', 'El UUID ya se encuentra registrado');
-                return redirect()->back();
-            }
-
-            /**************************************************/
-            /*             Registro de la factura             */
-            /**************************************************/
-
-            $search_provider = Provider::where('rfc', $provider_rfc)->first();   // Busca el RFC del emisor en la base de datos
-            $xml_name = '';
-            $name_xml_file = '';
-            $pdf_name = '';
-            $name_pdf_file = '';
-            $other_name = '';
-            $name_other_file = '';
-            $name_provider = '';
-            $other_file_aux = '';
-            $name_provider = Invoice::getNameProviderXML($convertedXML);
-
-            // Mover archivos a la carpeta pública
-            $name_pdf_file = time() . '.pdf';
-            $file_pdf->move(public_path("archivos/pdf"), $name_pdf_file);
-            $pdf_name = "archivos/pdf/" . $name_pdf_file;
-
-            $name_xml_file = time() . '.xml';
-            $file_xml->move(public_path("archivos/xml"), $name_xml_file);
-            $xml_name = "archivos/xml/" . $name_xml_file;
-
-            $name_other_file = '';
-            if ($file_other != null) {
-                $other_file_aux = $file_other->getClientOriginalName();
-
-                $name_other_file = time() . '.' . pathinfo($other_file_aux, PATHINFO_EXTENSION);
-                $file_other->move(public_path("archivos/anexo"), $name_other_file);
-                $other_name = "archivos/anexo/" . $name_other_file;
-            }
-
-            // Crear la factura en la base de datos
-            $new_invoice = new Invoice();
-            $new_invoice->provider_id = $search_provider->id;
-            $new_invoice->owner_id = $search_owner->id;
-            $new_invoice->uuid = $uuid;
-            $new_invoice->folio = $folio;
-            $new_invoice->total = $total;
-            $new_invoice->pdf = $pdf_name;
-            $new_invoice->xml = $xml_name;
-            $new_invoice->other = ($name_other_file == '') ? null : $other_name;
-            $new_invoice->save();
-
-            // Enviar correo electrónico
-            $pdf_original_name = $file_pdf->getClientOriginalName();
-            $xml_original_name = $file_xml->getClientOriginalName();
-            $archivos_email = new FilesReceived($xml_name, $xml_original_name, $pdf_name, $pdf_original_name, $other_name, $name_other_file, $name_provider, $other_file_aux);
-            Mail::to('proveedoresfrutioro@hotmail.com')->send($archivos_email);
-
-            Alert::success('Éxito', 'Factura guardada correctamente');
-            return redirect()->back();
-        }
-        else {
-            Alert::error('Error', 'Los archivos NO contienen el mismo UUID');
-            return redirect()->back();
-        }
-    }
-
-    public function validateProvider(Request $request) {
-        $rfc = $request->get('rfc');   //Obtiene el rfc que se le pasa por el método get desde ajax
-        $search_provider = Provider::where('rfc', $rfc)->first();   // Busca el RFC del emisor en la base de datos
-        if($search_provider == null)
-            return 0;
-        else
-            return 1;
-    }
-
-    public function createNewProvider(Request $request) {
-        //Datos obtenidos de ajax
-        $data = $request->all();
-
-        //Creación de un nuevo proveedor
-        $user = new User();
-        $user -> name = $data['nombre'];
-        $user -> rfc = $data['rfc'];
-        $user -> password = bcrypt($data['password']);
-        $user -> save();
-
-        $provider = new Provider();
-        $provider -> user_id = $user->id;
-        $provider -> rfc = $data['rfc'];
-        $provider -> nombre = $data['nombre'];
-        $provider -> password = bcrypt($data['password']);
-        $provider -> save();
-
-        return 1;
-    }
-
     public function readPdf() {
         return view("app.invoices.readPdf");
     }
@@ -492,7 +328,7 @@ class InvoiceController extends Controller
     public function modalPayment(Request $request) {
         $id = $request->get('id');
         $invoice = Invoice::with('payments')->where('id', $id)->first();
-        return view('app.invoices.ajax.modalPayment')->with('invoice', $invoice);
+        return view('app.admin.invoices.ajax.modalPayment')->with('invoice', $invoice);
     }
 
     public function addPayment(Request $request) {
@@ -521,7 +357,7 @@ class InvoiceController extends Controller
     public function paymentsBulkUpload() {
         $owners = Owner::all();
         $providers = Provider::all();
-        return view('app.invoices.paymentsBulkUpload')
+        return view('app.admin.invoices.paymentsBulkUpload')
             ->with('owners', $owners)
             ->with('providers', $providers);
     }
@@ -534,7 +370,7 @@ class InvoiceController extends Controller
             array_push($provider_ids, $invoice->provider_id);
         }
         $providers = Provider::whereIn('id', $provider_ids)->get();
-        return view('app.invoices.ajax.providersDatalist')->with('providers', $providers);
+        return view('app.admin.invoices.ajax.providersDatalist')->with('providers', $providers);
     }
 
     public function pendingPaymentsTable(Request $request) {
@@ -542,11 +378,11 @@ class InvoiceController extends Controller
         $provider_id = $request->get('provider');
         if($owner_id == -1 || $provider_id == -1) {
             $invoices = Invoice::with("provider", "payments")->where([['payment_status', 'Pendiente'], ['status', 'A']])->get();
-            return view('app.invoices.ajax.paymentsTable')->with('invoices', $invoices);
+            return view('app.admin.invoices.ajax.paymentsTable')->with('invoices', $invoices);
         }
         else {
             $invoices = Invoice::where([['owner_id', $owner_id], ['provider_id', $provider_id], ['payment_status', 'Pendiente'], ['status', 'A']])->get();
-            return view('app.invoices.ajax.pendingPaymentsTable')->with('invoices', $invoices);
+            return view('app.admin.invoices.ajax.pendingPaymentsTable')->with('invoices', $invoices);
         }
     }
 
@@ -558,6 +394,7 @@ class InvoiceController extends Controller
             $payment -> user_id = Auth::id();
             $payment -> invoice_id = $pendingPayment->invoice_id;
             $payment -> date = $pendingPayment->date;
+            $payment -> payment_method = $pendingPayment->payment_method;
             $payment -> payment = $pendingPayment->payment;
             $payment -> save();
 
@@ -572,23 +409,6 @@ class InvoiceController extends Controller
         return redirect()->route('invoices.paymentsBulkUpload');
     }
 
-    public function myInvoices() {
-        return view('app.providers.invoices.index');
-    }
-
-    public function myInvoicesTable(Request $request) {
-        $filter = $request->get('filter');
-
-        if($filter == 'TO')
-            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['status', 'A']])->get();
-        else if($filter == 'PE')
-            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['payment_status', 'Pendiente'], ['status', 'A']])->get();
-        else if($filter == 'PA')
-            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['payment_status', 'Pagado'], ['status', 'A']])->get();
-
-        return view('app.providers.invoices.ajax.myInvoicesTable')->with('invoices', $invoices);
-    }
-
     public function destroy($id) {
         $invoice = Invoice::find($id);
         $invoice->status = 'I';
@@ -597,5 +417,4 @@ class InvoiceController extends Controller
         Alert::success('Éxito', 'Factura eliminada correctamente');
         return redirect()->route('invoices.index');
     }
-    
 }

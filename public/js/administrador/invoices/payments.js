@@ -80,6 +80,7 @@ function saveAll() {
     for(let i = 0; i < payments.length; i++) {
         let id = payments[i]['id'];
         let date = $('#date_' + id).val();
+        let payment_method = $('#payment_method_' + id).val();
         let payment = $('#payment_' + id).val();
 
         let pendingMoney = payments[i]['total'];
@@ -99,6 +100,7 @@ function saveAll() {
             pendingPayments.push({
                 'invoice_id': id,
                 'date': date,
+                'payment_method': payment_method,
                 'payment': payment
             });
         }

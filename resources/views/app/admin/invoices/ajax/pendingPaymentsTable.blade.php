@@ -1,13 +1,14 @@
 <table class="table text-start align-middle table-bordered mb-0">
     <thead>
         <tr class="text-dark">
-            <th scope="col" class="text-center">UUID</th>
-            <th scope="col" class="text-center">Folio</th>
-            <th scope="col" class="text-center">Nombre</th>
-            <th scope="col" class="text-center">Importe</th>
-            <th scope="col" class="text-center">Saldo</th>
-            <th scope="col" class="text-center">F. Pago</th>
-            <th scope="col" class="text-center">Pago</th>
+            <th scope="col" class="text-center" style="width: 15%;">UUID</th>
+            <th scope="col" class="text-center" style="width: 10%;">Folio</th>
+            <th scope="col" class="text-center" style="width: 15%;">Nombre</th>
+            <th scope="col" class="text-center" style="width: 10%;">Importe</th>
+            <th scope="col" class="text-center" style="width: 10%;">Saldo</th>
+            <th scope="col" class="text-center" style="width: 10%;">F. Pago</th>
+            <th scope="col" class="text-center" style="width: 15%;">Método Pago</th>
+            <th scope="col" class="text-center" style="width: 15%;">Pago</th>
         </tr>
     </thead>
     <tbody>
@@ -22,6 +23,15 @@
                     <input class="form-control" type="date" name="date_{{ $inv->id }}" id="date_{{ $inv->id }}">
                 </td>
                 <td class="text-center">
+                    <select class="form-select" name="payment_method_{{ $inv->id }}" id="payment_method_{{ $inv->id }}">
+                        <option value="1">Efectivo</option>
+                        <option value="2">Tarjeta crédito</option>
+                        <option value="3">Tarjeta débito</option>
+                        <option value="4">Transferencia</option>
+                        <option value="5">Otro</option>
+                    </select>
+                </td>
+                <td class="text-center">
                     <div class="input-group">
                         <span class="input-group-text">$</span>
                         <input class="form-control" type="number" name="payment_{{ $inv->id }}" id="payment_{{ $inv->id }}" min="0" onchange="payment();">
@@ -30,7 +40,7 @@
             </tr>
         @endforeach
         <tr>
-            <th class="text-end fs-5" colspan="6">Monto Total</th>
+            <th class="text-end fs-5" colspan="7">Monto Total</th>
             <td class="text-center fs-5" id="total">$0.00</td>
         </tr>
         

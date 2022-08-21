@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Provider;
 
+use App\Http\Controllers\Controller;
 use App\Models\PaymentHistory;
 use Illuminate\Http\Request;
 

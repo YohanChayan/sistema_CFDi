@@ -15,10 +15,12 @@ class CreatePaymentsHistoriesTable extends Migration
     {
         Schema::create('payments_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained("users", "id");
-            $table->foreignId("invoice_id")->constrained("invoices", "id");
-            $table->date("date");
-            $table->double("payment", 8, 2);
+            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->foreignId('invoice_id')->constrained('invoices', 'id');
+            $table->date('date');
+            $table->char('payment_method', 1)->default(1)->comment('1 = Efectivo, 2 = Tarjeta de crédito, 3 = Tarjeta de débito, 4 = Transferencia, 5 = Otro');
+            $table->double('payment', 8, 2);
+            $table->string('receipt')->nullable()->comment('Comprobante de pago');
             $table->timestamps();
         });
     }
