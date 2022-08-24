@@ -60,21 +60,28 @@
                     {{-- ACCIONES --}}
                     <td class="text-center">
                         <div class="row d-flex justify-content-between">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <a class="text-success" data-bs-toggle="modal" data-bs-target="#paymentsModal" onclick="modalPayment({{ $inv->id }});" style="cursor: pointer;">
                                     <span data-bs-toggle="tooltip" data-bs-placement="top" title="Pagos">
                                         <i class="fas fa-money-bill-wave"></i>
                                     </span>
                                 </a>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <a class="text-primary" data-bs-toggle="modal" data-bs-target="#filesModal" onclick="modalFile({{ $inv->id }});" style="cursor: pointer;">
                                     <span data-bs-toggle="tooltip" data-bs-placement="top" title="Descargas">
                                         <i class="fas fa-file-download"></i>
                                     </span>
                                 </a>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <a class="text-secondary" onclick="resendEmail({{ $inv->id }});" style="cursor: pointer;">
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Reenviar Correo">
+                                        <i class="fas fa-envelope-open-text"></i>
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
                                 <a class="text-danger" id="delete_{{ $inv->id }}" onclick="deleteInvoice(this);" style="cursor: pointer;">
                                     <span data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
                                         <i class="fas fa-trash"></i>

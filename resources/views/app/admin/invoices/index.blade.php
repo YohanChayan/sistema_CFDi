@@ -62,6 +62,24 @@
           </div>
           <br>
           <div class="row">
+            <div class="col-lg-6">
+              <label for="payment_method">Método de pago</label>
+              <select class="form-select" name="payment_method" id="payment_method">
+                <option value="-1" selected>Seleccione un método</option>
+                <option value="1">Efectivo</option>
+                <option value="2">Tarjeta crédito</option>
+                <option value="3">Tarjeta débito</option>
+                <option value="4">Transferencia</option>
+                <option value="5">Otro</option>
+              </select>
+            </div>
+            <div class="col-lg-6">
+              <label for="receipt">Comprobante</label>
+              <input class="form-control" type="file" name="receipt" id="receipt">
+            </div>
+          </div>
+          <br>
+          <div class="row">
             <div class="col-lg-12">
               <a class="text-success" data-bs-toggle="collapse" data-bs-target="#paymentsHistory" aria-expanded="false" aria-controls="paymentsHistory" style="cursor: pointer">
                   Historial de pagos

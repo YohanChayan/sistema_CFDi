@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\ReportsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\Provider\InvoiceController as ProviderInvoiceController;
 use App\Http\Controllers\Provider\PaymentHistoryController;
 use App\Http\Controllers\ProviderController;
-use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UniversalDashboardController;
 
 /*
@@ -57,13 +57,14 @@ Route::group(['middleware' => ['is_admin'] ], function() {
         Route::get('/invoicesTable', [InvoiceController::class, 'invoicesTable'])->name('invoices.invoicesTable');
         Route::get('/addPayment', [InvoiceController::class, 'addPayment'])->name('invoices.addPayment');
         Route::get('/modalPayment', [InvoiceController::class, 'modalPayment'])->name('invoices.modalPayment');
+        Route::get('/downloadfile/{id}',[InvoiceController::class, 'download'])->name('invoices.download');
+        Route::get('/resendEmail/{id}',[InvoiceController::class, 'resendEmail'])->name('invoices.resendEmail');
+        Route::get('/delete/{id}',[InvoiceController::class, 'destroy'])->name('invoices.destroy');
+
         Route::get('/paymentsBulkUpload', [InvoiceController::class, 'paymentsBulkUpload'])->name('invoices.paymentsBulkUpload');
         Route::get('/providersDatalist', [InvoiceController::class, 'providersDatalist'])->name('invoices.providersDatalist');
         Route::get('/pendingPaymentsTable', [InvoiceController::class, 'pendingPaymentsTable'])->name('invoices.pendingPaymentsTable');
         Route::post('/addFilteredPayments', [InvoiceController::class, 'addFilteredPayments'])->name('invoices.addFilteredPayments');
-
-        Route::get('/downloadfile/{id}',[InvoiceController::class, 'download'])->name('invoices.download');
-        Route::get('/delete/{id}',[InvoiceController::class, 'destroy'])->name('invoices.destroy');
     });
 
     //* Rutas de reportes

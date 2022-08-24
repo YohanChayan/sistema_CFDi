@@ -21,6 +21,14 @@ function validatePayment() {
         $('#payment').removeClass('is-invalid');
     }
 
+    if($('#payment_method').val() == '-1') {
+        $('#payment_method').addClass('is-invalid');
+        errors++;
+    }
+    else {
+        $('#payment_method').removeClass('is-invalid');
+    }
+
     return errors;
 }
 
@@ -83,7 +91,6 @@ function changeOwner() {
 function filter() {
     let owner = datalist_id('owner', 'owners_list');
     let provider = datalist_id('provider', 'providers_list');
-    console.log(owner, provider);
 
     if(validate() == 0) {
         $.ajax({
@@ -158,6 +165,10 @@ function downloadFile() {
             'warning'
         );
     }
+}
+
+function resendEmail(id) {
+    window.location.href = './resendEmail/' + id;
 }
 
 function deleteInvoice(btn) {

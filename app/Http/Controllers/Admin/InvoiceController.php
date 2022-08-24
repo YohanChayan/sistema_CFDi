@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\FilesReceived;
 use Illuminate\Http\Request;
 
 use App\Models\Invoice;
@@ -13,7 +14,7 @@ use App\Models\PaymentHistory;
 use Smalot\PdfParser\Parser;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Mail;
 use Response;
 use ZipArchive;
 
@@ -407,6 +408,15 @@ class InvoiceController extends Controller
 
         Alert::success('Éxito', 'Pagos guardados correctamente');
         return redirect()->route('invoices.paymentsBulkUpload');
+    }
+
+    public function resendEmail($id) {
+        $invoice = Invoice::with('provider')->find($id);
+        $email_files = new FilesReceived($invoice->xml, 'factura.xml', $invoice->pdf, 'factura.pdf', $invoice->other,'factura.png', $invoice->other, $invoice->provider->nombre, 'factura.png');
+        Mail::to('chuyatlas2001@hotmail.com')->send($email_files);
+
+        Alert::success('Éxito', 'Correo reenviado correctamente');
+        return redirect()->back();
     }
 
     public function destroy($id) {
