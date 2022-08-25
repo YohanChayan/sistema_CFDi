@@ -336,6 +336,7 @@ class InvoiceController extends Controller
         $id = $request->get('id');
         $date = $request->get('date');
         $amount = $request->get('amount');
+        $payment_method = $request->get('payment_method');
 
         $invoice = Invoice::find($id);
         $subtotal = PaymentHistory::where('invoice_id', $id)->sum('payment');
@@ -348,6 +349,7 @@ class InvoiceController extends Controller
             $payment -> user_id = Auth::id();
             $payment -> invoice_id = $id;
             $payment -> date = $date;
+            $payment -> payment_method = $payment_method;
             $payment -> payment = $amount;
             $payment -> save();
 
@@ -412,7 +414,9 @@ class InvoiceController extends Controller
 
     public function resendEmail($id) {
         $invoice = Invoice::with('provider')->find($id);
-        $email_files = new FilesReceived($invoice->xml, 'factura.xml', $invoice->pdf, 'factura.pdf', $invoice->other,'factura.png', $invoice->other, $invoice->provider->nombre, 'factura.png');
+        $name_other_file_aux = explode('/', $invoice->other);
+        $name_other_file = end($name_other_file_aux);
+        $email_files = new FilesReceived($invoice->xml, 'factura.xml', $invoice->pdf, 'factura.pdf', $invoice->other, $name_other_file, $invoice->provider->nombre, $name_other_file);
         Mail::to('chuyatlas2001@hotmail.com')->send($email_files);
 
         Alert::success('Éxito', 'Correo reenviado correctamente');

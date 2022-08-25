@@ -26,7 +26,7 @@
         <label for="provider">Proveedor</label>
         <input class="form-control" type="text" list="providers_list" name="provider" id="provider" onchange="filter();">
         <datalist id="providers_list">
-        
+          
         </datalist>
       </div>
     </div>

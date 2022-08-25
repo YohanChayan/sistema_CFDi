@@ -8,54 +8,24 @@
 <table class="table text-start align-middle table-bordered mb-0" style="width: 100%;">
     <thead>
         <tr class="text-dark">
-            <th scope="col" class="text-center" style="width: 25%;">Empresa registrada</th>
-            <th scope="col" class="text-center" style="width: 65%;">Proveedor</th>
-            <th scope="col" class="text-center" style="width: 10%;">Acciones</th>
+            <th scope="col" class="text-center" style="width: 20%;">Nombre</th>
+            <th scope="col" class="text-center" style="width: 15%;">RFC</th>
+            <th scope="col" class="text-center" style="width: 30%;">UUID</th>
+            <th scope="col" class="text-center" style="width: 10%;">Folio</th>
+            <th scope="col" class="text-center" style="width: 10%;">Total</th>
+            <th scope="col" class="text-center" style="width: 15%;">Acciones</th>
         </tr>
     </thead>
     <tbody>
         @if(count($invoices) > 0)
-        @foreach($invoices as $inv)
-            <tr>
-                {{-- EMPRESA REGISTRADA --}}
-                <td>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" style="width: 75%;">Nombre</th>
-                                <th scope="col" style="width: 25%;">RFC</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ $inv->owner->nombre }}</td>
-                                <td>{{ $inv->owner->rfc }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    </td>
-
+            @foreach($invoices as $inv)
+                <tr>
                     {{-- PROVEEDOR --}}
-                    <td>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="width: 25%;">Nombre</th>
-                                    <th scope="col" style="width: 10%;">RFC</th>
-                                    <th scope="col" style="width: 55%;">UUID</th>
-                                    <th scope="col" style="width: 10%;">Folio</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{ $inv->provider->nombre }}</td>
-                                    <td>{{ $inv->provider->rfc }}</td>
-                                    <td>{{ $inv->uuid }}</td>
-                                    <td>{{ $inv->folio }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
+                    <td class="text-center">{{ $inv->provider->nombre }}</td>
+                    <td class="text-center">{{ $inv->provider->rfc }}</td>
+                    <td class="text-center">{{ $inv->uuid }}</td>
+                    <td class="text-center">{{ $inv->folio }}</td>
+                    <td class="text-center">${{ number_format($inv->total, 2) }}</td>
 
                     {{-- ACCIONES --}}
                     <td class="text-center">

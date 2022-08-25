@@ -123,12 +123,14 @@ function addPayment() {
     if(validatePayment() == 0) {
         let date = $('#date').val();
         let amount = $('#payment').val();
+        let payment_method = $('#payment_method').val();
         $.ajax({
             url: './addPayment',
             data: {
                 id: invoice_id,
                 date: date,
                 amount: amount,
+                payment_method: payment_method,
             },
             success: function(data) {
                 if(data == 1) {
@@ -147,6 +149,7 @@ function addPayment() {
 function cleanPayment() {
     $('#date').val('');
     $('#payment').val('');
+    $('#payment_method').val('-1');
 }
 
 function modalFile(id) {
