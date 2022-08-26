@@ -31,7 +31,7 @@
     <br>
 
     <div class="table-responsive" id="my_payments_table">
-      
+
     </div>
   </div>
 </div>

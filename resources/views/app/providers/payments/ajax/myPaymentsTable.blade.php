@@ -1,4 +1,6 @@
-<table class="table text-start align-middle table-bordered mb-0" style="widows: 100%;">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+
+<table class="table text-start align-middle table-bordered mb-0" id="myPaymentTable" style="widows: 100%;">
     <thead>
         <tr class="text-dark">
             <th style="width: 10%;" class="text-center">#</th>
@@ -31,3 +33,10 @@
         @endif
     </tbody>
 </table>
+
+
+<script>
+      $(document).ready( function () {
+          $('#myPaymentTable').DataTable();
+      } );
+</script>

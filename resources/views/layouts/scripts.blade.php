@@ -9,5 +9,10 @@
 <script src="{{asset('custom/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+{{-- DataTable --}}
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+
 <!-- Template Javascript -->
 <script src="{{asset('custom/js/main.js')}}"></script>
