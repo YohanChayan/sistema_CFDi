@@ -31,7 +31,7 @@ class Invoice extends Model
     }
 
     public static function readXML($file) {
-        libxml_use_internal_errors(true);
+        libxml_use_internal_errors(true);   //Previene de posibles errores al intentar leer el archivo XML
         $xmlObject = simplexml_load_file($file);   //Convertir el archivo XML en un objeto XML de PHP
         $xmlNamespaces = $xmlObject->getNamespaces(true);   //Obtener los namespaces utilizados al inicio del documento XML
         $xmlObject->registerXPathNamespace('c', $xmlNamespaces['cfdi']);   //c hará referencia a todos los prefijos que empiecen con cfdi
@@ -42,7 +42,8 @@ class Invoice extends Model
             "Comprobante" => $xmlObject->xpath('//c:Comprobante'),
             "Emisor" => $xmlObject->xpath('//c:Emisor'),
             "Receptor" => $xmlObject->xpath('//c:Receptor'),
-            "TimbreFiscalDigital" => $xmlObject->xpath('//t:TimbreFiscalDigital')
+            "Productos" => $xmlObject->xpath('//c:Concepto'),
+            "TimbreFiscalDigital" => $xmlObject->xpath('//t:TimbreFiscalDigital'),
         ]);
 
         $data = json_decode($json, true);   //Convertir de JSON a arreglo asociativo los resultados
@@ -105,34 +106,49 @@ class Invoice extends Model
     }
 
     public static function getUUIDXML($xml) {
-        return $xml["TimbreFiscalDigital"][0]["@attributes"]["UUID"];   //Obtiene el UUID del archivo xml
+        return $xml['TimbreFiscalDigital'][0]['@attributes']['UUID'];   //Obtiene el UUID del archivo xml
     }
 
     public static function getProviderRFCXML($xml) {
-        return $xml["Emisor"][0]["@attributes"]["Rfc"];   //Obtiene el RFC del emisor (proveedor) del archivo xml
+        return $xml['Emisor'][0]['@attributes']['Rfc'];   //Obtiene el RFC del emisor (proveedor) del archivo xml
     }
 
     public static function getOwnerRFCXML($xml) {
-        return $xml["Receptor"][0]["@attributes"]["Rfc"];   //Obtiene el RFC del receptor (propietario) del archivo xml
+        return $xml['Receptor'][0]['@attributes']['Rfc'];   //Obtiene el RFC del receptor (propietario) del archivo xml
     }
 
     public static function getNameProviderXML($xml) {
-        return $xml["Emisor"][0]["@attributes"]["Nombre"];   //Obtiene el Nombre del emisor (proveedor) del archivo xml
+        return $xml['Emisor'][0]['@attributes']['Nombre'];   //Obtiene el Nombre del emisor (proveedor) del archivo xml
     }
 
     public static function getNameOwnerXML($xml) {
-        return $xml["Receptor"][0]["@attributes"]["Nombre"];   //Obtiene el Nombre del emisor (propietario) del archivo xml
+        return $xml['Receptor'][0]['@attributes']['Nombre'];   //Obtiene el Nombre del emisor (propietario) del archivo xml
     }
 
     public static function getTotalXML($xml) {
-        return $xml["Comprobante"][0]["@attributes"]["Total"];   //Obtiene el Total de la factura del archivo xml
+        return $xml['Comprobante'][0]['@attributes']['Total'];   //Obtiene el Total de la factura del archivo xml
     }
 
     public static function getFolio($xml) {
         try {
-            return $xml["Comprobante"][0]["@attributes"]["Folio"];   //Obtiene el Folio de la factura del archivo xml
+            return $xml['Comprobante'][0]['@attributes']['Folio'];   //Obtiene el Folio de la factura del archivo xml
         } catch(Exception $e) {
             return null;
         }
+    }
+
+    public static function getProductsXML($xml) {
+        $array_products = [];
+        foreach($xml['Productos'] as $product) {
+            array_push($array_products, [
+                'name' => $product['@attributes']['Descripcion'],
+                'quantity' => $product['@attributes']['Cantidad'],
+                'price' => $product['@attributes']['ValorUnitario'],
+                'total' => $product['@attributes']['Importe'],
+                'sat_product' => intval($product['@attributes']['ClaveProdServ']),
+                'sat_measurement_unit' => strtoupper($product['@attributes']['ClaveUnidad']),
+            ]);
+        }
+        return $array_products;   //Obtiene los Productos de la factura del archivo xml
     }
 }

@@ -16,11 +16,12 @@ class CreateInvoicesDetailsTable extends Migration
         Schema::create('invoices_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('invoice_id')->constrained('invoices', 'id');
+            $table->foreignId('sat_product_id')->nullable()->constrained('sat_products', 'id');
+            $table->foreignId('sat_measurement_unit_id')->nullable()->constrained('sat_measurement_units', 'id');
             $table->string('name');
             $table->double('quantity');
             $table->double('price', 8, 2);
-            $table->string('prod_serv');
-            $table->string('udm');
+            $table->double('total', 8, 2);
             $table->timestamps();
         });
     }

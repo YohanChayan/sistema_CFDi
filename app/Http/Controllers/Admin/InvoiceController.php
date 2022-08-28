@@ -338,7 +338,7 @@ class InvoiceController extends Controller
         $amount = $request->get('amount');
         $payment_method = $request->get('payment_method');
 
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::with('provider')->find($id);
         $subtotal = PaymentHistory::where('invoice_id', $id)->sum('payment');
 
         if($subtotal + $amount > $invoice->total) {
@@ -346,7 +346,8 @@ class InvoiceController extends Controller
         }
         else {
             $payment = new PaymentHistory();
-            $payment -> user_id = Auth::id();
+            $payment -> user_id = $invoice->provider->user_id;
+            $payment -> approved_by = Auth::id();
             $payment -> invoice_id = $id;
             $payment -> date = $date;
             $payment -> payment_method = $payment_method;

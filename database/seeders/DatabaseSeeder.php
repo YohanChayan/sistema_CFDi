@@ -55,6 +55,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            SatMeasurementUnitSeeder::class,
+            SatProductSeeder::class,
             OwnerSeeder::class,
             ProviderSeeder::class,
             InvoiceSeeder::class,

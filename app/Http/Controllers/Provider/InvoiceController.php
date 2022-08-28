@@ -13,6 +13,9 @@ use App\Models\User;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FilesReceived;
+use App\Models\InvoiceDetail;
+use App\Models\SatMeasurementUnit;
+use App\Models\SatProduct;
 use App\SAT\ValidateCFDI;
 
 class InvoiceController extends Controller
@@ -45,7 +48,8 @@ class InvoiceController extends Controller
             $provider_rfc = Invoice::getProviderRFCXML($convertedXML);   // Obtiene el RFC del emisor
             $owner_rfc = Invoice::getOwnerRFCXML($convertedXML);         // Obtiene el RFC del receptor
             $total = Invoice::getTotalXML($convertedXML);                // Obtiene el Total de la factura
-            $folio = Invoice::getFolio($convertedXML);
+            $folio = Invoice::getFolio($convertedXML);                   // Obtiene el Folio de la factura
+            $products = Invoice::getProductsXML($convertedXML);          // Obtiene los Productos registrados en la factura
 
             /**************************************************/
             /*           Valida el CFDI ante el SAT           */
@@ -139,12 +143,29 @@ class InvoiceController extends Controller
             $new_invoice->status = 'A';
             $new_invoice->save();
 
+            if(count($products) > 0) {
+                foreach($products as $product) {
+                    $sat_product = SatProduct::where('code', $product['sat_product'])->first();
+                    $sat_measurement_unit = SatMeasurementUnit::where('code', $product['sat_measurement_unit'])->first();
+
+                    $new_invoice_detail = new InvoiceDetail();
+                    $new_invoice_detail -> invoice_id = $new_invoice -> id;
+                    $new_invoice_detail -> sat_product_id = ($sat_product != null) ? $sat_product -> id : null;
+                    $new_invoice_detail -> sat_measurement_unit_id = ($sat_measurement_unit != null) ? $sat_measurement_unit -> id : null;
+                    $new_invoice_detail -> name = $product['name'];
+                    $new_invoice_detail -> quantity = $product['quantity'];
+                    $new_invoice_detail -> price = $product['price'];
+                    $new_invoice_detail -> total = $product['total'];
+                    $new_invoice_detail -> save();
+                }
+            }
+
             // Enviar correo electrónico
             $pdf_original_name = $file_pdf->getClientOriginalName();
             $xml_original_name = $file_xml->getClientOriginalName();
             $archivos_email = new FilesReceived($xml_name, $xml_original_name, $pdf_name, $pdf_original_name, $other_name, $name_other_file, $name_provider, $other_file_aux);
             //Mail::to('proveedoresfrutioro@hotmail.com')->send($archivos_email);
-            Mail::to('chuyatlas2001@hotmail.com')->send($archivos_email);
+            //Mail::to('chuyatlas2001@hotmail.com')->send($archivos_email);
 
             Alert::success('Éxito', 'Factura guardada correctamente');
             return redirect()->back();

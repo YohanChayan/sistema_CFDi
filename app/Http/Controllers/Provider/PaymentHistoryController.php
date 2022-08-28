@@ -16,10 +16,7 @@ class PaymentHistoryController extends Controller
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
 
-        $payments = PaymentHistory::with('invoice')->whereBetween('date', [$startDate, $endDate])
-        // ->where([['user_id', auth()->user()->id ]])
-        ->get();
-        // dd($payments);
+        $payments = PaymentHistory::with('invoice')->whereBetween('date', [$startDate, $endDate])->where('user_id', auth()->user()->id)->get();
 
         return view('app.providers.payments.ajax.myPaymentsTable')->with('payments', $payments);
     }
