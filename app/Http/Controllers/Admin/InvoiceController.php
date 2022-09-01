@@ -397,6 +397,7 @@ class InvoiceController extends Controller
             $payment = new PaymentHistory();
             $payment -> user_id = Auth::id();
             $payment -> invoice_id = $pendingPayment->invoice_id;
+            $payment -> approved_by = Auth::id();
             $payment -> date = $pendingPayment->date;
             $payment -> payment_method = $pendingPayment->payment_method;
             $payment -> payment = $pendingPayment->payment;
