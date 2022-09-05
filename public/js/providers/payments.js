@@ -55,3 +55,32 @@ function filter() {
         });
     }
 }
+
+
+function paymentPreview(paymentID)
+{
+    $.ajax({
+        url: './preview',
+        data: {id: paymentID},
+        success: function(answer){
+            console.log('success ajax for preview');
+            if(answer == 'No'){
+                document.querySelector('#imgPreviewContainer').innerHTML = '';
+                const p = document.createElement('p');
+                p.classList.add('text-center', 'text-danger');
+                p.innerText = 'No existe archivo.';
+                document.querySelector('#imgPreviewContainer').appendChild(p);
+                $('#paymentPreview').modal('toggle');
+            } else {
+                document.querySelector('#imgPreviewContainer').innerHTML = '';
+                const img = document.createElement('img');
+                img.setAttribute('width', '100%');
+                img.setAttribute('height', '500px');
+                img.setAttribute("src", answer );
+                img.classList.add("p-2");
+                document.querySelector('#imgPreviewContainer').append(img);
+                $('#paymentPreview').modal('toggle');
+            }
+        }
+    })
+}

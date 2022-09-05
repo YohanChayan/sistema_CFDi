@@ -33,6 +33,31 @@
     <div class="table-responsive" id="my_payments_table">
 
     </div>
+
+
+    <!-- Modal payment preview -->
+    <div class="modal fade" id="paymentPreview" tabindex="-1" aria-labelledby="paymentPreviewLabel" aria-hidden="true" data-bs-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content bg-light">
+          <div class="modal-header">
+            <h5 class="modal-title" id="paymentPreviewLabel">Vista previa pago</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ">
+            <div class="row">
+                <div class="col-md-8 mx-auto" id="imgPreviewContainer">
+
+                </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 

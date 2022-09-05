@@ -26,7 +26,7 @@
         <label for="provider">Proveedor</label>
         <input class="form-control" type="text" list="providers_list" name="provider" id="provider" onchange="filter();">
         <datalist id="providers_list">
-          
+
         </datalist>
       </div>
     </div>
@@ -34,7 +34,7 @@
     <br>
 
     <div class="table-responsive" id="my_invoices_table">
-      
+
     </div>
   </div>
 
@@ -47,6 +47,12 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+
+    <form action="#" method="POST" id="formNewPayment" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <input type="hidden" id="prov_id" name="prov_id">
+
           <div class="row">
             <div class="col-lg-6">
               <label for="date">Fecha</label>
@@ -93,8 +99,10 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button id="addPaymentBtn" type="button" class="btn btn-success">Agregar</button>
+          {{-- <button id="addPaymentBtn" type="submit" class="btn btn-success">Agregar</button> --}}
+          <button id="addPaymentBtn2" type="submit" class="btn btn-primary">Agregar</button>
         </div>
+    </form>
       </div>
     </div>
   </div>

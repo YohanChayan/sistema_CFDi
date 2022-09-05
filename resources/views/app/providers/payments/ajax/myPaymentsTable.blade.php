@@ -21,8 +21,22 @@
                     <td class="text-center">{{ $payment->invoice->uuid }}</td>
                     <td class="text-center">${{ number_format($payment->payment, 2) }}</td>
                     <td class="text-center">
-                        <i class="fas fa-eye me-3"></i>
-                        <i class="fas fa-download"></i>
+                        <div class="row d-flex justify-content-evenly">
+                            <div class="col-md-3" >
+                                <a onclick="paymentPreview({{$payment->id}});" class="text-primary" style="cursor: pointer;">
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Vista previa">
+                                        <i class="fas fa-eye me-3"></i>
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="{{route('invoices.downloadPayment', $payment->id)}}" class="text-primary" style="cursor: pointer;">
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Descargar">
+                                        <i class="fas fa-download"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             @endforeach

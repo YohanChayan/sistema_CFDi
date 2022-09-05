@@ -55,6 +55,7 @@ Route::group(['middleware' => ['is_admin'] ], function() {
     Route::group(['prefix' => '/invoice'], function() {
         Route::get('/index', [InvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoicesTable', [InvoiceController::class, 'invoicesTable'])->name('invoices.invoicesTable');
+        Route::post('/addPayment2', [InvoiceController::class, 'addPayment2'])->name('invoices.addPayment2');
         Route::get('/addPayment', [InvoiceController::class, 'addPayment'])->name('invoices.addPayment');
         Route::get('/modalPayment', [InvoiceController::class, 'modalPayment'])->name('invoices.modalPayment');
         Route::get('/downloadfile/{id}',[InvoiceController::class, 'download'])->name('invoices.download');
@@ -89,6 +90,8 @@ Route::group(['middleware' => ['is_provider'] ], function() {
     Route::get('/invoice/myInvoicesTable', [ProviderInvoiceController::class, 'myInvoicesTable'])->name('invoices.myInvoicesTable');
 
     Route::get('/payments/myPayments', [PaymentHistoryController::class, 'myPayments'])->name('invoices.myPayments');
+    Route::get('/payments/preview', [PaymentHistoryController::class, 'preview'])->name('invoices.preview');
+    Route::get('/payments/download/${id}', [PaymentHistoryController::class, 'download'])->name('invoices.downloadPayment');
     Route::get('/payments/myPaymentsTable', [PaymentHistoryController::class, 'myPaymentsTable'])->name('invoices.myPaymentsTable');
 });
 

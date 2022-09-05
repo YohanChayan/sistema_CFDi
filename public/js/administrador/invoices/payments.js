@@ -21,7 +21,7 @@ function changeOwner() {
 function changeProvider() {
     let owner = datalist_id('owner', 'owners_list');
     let provider = datalist_id('provider', 'providers_list');
-    
+
     $.ajax({
         'url': './pendingPaymentsTable',
         data: {
@@ -154,3 +154,5 @@ function datalist_id(datalist, lista){
     });
     return findId;
 }
+
+

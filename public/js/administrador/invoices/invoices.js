@@ -107,6 +107,9 @@ function filter() {
 }
 
 function modalPayment(id) {
+
+    $('#prov_id').val(id);
+
     invoice_id = id;
     $.ajax({
         url: './modalPayment',
@@ -117,13 +120,45 @@ function modalPayment(id) {
     });
 }
 
+
 $('#addPaymentBtn').on('click', addPayment);
+
+document.querySelector('#formNewPayment').addEventListener('submit', function(e){
+    e.preventDefault();
+    console.log('event trigrered')
+    if(validatePayment() == 0){
+        $.ajax({
+            url: './addPayment2',
+            type: 'POST',
+            data: new FormData(this),
+            dataType: 'JSON',
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data){
+                if(data.answer == 1) {
+                    cleanPayment();
+                    modalPayment(invoice_id);
+                    Swal.fire('Éxito', 'Pago registrado correctamente.', 'success');
+                }
+                else {
+                    Swal.fire('Error', 'No es posible agregar una cantidad mayor a la del saldo pendiente.', 'error');
+                }
+
+            }
+        })
+
+    }
+
+
+});
 
 function addPayment() {
     if(validatePayment() == 0) {
         let date = $('#date').val();
         let amount = $('#payment').val();
         let payment_method = $('#payment_method').val();
+        let receiptFile = $('#receipt').val();
         $.ajax({
             url: './addPayment',
             data: {
@@ -131,8 +166,11 @@ function addPayment() {
                 date: date,
                 amount: amount,
                 payment_method: payment_method,
+                receipt: receiptFile,
+
             },
             success: function(data) {
+
                 if(data == 1) {
                     cleanPayment();
                     modalPayment(invoice_id);
