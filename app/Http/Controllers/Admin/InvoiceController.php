@@ -434,7 +434,8 @@ class InvoiceController extends Controller
 
     public function addFilteredPayments(Request $request) {
         $pendingPayments = json_decode($request->post('pendingPayments'));
-
+        // dd($request->filePayment);
+        $file_pdf = $request->filePayment;
         foreach($pendingPayments as $pendingPayment) {
             $payment = new PaymentHistory();
             $payment -> user_id = Auth::id();
@@ -443,6 +444,12 @@ class InvoiceController extends Controller
             $payment -> date = $pendingPayment->date;
             $payment -> payment_method = $pendingPayment->payment_method;
             $payment -> payment = $pendingPayment->payment;
+
+            $name_file = time() . '.pdf';
+            $file_pdf->move(public_path("pagos/pdf"), $name_file);
+            $file_name = "pagos/pdf/" . $name_file;
+
+            $payment -> filePayment = $file_name;
             $payment -> save();
 
             $invoice = Invoice::with('payments')->where('id', $payment->invoice_id)->first();

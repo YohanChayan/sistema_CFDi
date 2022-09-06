@@ -43,16 +43,25 @@
             <th class="text-end fs-5" colspan="7">Monto Total</th>
             <td class="text-center fs-5" id="total">$0.00</td>
         </tr>
-        
+        <tr>
+            <td>
+                {{-- <input class="form-control" type="file" id="formFile" name="filePayment"> --}}
+            </td>
+        </tr>
     </tbody>
 </table>
 
 <br>
 
-<form action="{{ route("invoices.addFilteredPayments") }}" method="POST" id="paymentsForm">
+<form action="{{ route("invoices.addFilteredPayments") }}" method="POST" id="paymentsForm" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="paymentsFiltered" id="paymentsFiltered" value="{{ json_encode($invoices) }}">
     <input type="hidden" name="pendingPayments" id="pendingPayments">
+    {{-- <input type="hidden" name="filePayment"> --}}
+    <div class="mb-3 w-25">
+
+        <input class="form-control" type="file" id="formFile" name="filePayment">
+    </div>
 </form>
 
 <div class="d-flex justify-content-end">
