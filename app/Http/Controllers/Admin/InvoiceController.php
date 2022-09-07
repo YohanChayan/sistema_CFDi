@@ -433,15 +433,21 @@ class InvoiceController extends Controller
     }
 
     public function addFilteredPayments(Request $request) {
+        $request->validate([
+            'date' => 'required',
+            'filePayment' => 'required',
+
+        ]);
         $pendingPayments = json_decode($request->post('pendingPayments'));
         // dd($request->filePayment);
         $file_pdf = $request->filePayment;
+        
         foreach($pendingPayments as $pendingPayment) {
             $payment = new PaymentHistory();
             $payment -> user_id = Auth::id();
             $payment -> invoice_id = $pendingPayment->invoice_id;
             $payment -> approved_by = Auth::id();
-            $payment -> date = $pendingPayment->date;
+            $payment -> date = $request->date;
             $payment -> payment_method = $pendingPayment->payment_method;
             $payment -> payment = $pendingPayment->payment;
 

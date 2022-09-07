@@ -6,7 +6,7 @@
             <th scope="col" class="text-center" style="width: 15%;">Nombre</th>
             <th scope="col" class="text-center" style="width: 10%;">Importe</th>
             <th scope="col" class="text-center" style="width: 10%;">Saldo</th>
-            <th scope="col" class="text-center" style="width: 10%;">F. Pago</th>
+            {{-- <th scope="col" class="text-center" style="width: 10%;">F. Pago</th> --}}
             <th scope="col" class="text-center" style="width: 15%;">Método Pago</th>
             <th scope="col" class="text-center" style="width: 15%;">Pago</th>
         </tr>
@@ -19,9 +19,9 @@
                 <td class="text-center">{{ $inv->provider->nombre }}</td>
                 <td class="text-center">${{ number_format($inv->total, 2) }}</td>
                 <td class="text-center">${{ number_format($inv->total - $inv->payments->sum('payment'), 2) }}</td>
-                <td class="text-center">
+                {{-- <td class="text-center">
                     <input class="form-control" type="date" name="date_{{ $inv->id }}" id="date_{{ $inv->id }}">
-                </td>
+                </td> --}}
                 <td class="text-center">
                     <select class="form-select" name="payment_method_{{ $inv->id }}" id="payment_method_{{ $inv->id }}">
                         <option value="1">Efectivo</option>
@@ -43,11 +43,7 @@
             <th class="text-end fs-5" colspan="7">Monto Total</th>
             <td class="text-center fs-5" id="total">$0.00</td>
         </tr>
-        <tr>
-            <td>
-                {{-- <input class="form-control" type="file" id="formFile" name="filePayment"> --}}
-            </td>
-        </tr>
+       
     </tbody>
 </table>
 
@@ -59,8 +55,10 @@
     <input type="hidden" name="pendingPayments" id="pendingPayments">
     {{-- <input type="hidden" name="filePayment"> --}}
     <div class="mb-3 w-25">
-
-        <input class="form-control" type="file" id="formFile" name="filePayment">
+        <label for="date">Fecha de Pago</label>
+        <input class="form-control" type="date" name="date" id="date" required>
+        <label for="filePayment">Comprobante de Pago</label>
+        <input class="form-control" type="file" id="formFile" name="filePayment" required>
     </div>
 </form>
 
