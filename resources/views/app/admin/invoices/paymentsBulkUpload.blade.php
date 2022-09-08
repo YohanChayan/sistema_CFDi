@@ -38,7 +38,7 @@
 
     <br>
 
-    <div class="table-responsive" id="table_pending_payments">
+    <div id="table_pending_payments">
       
     </div>
   </div>

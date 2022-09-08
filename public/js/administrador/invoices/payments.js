@@ -76,70 +76,94 @@ function saveAll() {
     let emptyInput = false;
     let higherPayment = false;
     let cont = 0;
+    let errores = 0;
 
-    for(let i = 0; i < payments.length; i++) {
-        let id = payments[i]['id'];
-        // let date = $('#date_' + id).val();
-        let payment_method = $('#payment_method_' + id).val();
-        let payment = $('#payment_' + id).val();
-
-        let pendingMoney = payments[i]['total'];
-        for(let j = 0; j < payments[i]['payments'].length; j++) {
-            pendingMoney -= payments[i]['payments'][j]['payment'];
-        }
-
-        if(payment == '') {
-            emptyInput = true;
-            cont++;
-        }
-        else if(pendingMoney != 0 && payment > pendingMoney) {
-            higherPayment = true;
-            break;
-        }
-        else {
-            pendingPayments.push({
-                'invoice_id': id,
-                
-                'payment_method': payment_method,
-                'payment': payment
-            });
-        }
+    if($('#date').val() == '') {
+        $('#date').addClass('is-invalid');
+        $('#error_date').text('La fecha es inválida');
+        errores++;
     }
-
-    if(cont == payments.length) {
+    if($('#filePayment').val() == '') {
+        $('#filePayment').addClass('is-invalid');
+        $('#error_filePayment').text('Es necesario subir un archivo');
+        errores++;
+    }
+    if(errores > 0) {
         Swal.fire(
-            'Error',
-            'Debes ingresar los datos de al menos una factura que quieras guardar.',
-            'error'
+            'Advertencia',
+            'Es necesario llenar los campos obligatorios',
+            'warning'
         );
-    }
-    else if(higherPayment) {
-        Swal.fire(
-            'Error',
-            'No es posible ingresar una cantidad mayor a la que queda en el saldo.',
-            'error'
-        );
-    }
-    else if(emptyInput) {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Solo de guardarán los registros que tengan una fecha y un monto de pago asignados.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, guardar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if(result.isConfirmed) {
-                $('#pendingPayments').val(JSON.stringify(pendingPayments));
-                $('#paymentsForm').submit();
-            }
-        });
     }
     else {
-        $('#pendingPayments').val(JSON.stringify(pendingPayments));
-        $('#paymentsForm').submit();
+        $('#date').removeClass('is-invalid');
+        $('#filePayment').removeClass('is-invalid');
+        $('#error_date').text('');
+        $('#error_filePayment').text('');
+
+        for(let i = 0; i < payments.length; i++) {
+            let id = payments[i]['id'];
+            // let date = $('#date_' + id).val();
+            let payment_method = $('#payment_method_' + id).val();
+            let payment = $('#payment_' + id).val();
+
+            let pendingMoney = payments[i]['total'];
+            for(let j = 0; j < payments[i]['payments'].length; j++) {
+                pendingMoney -= payments[i]['payments'][j]['payment'];
+            }
+
+            if(payment == '') {
+                emptyInput = true;
+                cont++;
+            }
+            else if(pendingMoney != 0 && payment > pendingMoney) {
+                higherPayment = true;
+                break;
+            }
+            else {
+                pendingPayments.push({
+                    'invoice_id': id,
+                    'payment_method': payment_method,
+                    'payment': payment
+                });
+            }
+        }
+
+        if(cont == payments.length) {
+            Swal.fire(
+                'Error',
+                'Debes ingresar los datos de al menos una factura que quieras guardar.',
+                'error'
+            );
+        }
+        else if(higherPayment) {
+            Swal.fire(
+                'Error',
+                'No es posible ingresar una cantidad mayor a la que queda en el saldo.',
+                'error'
+            );
+        }
+        else if(emptyInput) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Solo de guardarán los registros que tengan una fecha y un monto de pago asignados.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, guardar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    $('#pendingPayments').val(JSON.stringify(pendingPayments));
+                    $('#paymentsForm').submit();
+                }
+            });
+        }
+        else {
+            $('#pendingPayments').val(JSON.stringify(pendingPayments));
+            $('#paymentsForm').submit();
+        }
     }
 }
 

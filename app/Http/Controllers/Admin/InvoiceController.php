@@ -423,21 +423,16 @@ class InvoiceController extends Controller
         $owner_id = $request->get('owner');
         $provider_id = $request->get('provider');
         if($owner_id == -1 || $provider_id == -1) {
-            $invoices = Invoice::with("provider", "payments")->where([['payment_status', 'Pendiente'], ['status', 'A']])->get();
+            $invoices = Invoice::with('provider', 'payments')->where([['payment_status', 'Pendiente'], ['status', 'A']])->get();
             return view('app.admin.invoices.ajax.paymentsTable')->with('invoices', $invoices);
         }
         else {
-            $invoices = Invoice::where([['owner_id', $owner_id], ['provider_id', $provider_id], ['payment_status', 'Pendiente'], ['status', 'A']])->get();
+            $invoices = Invoice::with('provider', 'payments')->where([['owner_id', $owner_id], ['provider_id', $provider_id], ['payment_status', 'Pendiente'], ['status', 'A']])->get();
             return view('app.admin.invoices.ajax.pendingPaymentsTable')->with('invoices', $invoices);
         }
     }
 
     public function addFilteredPayments(Request $request) {
-        $request->validate([
-            'date' => 'required',
-            'filePayment' => 'required',
-
-        ]);
         $pendingPayments = json_decode($request->post('pendingPayments'));
         // dd($request->filePayment);
         $file_pdf = $request->filePayment;
