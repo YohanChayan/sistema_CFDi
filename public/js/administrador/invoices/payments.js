@@ -1,3 +1,5 @@
+var paymentsSelected = [];
+
 changeProvider();
 
 function changeOwner() {
@@ -70,37 +72,56 @@ function payment() {
     $('#total').text('$' + sum.toFixed(2));
 }
 
+function selectPayment(input) {
+    let input_id = input.id;
+    let id = input_id.substring(6);
+    let checked = $(input).prop('checked');
+
+    if(checked) {
+        if(!paymentsSelected.includes(id)) {
+            paymentsSelected.push(id);
+        }
+    }
+    else {
+        paymentsSelected.splice(paymentsSelected.indexOf(id), 1);
+    }
+
+    console.log(paymentsSelected);
+}
+
+function validate() {
+    let errors = 0;
+
+    if($('#date').val() == '') {
+        $('#date').addClass('is-invalid');
+        $('#error_date').text('La fecha es inválida');
+        errors++;
+    }
+    else {
+        $('#date').removeClass('is-invalid');
+        $('#error_date').text('');
+    }
+    
+    if($('#filePayment').val() == '') {
+        $('#filePayment').addClass('is-invalid');
+        $('#error_filePayment').text('Es necesario subir un archivo');
+        errors++;
+    }
+    else {
+        $('#filePayment').removeClass('is-invalid');
+        $('#error_filePayment').text('');
+    }
+
+    return errors;
+}
+
 function saveAll() {
     let payments = JSON.parse($('#paymentsFiltered').val());
     let pendingPayments = [];
     let emptyInput = false;
     let higherPayment = false;
-    let cont = 0;
-    let errores = 0;
-
-    if($('#date').val() == '') {
-        $('#date').addClass('is-invalid');
-        $('#error_date').text('La fecha es inválida');
-        errores++;
-    }
-    if($('#filePayment').val() == '') {
-        $('#filePayment').addClass('is-invalid');
-        $('#error_filePayment').text('Es necesario subir un archivo');
-        errores++;
-    }
-    if(errores > 0) {
-        Swal.fire(
-            'Advertencia',
-            'Es necesario llenar los campos obligatorios',
-            'warning'
-        );
-    }
-    else {
-        $('#date').removeClass('is-invalid');
-        $('#filePayment').removeClass('is-invalid');
-        $('#error_date').text('');
-        $('#error_filePayment').text('');
-
+    
+    if(validate() == 0) {
         for(let i = 0; i < payments.length; i++) {
             let id = payments[i]['id'];
             // let date = $('#date_' + id).val();
@@ -111,29 +132,35 @@ function saveAll() {
             for(let j = 0; j < payments[i]['payments'].length; j++) {
                 pendingMoney -= payments[i]['payments'][j]['payment'];
             }
-
-            if(payment == '') {
-                emptyInput = true;
-                cont++;
-            }
-            else if(pendingMoney != 0 && payment > pendingMoney) {
+            
+            if(pendingMoney != 0 && payment > pendingMoney) {
                 higherPayment = true;
                 break;
             }
-            else {
-                pendingPayments.push({
-                    'invoice_id': id,
-                    'payment_method': payment_method,
-                    'payment': payment
-                });
+            else if(paymentsSelected.includes(id.toString())) {
+                if(payment == '') {
+                    emptyInput = true;
+                    $('#payment_' + id).addClass('is-invalid');
+                    $('#error_payment_' + id).text('Ingresa una cantidad');
+                }
+                else {
+                    pendingPayments.push({
+                        'invoice_id': id,
+                        'payment_method': payment_method,
+                        'payment': payment
+                    });
+
+                    $('#payment_' + id).removeClass('is-invalid');
+                    $('#error_payment_' + id).text('');
+                }
             }
         }
 
-        if(cont == payments.length) {
+        if(paymentsSelected.length == 0) {
             Swal.fire(
-                'Error',
-                'Debes ingresar los datos de al menos una factura que quieras guardar.',
-                'error'
+                'Advertencia',
+                'Debes seleccionar al menos una factura que quieras guardar.',
+                'warning'
             );
         }
         else if(higherPayment) {
@@ -144,26 +171,23 @@ function saveAll() {
             );
         }
         else if(emptyInput) {
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: 'Solo de guardarán los registros que tengan una fecha y un monto de pago asignados.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, guardar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if(result.isConfirmed) {
-                    $('#pendingPayments').val(JSON.stringify(pendingPayments));
-                    $('#paymentsForm').submit();
-                }
-            });
+            Swal.fire(
+                'Error',
+                'Debes de ingresar una cantidad en los pagos seleccionados.',
+                'error'
+            );
         }
         else {
             $('#pendingPayments').val(JSON.stringify(pendingPayments));
             $('#paymentsForm').submit();
         }
+    }
+    else {
+        Swal.fire(
+            'Advertencia',
+            'Es necesario llenar los campos obligatorios',
+            'warning'
+        );
     }
 }
 

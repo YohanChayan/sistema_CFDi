@@ -56,28 +56,26 @@ function filter() {
     }
 }
 
-
-function paymentPreview(paymentID)
-{
+function paymentPreview(id) {
     $.ajax({
         url: './preview',
-        data: {id: paymentID},
-        success: function(answer){
-            console.log('success ajax for preview');
-            if(answer == 'No'){
+        data: {id: id},
+        success: function(response){
+            if(response == 'No'){
                 document.querySelector('#imgPreviewContainer').innerHTML = '';
                 const p = document.createElement('p');
                 p.classList.add('text-center', 'text-danger');
-                p.innerText = 'No existe archivo.';
+                p.innerText = 'No existe el comprobante de pago.';
                 document.querySelector('#imgPreviewContainer').appendChild(p);
                 $('#paymentPreview').modal('toggle');
-            } else {
+            }
+            else {
                 document.querySelector('#imgPreviewContainer').innerHTML = '';
                 const img = document.createElement('img');
                 img.setAttribute('width', '100%');
                 img.setAttribute('height', '500px');
-                img.setAttribute("src", answer );
-                img.classList.add("p-2");
+                img.setAttribute('src', response);
+                img.classList.add('p-2');
                 document.querySelector('#imgPreviewContainer').append(img);
                 $('#paymentPreview').modal('toggle');
             }

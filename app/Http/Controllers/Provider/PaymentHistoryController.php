@@ -25,23 +25,22 @@ class PaymentHistoryController extends Controller
     }
 
     public function preview(Request $request){
-        $id = $request->input('id');
+        $id = $request->get('id');
         $payment = PaymentHistory::find($id);
-        if($payment->receipt){
+        if($payment->receipt)
             return asset($payment->receipt);
-        }else
+        else
             return 'No';
-
     }
 
     public function download($id){
         $payment = PaymentHistory::find($id);
-            if($payment->receipt)
-                return Response::download($payment->receipt);
-            else{
-                Alert::error('Error', 'No existe archivo de factura con este pago');
-                return redirect()->back();
-                }
+        if($payment->receipt)
+            return Response::download($payment->receipt);
+        else {
+            Alert::error('Error', 'No se encontró el comprobante de pago');
+            return redirect()->back();
+        }
     }
 
 }

@@ -18,7 +18,7 @@
                     <td class="text-center">{{ $invoice->folio }}</td>
                     <td class="text-center">${{ number_format($invoice->total, 2) }}</td>
                     <td class="text-center">${{ number_format($invoice->total - $invoice->payments->sum('payment'), 2) }}</td>
-                    <td class="text-center">{{ $invoice->status }}</td>
+                    <td class="text-center">{{ $invoice->payment_status }}</td>
                 </tr>
             @endforeach
         @else

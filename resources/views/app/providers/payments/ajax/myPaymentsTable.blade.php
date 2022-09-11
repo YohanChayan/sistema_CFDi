@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
-<table class="table text-start align-middle table-bordered mb-0" id="myPaymentTable" style="widows: 100%;">
+<table class="table text-start align-middle table-bordered mb-0" id="myPaymentTable" style="width: 100%;">
     <thead>
         <tr class="text-dark">
             <th style="width: 10%;" class="text-center">#</th>
@@ -21,22 +21,16 @@
                     <td class="text-center">{{ $payment->invoice->uuid }}</td>
                     <td class="text-center">${{ number_format($payment->payment, 2) }}</td>
                     <td class="text-center">
-                        <div class="row d-flex justify-content-evenly">
-                            <div class="col-md-3" >
-                                <a onclick="paymentPreview({{$payment->id}});" class="text-primary" style="cursor: pointer;">
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Vista previa">
-                                        <i class="fas fa-eye me-3"></i>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="{{route('invoices.downloadPayment', $payment->id)}}" class="text-primary" style="cursor: pointer;">
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Descargar">
-                                        <i class="fas fa-download"></i>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
+                        <a onclick="paymentPreview({{ $payment->id }});" class="text-primary me-4" style="cursor: pointer;">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Vista previa">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </a>
+                        <a href="{{ route('invoices.downloadPayment', $payment->id) }}" class="text-primary" style="cursor: pointer;">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Descargar">
+                                <i class="fas fa-download"></i>
+                            </span>
+                        </a>
                     </td>
                 </tr>
             @endforeach
@@ -50,7 +44,12 @@
 
 
 <script>
-      $(document).ready( function () {
-          $('#myPaymentTable').DataTable();
-      } );
+    //Tooltip
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+
+    //DataTable
+    $('#myPaymentTable').DataTable();
 </script>

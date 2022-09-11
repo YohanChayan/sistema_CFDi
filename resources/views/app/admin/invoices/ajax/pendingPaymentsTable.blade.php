@@ -1,4 +1,4 @@
-<form action="{{ route("invoices.addFilteredPayments") }}" method="POST" id="paymentsForm" enctype="multipart/form-data">
+<form action="{{ route('invoices.addFilteredPayments') }}" method="POST" id="paymentsForm" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="paymentsFiltered" id="paymentsFiltered" value="{{ json_encode($invoices) }}">
     <input type="hidden" name="pendingPayments" id="pendingPayments">
@@ -38,7 +38,7 @@
             @foreach($invoices as $inv)
                 <tr>
                     <td class="text-center">
-                        <input class="form-check-input" type="checkbox" id="check_{{ $inv->id }}">
+                        <input class="form-check-input" type="checkbox" id="check_{{ $inv->id }}" onchange="selectPayment(this);">
                     </td>
                     <td class="text-center">{{ $inv->uuid }}</td>
                     <td class="text-center">{{ $inv->folio }}</td>
@@ -61,6 +61,7 @@
                         <div class="input-group">
                             <span class="input-group-text">$</span>
                             <input class="form-control" type="number" name="payment_{{ $inv->id }}" id="payment_{{ $inv->id }}" min="0" onchange="payment();">
+                            <div class="text-danger" id="error_payment_{{ $inv->id }}"></div>
                         </div>
                     </td>
                 </tr>

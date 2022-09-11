@@ -433,27 +433,28 @@ class InvoiceController extends Controller
     }
 
     public function addFilteredPayments(Request $request) {
-        $pendingPayments = json_decode($request->post('pendingPayments'));
-        // dd($request->filePayment);
-        $file_pdf = $request->filePayment;
+        $data = $request->all();
+        $pendingPayments = json_decode($data['pendingPayments']);
+        $receipt = $request->file('filePayment');
         
         foreach($pendingPayments as $pendingPayment) {
+            $invoice = Invoice::with('payments', 'provider')->find($pendingPayment->invoice_id);
+
             $payment = new PaymentHistory();
-            $payment -> user_id = Auth::id();
+            $payment -> user_id = $invoice->provider->user_id;
             $payment -> invoice_id = $pendingPayment->invoice_id;
             $payment -> approved_by = Auth::id();
-            $payment -> date = $request->date;
+            $payment -> date = $data['date'];
             $payment -> payment_method = $pendingPayment->payment_method;
             $payment -> payment = $pendingPayment->payment;
 
-            $name_file = time() . '.pdf';
-            $file_pdf->move(public_path("pagos/pdf"), $name_file);
-            $file_name = "pagos/pdf/" . $name_file;
+            $name_file = time() . '.' . $receipt->extension();
+            $receipt->move(public_path('archivos/pagos'), $name_file);
+            $file_name = 'archivos/pagos/' . $name_file;
 
-            $payment -> filePayment = $file_name;
+            $payment -> receipt = $file_name;
             $payment -> save();
 
-            $invoice = Invoice::with('payments')->where('id', $payment->invoice_id)->first();
             if($invoice->total == $invoice->payments->sum('payment')) {
                 $invoice -> payment_status = 'Pagado';
                 $invoice -> save();
