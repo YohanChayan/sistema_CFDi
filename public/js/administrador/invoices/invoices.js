@@ -7,26 +7,42 @@ function validatePayment() {
 
     if($('#date').val() == '') {
         $('#date').addClass('is-invalid');
+        $('#error_date').text('Ingresa una fecha');
         errors++;
     }
     else {
         $('#date').removeClass('is-invalid');
+        $('#error_date').text('');
     }
 
     if($('#payment').val() == '') {
         $('#payment').addClass('is-invalid');
+        $('#error_payment').text('Ingresa una cantidad');
         errors++;
     }
     else {
         $('#payment').removeClass('is-invalid');
+        $('#error_payment').text('');
     }
 
     if($('#payment_method').val() == '-1') {
         $('#payment_method').addClass('is-invalid');
+        $('#error_payment_method').text('Selecciona un método');
         errors++;
     }
     else {
         $('#payment_method').removeClass('is-invalid');
+        $('#error_payment_method').text('');
+    }
+
+    if($('#receipt').val() == '') {
+        $('#receipt').addClass('is-invalid');
+        $('#error_receipt').text('Carga tu comprobante');
+        errors++;
+    }
+    else {
+        $('#receipt').removeClass('is-invalid');
+        $('#error_receipt').text('');
     }
 
     return errors;
@@ -107,7 +123,6 @@ function filter() {
 }
 
 function modalPayment(id) {
-
     $('#prov_id').val(id);
 
     invoice_id = id;
@@ -120,15 +135,11 @@ function modalPayment(id) {
     });
 }
 
-
-$('#addPaymentBtn').on('click', addPayment);
-
-document.querySelector('#formNewPayment').addEventListener('submit', function(e){
+document.querySelector('#formNewPayment').addEventListener('submit', function(e) {
     e.preventDefault();
-    console.log('event trigrered')
-    if(validatePayment() == 0){
+    if(validatePayment() == 0) {
         $.ajax({
-            url: './addPayment2',
+            url: './addPayment',
             type: 'POST',
             data: new FormData(this),
             dataType: 'JSON',
@@ -136,41 +147,6 @@ document.querySelector('#formNewPayment').addEventListener('submit', function(e)
             cache: false,
             processData: false,
             success: function(data){
-                if(data.answer == 1) {
-                    cleanPayment();
-                    modalPayment(invoice_id);
-                    Swal.fire('Éxito', 'Pago registrado correctamente.', 'success');
-                }
-                else {
-                    Swal.fire('Error', 'No es posible agregar una cantidad mayor a la del saldo pendiente.', 'error');
-                }
-
-            }
-        })
-
-    }
-
-
-});
-
-function addPayment() {
-    if(validatePayment() == 0) {
-        let date = $('#date').val();
-        let amount = $('#payment').val();
-        let payment_method = $('#payment_method').val();
-        let receiptFile = $('#receipt').val();
-        $.ajax({
-            url: './addPayment',
-            data: {
-                id: invoice_id,
-                date: date,
-                amount: amount,
-                payment_method: payment_method,
-                receipt: receiptFile,
-
-            },
-            success: function(data) {
-
                 if(data == 1) {
                     cleanPayment();
                     modalPayment(invoice_id);
@@ -182,12 +158,13 @@ function addPayment() {
             }
         });
     }
-}
+});
 
 function cleanPayment() {
     $('#date').val('');
     $('#payment').val('');
     $('#payment_method').val('-1');
+    $('#receipt').val('');
 }
 
 function modalFile(id) {

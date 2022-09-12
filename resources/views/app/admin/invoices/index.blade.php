@@ -47,62 +47,70 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <form id="formNewPayment" method="POST" enctype="multipart/form-data">
+              @csrf
 
-    <form action="#" method="POST" id="formNewPayment" method="POST" enctype="multipart/form-data">
-        @csrf
+              <input type="hidden" id="prov_id" name="prov_id">
 
-        <input type="hidden" id="prov_id" name="prov_id">
+              <div class="row">
+                <div class="col-lg-6">
+                  <label for="date">Fecha</label>
+                  <input class="form-control" type="date" name="date" id="date">
+                  <div class="text-danger" id="error_date"></div>
+                </div>
+                <div class="col-lg-6">
+                  <label for="payment">Monto</label>
+                  <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input class="form-control" type="number" name="payment" id="payment" min="0">
+                  </div>
+                  <div class="text-danger" id="error_payment"></div>
+                </div>
+              </div>
 
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="date">Fecha</label>
-              <input class="form-control" type="date" name="date" id="date">
-            </div>
-            <div class="col-lg-6">
-              <label for="payment">Monto</label>
-              <div class="input-group">
-                <span class="input-group-text">$</span>
-                <input class="form-control" type="number" name="payment" id="payment" min="0">
+              <br>
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <label for="payment_method">Método de pago</label>
+                  <select class="form-select" name="payment_method" id="payment_method">
+                    <option value="-1" selected>Seleccione un método</option>
+                    <option value="1">Efectivo</option>
+                    <option value="2">Tarjeta crédito</option>
+                    <option value="3">Tarjeta débito</option>
+                    <option value="4">Transferencia</option>
+                    <option value="5">Otro</option>
+                  </select>
+                  <div class="text-danger" id="error_payment_method"></div>
+                </div>
+                <div class="col-lg-6">
+                  <label for="receipt">Comprobante</label>
+                  <input class="form-control" type="file" name="receipt" id="receipt">
+                  <div class="text-danger" id="error_receipt"></div>
+                </div>
+              </div>
+
+              <br>
+
+              <div class="row">
+                <div class="col-lg-12">
+                  <a class="text-success" data-bs-toggle="collapse" data-bs-target="#paymentsHistory" aria-expanded="false" aria-controls="paymentsHistory" style="cursor: pointer">
+                      Historial de pagos
+                  </a>
+                  <div class="collapse" id="paymentsHistory">
+
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="payment_method">Método de pago</label>
-              <select class="form-select" name="payment_method" id="payment_method">
-                <option value="-1" selected>Seleccione un método</option>
-                <option value="1">Efectivo</option>
-                <option value="2">Tarjeta crédito</option>
-                <option value="3">Tarjeta débito</option>
-                <option value="4">Transferencia</option>
-                <option value="5">Otro</option>
-              </select>
-            </div>
-            <div class="col-lg-6">
-              <label for="receipt">Comprobante</label>
-              <input class="form-control" type="file" name="receipt" id="receipt">
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-lg-12">
-              <a class="text-success" data-bs-toggle="collapse" data-bs-target="#paymentsHistory" aria-expanded="false" aria-controls="paymentsHistory" style="cursor: pointer">
-                  Historial de pagos
-              </a>
-              <div class="collapse" id="paymentsHistory">
 
-              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              {{-- <button id="addPaymentBtn" type="submit" class="btn btn-success">Agregar</button> --}}
+              <button id="addPaymentBtn2" type="submit" class="btn btn-success">Agregar</button>
             </div>
-          </div>
+          </form>
         </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          {{-- <button id="addPaymentBtn" type="submit" class="btn btn-success">Agregar</button> --}}
-          <button id="addPaymentBtn2" type="submit" class="btn btn-primary">Agregar</button>
-        </div>
-    </form>
       </div>
     </div>
   </div>
@@ -145,117 +153,6 @@
       </div>
     </div>
   </div>
-
-
-  {{-- <div class="modal  fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row g-2">
-            <div class="col-md-6 mb-2">
-              <div class="card text-center">
-                <div class="card-header">
-                  <p class="fw-bolder mb-0">Ejemplo</p>
-                </div>
-                <div class="card-body">
-                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-
-                  <div class="btn-group dropend">
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                      Ver
-                    </button>
-
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Action two</a></li>
-                      <li><a class="dropdown-item" href="#">Action three</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6 mb-2">
-              <div class="card text-center">
-                <div class="card-header">
-                  <p class="fw-bolder mb-0">Ejemplo</p>
-                </div>
-                <div class="card-body">
-                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                  <div class="btn-group dropend">
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                      Ver
-                    </button>
-
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Action two</a></li>
-                      <li><a class="dropdown-item" href="#">Action three</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row g-2">
-            <div class="col-md-6 mb-2">
-              <div class="card text-center">
-                <div class="card-header">
-                  <p class="fw-bolder mb-0">Ejemplo</p>
-                </div>
-                <div class="card-body">
-                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-
-                  <div class="btn-group dropend">
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                      Ver
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Action two</a></li>
-                      <li><a class="dropdown-item" href="#">Action three</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6 mb-2">
-              <div class="card text-center">
-                <div class="card-header">
-                  <p class="fw-bolder mb-0">Ejemplo</p>
-                </div>
-                <div class="card-body">
-                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-
-                  <div class="btn-group dropend">
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                      Ver
-                    </button>
-
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Action two</a></li>
-                      <li><a class="dropdown-item" href="#">Action three</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        </div>
-      </div>
-    </div>
-  </div> --}}
 </div>
 
 @endsection

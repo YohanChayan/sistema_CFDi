@@ -29,7 +29,7 @@ class UniversalDashboardController extends Controller
             $providers_count = Provider::count();
             $invoices_count = count($invoices);
             $invoices_today = Invoice::whereDate('created_at', Carbon::today() )->count();
-            $users_count = User::count();
+            $payments_count = PaymentHistory::count();
 
             // Bar Chart
                 /* sql query
@@ -74,7 +74,7 @@ class UniversalDashboardController extends Controller
             ->with('providers_count', $providers_count)
             ->with('invoices_count', $invoices_count)
             ->with('invoices_today', $invoices_today)
-            ->with('users_count', $users_count)
+            ->with('payments_count', $payments_count)
             ->with('providers_vs_invoices', $providers_vs_invoices)
             ->with('invoices_vs_months', $invoices_vs_months)
             ->with('invoices_vs_months', $arr);

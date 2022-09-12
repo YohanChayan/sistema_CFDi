@@ -332,53 +332,18 @@ class InvoiceController extends Controller
         return view('app.admin.invoices.ajax.modalPayment')->with('invoice', $invoice);
     }
 
-    public function addPayment2(Request $request){
+    public function addPayment(Request $request) {
+        $data = $request->all();
 
-        $id = $request->input('prov_id');
-        $date = $request->input('date');
-        $amount = $request->input('payment');
-        $payment_method = $request->input('payment_method');
-
-        // validate file exist ?
-        // file required ?
+        $id = $data['prov_id'];
+        $date = $data['date'];
+        $amount = $data['payment'];
+        $payment_method = $data['payment_method'];
 
         $receiptFile = $request->file('receipt');
-        $newFileName = time() . '.' . $receiptFile->getClientOriginalExtension();
-        $receiptFile->move(public_path('archivos/pagos/'), $newFileName );
-
-        $invoice = Invoice::with('provider')->find($id);
-        $subtotal = PaymentHistory::where('invoice_id', $id)->sum('payment');
-
-        if($subtotal + $amount > $invoice->total) {
-            return response()->json([
-                'answer' => 0
-            ]);
-        }
-        else {
-            $payment = new PaymentHistory();
-            $payment -> user_id = $invoice->provider->user_id;
-            $payment -> approved_by = Auth::id();
-            $payment -> invoice_id = $id;
-            $payment -> date = $date;
-            $payment -> payment_method = $payment_method;
-            $payment -> payment = $amount;
-            $payment -> receipt = 'archivos/pagos/' . $newFileName;
-            $payment -> save();
-
-            return response()->json([
-                'answer' => 1
-            ]);
-        }
-
-    }
-
-    public function addPayment(Request $request) {
-        $id = $request->get('id');
-        $date = $request->get('date');
-        $amount = $request->get('amount');
-        $payment_method = $request->get('payment_method');
-
-        // receiptFile --table
+        $name_file = time() . '.' . $receiptFile->extension();
+        $receiptFile->move(public_path('archivos/pagos'), $name_file);
+        $file_name = 'archivos/pagos/' . $name_file;
 
         $invoice = Invoice::with('provider')->find($id);
         $subtotal = PaymentHistory::where('invoice_id', $id)->sum('payment');
@@ -394,6 +359,7 @@ class InvoiceController extends Controller
             $payment -> date = $date;
             $payment -> payment_method = $payment_method;
             $payment -> payment = $amount;
+            $payment -> receipt = $file_name;
             $payment -> save();
 
             return 1;

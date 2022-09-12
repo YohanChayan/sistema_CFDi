@@ -55,8 +55,7 @@ Route::group(['middleware' => ['is_admin'] ], function() {
     Route::group(['prefix' => '/invoice'], function() {
         Route::get('/index', [InvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoicesTable', [InvoiceController::class, 'invoicesTable'])->name('invoices.invoicesTable');
-        Route::post('/addPayment2', [InvoiceController::class, 'addPayment2'])->name('invoices.addPayment2');
-        Route::get('/addPayment', [InvoiceController::class, 'addPayment'])->name('invoices.addPayment');
+        Route::post('/addPayment', [InvoiceController::class, 'addPayment'])->name('invoices.addPayment');
         Route::get('/modalPayment', [InvoiceController::class, 'modalPayment'])->name('invoices.modalPayment');
         Route::get('/downloadfile/{id}',[InvoiceController::class, 'download'])->name('invoices.download');
         Route::get('/resendEmail/{id}',[InvoiceController::class, 'resendEmail'])->name('invoices.resendEmail');

@@ -5,7 +5,7 @@
     })
 </script>
 
-<table class="table text-start align-middle table-bordered mb-0" style="width: 100%;">
+<table class="table text-start align-middle table-bordered mt-3" style="width: 100%;">
     <thead>
         <tr class="text-dark">
             <th scope="col" class="text-center" style="width: 20%;">Nombre</th>
@@ -29,36 +29,26 @@
 
                     {{-- ACCIONES --}}
                     <td class="text-center">
-                        <div class="row d-flex justify-content-between">
-                            <div class="col-md-3">
-                                <a class="text-success" data-bs-toggle="modal" data-bs-target="#paymentsModal" onclick="modalPayment({{ $inv->id }});" style="cursor: pointer;">
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Pagos">
-                                        <i class="fas fa-money-bill-wave"></i>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a class="text-primary" data-bs-toggle="modal" data-bs-target="#filesModal" onclick="modalFile({{ $inv->id }});" style="cursor: pointer;">
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Descargas">
-                                        <i class="fas fa-file-download"></i>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a class="text-secondary" onclick="resendEmail({{ $inv->id }});" style="cursor: pointer;">
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Reenviar Correo">
-                                        <i class="fas fa-envelope-open-text"></i>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a class="text-danger" id="delete_{{ $inv->id }}" onclick="deleteInvoice(this);" style="cursor: pointer;">
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
-                                        <i class="fas fa-trash"></i>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
+                        <a class="text-success me-4" data-bs-toggle="modal" data-bs-target="#paymentsModal" onclick="modalPayment({{ $inv->id }});" style="cursor: pointer;">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Pagos">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </span>
+                        </a>
+                        <a class="text-primary me-4" data-bs-toggle="modal" data-bs-target="#filesModal" onclick="modalFile({{ $inv->id }});" style="cursor: pointer;">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Descargas">
+                                <i class="fas fa-file-download"></i>
+                            </span>
+                        </a>
+                        <a class="text-secondary me-4" onclick="resendEmail({{ $inv->id }});" style="cursor: pointer;">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Reenviar Correo">
+                                <i class="fas fa-envelope-open-text"></i>
+                            </span>
+                        </a>
+                        <a class="text-danger" id="delete_{{ $inv->id }}" onclick="deleteInvoice(this);" style="cursor: pointer;">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                        </a>
                     </td>
                 </tr>
             @endforeach

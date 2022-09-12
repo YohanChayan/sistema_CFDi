@@ -13,6 +13,9 @@
     </thead>
     <tbody>
         @if(count($payments) > 0)
+            @php
+                $extensiones = ['png', 'jpg', 'jpeg']
+            @endphp
             @foreach($payments as $key => $payment)
                 <tr>
                     <td class="text-center">{{ $key+1 }}</td>
@@ -21,12 +24,24 @@
                     <td class="text-center">{{ $payment->invoice->uuid }}</td>
                     <td class="text-center">${{ number_format($payment->payment, 2) }}</td>
                     <td class="text-center">
-                        <a onclick="paymentPreview({{ $payment->id }});" class="text-primary me-4" style="cursor: pointer;">
-                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Vista previa">
-                                <i class="fas fa-eye"></i>
+                        @php
+                            $file = explode('.', $payment->receipt);
+                            $extension = strtolower($file[count($file) - 1]);
+                        @endphp
+                        @if(in_array($extension, $extensiones))
+                            <a onclick="paymentPreview({{ $payment->id }});" class="text-primary me-4" style="cursor: pointer;">
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="Vista previa">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </a>
+                        @else
+                            <span class="text-secondary me-4" style="cursor: pointer;">
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="Vista previa no disponible">
+                                    <i class="fas fa-eye-slash"></i>
+                                </span>
                             </span>
-                        </a>
-                        <a href="{{ route('invoices.downloadPayment', $payment->id) }}" class="text-primary" style="cursor: pointer;">
+                        @endif
+                        <a href="{{ route('invoices.downloadPayment', $payment->id) }}" class="text-success" style="cursor: pointer;">
                             <span data-bs-toggle="tooltip" data-bs-placement="top" title="Descargar">
                                 <i class="fas fa-download"></i>
                             </span>
