@@ -73,7 +73,7 @@ class InvoiceController extends Controller
             /*    Validar que exista el receptor en la BD     */
             /**************************************************/
 
-            $search_owner = Owner::where('rfc', $owner_rfc)->first();
+            $search_owner = Owner::where([['rfc', $owner_rfc], ['status', 'A']])->first();
 
             if($search_owner == null){
                 Alert::error('Error', 'El RFC del receptor no coincide con ninguna empresa');
@@ -221,5 +221,11 @@ class InvoiceController extends Controller
             $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['payment_status', 'Pagado'], ['status', 'A']])->get();
 
         return view('app.providers.invoices.ajax.myInvoicesTable')->with('invoices', $invoices);
+    }
+
+    public function modalDetails(Request $request) {
+        $id = $request->get('id');
+        $invoice = Invoice::with('details')->find($id);
+        return view('app.providers.invoices.ajax.modalDetails')->with('invoice', $invoice);
     }
 }

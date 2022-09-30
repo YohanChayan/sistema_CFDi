@@ -46,6 +46,12 @@
                             <a href="{{ route('invoices.myPayments') }}" class="dropdown-item ms-4">Mis Pagos</a>
                         </div>
                     </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-tag me-2"></i>Productos</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="{{ route('products.myProducts') }}" class="dropdown-item ms-4">Mis Productos</a>
+                        </div>
+                    </div>
                 @endif
             @endif 
             @if(Auth::Check() && auth()->user()->type == "A")

@@ -30,6 +30,10 @@ class Invoice extends Model
         return $this->hasMany(PaymentHistory::class, 'invoice_id');
     }
 
+    public function details() {
+        return $this->hasMany(InvoiceDetail::class, 'invoice_id');
+    }
+
     public static function readXML($file) {
         libxml_use_internal_errors(true);   //Previene de posibles errores al intentar leer el archivo XML
         $xmlObject = simplexml_load_file($file);   //Convertir el archivo XML en un objeto XML de PHP

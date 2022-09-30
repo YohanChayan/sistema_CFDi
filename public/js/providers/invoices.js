@@ -11,3 +11,19 @@ function filter() {
         }
     });
 }
+
+function modalDetails(btn) {
+    let btn_id = btn.id;
+    let id = btn_id.substring(8);
+
+    $.ajax({
+        url: './modalDetails',
+        data: {
+            id: id,
+        },
+        success: function(data) {
+            $('#invoiceDetailsModal').modal('show');
+            $('#invoiceDetailsModalContent').html(data);
+        }
+    });
+}

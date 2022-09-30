@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+ini_set('memory_limit', '-1');
+
 use App\Models\User;
 use Illuminate\Database\Seeder;
 

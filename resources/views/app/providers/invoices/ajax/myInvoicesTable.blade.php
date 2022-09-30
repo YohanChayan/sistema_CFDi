@@ -7,6 +7,7 @@
             <th class="text-center">Total</th>
             <th class="text-center">Saldo por pagar</th>
             <th class="text-center">Estado</th>
+            <th class="text-center">Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +20,13 @@
                     <td class="text-center">${{ number_format($invoice->total, 2) }}</td>
                     <td class="text-center">${{ number_format($invoice->total - $invoice->payments->sum('payment'), 2) }}</td>
                     <td class="text-center">{{ $invoice->payment_status }}</td>
+                    <td class="text-center">
+                        <a id="details_{{ $invoice->id }}" class="text-primary" style="cursor: pointer;" onclick="modalDetails(this);">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Ver Detalles">
+                                <i class="far fa-eye"></i>
+                            </span>
+                        </a>
+                    </td>
                 </tr>
             @endforeach
         @else
@@ -28,3 +36,11 @@
         @endif
     </tbody>
 </table>
+
+<script>
+    //Tooltip
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+</script>

@@ -9,4 +9,12 @@ class InvoiceDetail extends Model
 {
     use HasFactory;
     protected $table = 'invoices_details';
+
+    public function sat_product() {
+        return $this->belongsTo(SatProduct::class, 'sat_product_id');
+    }
+
+    public function sat_measurement_unit() {
+        return $this->belongsTo(SatMeasurementUnit::class, 'sat_measurement_unit_id');
+    }
 }

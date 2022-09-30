@@ -17,6 +17,7 @@ class CreateOwnersTable extends Migration
             $table->id();
             $table->string("rfc");
             $table->string("nombre");
+            $table->char("status", 5)->default("A")->comment("A = Activo, I = Inactivo");
             $table->timestamps();
         });
     }

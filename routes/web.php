@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\OwnerController as AdminOwnerController;
 use App\Http\Controllers\Admin\ReportsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\Provider\InvoiceController as ProviderInvoiceController;
 use App\Http\Controllers\Provider\PaymentHistoryController;
+use App\Http\Controllers\Provider\ProductController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\UniversalDashboardController;
 
@@ -80,18 +81,28 @@ Route::group(['middleware' => ['is_admin'] ], function() {
 
 
     Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');
-    Route::get('/owners/index', [OwnerController::class, 'index'])->name('owners.index');
+    Route::get('/owners/index', [AdminOwnerController::class, 'index'])->name('owners.index');
+    Route::get('/owners/delete/{id}', [AdminOwnerController::class, 'delete'])->name('owners.delete');
 });
 
 //* Rutas de proveedores
 Route::group(['middleware' => ['is_provider'] ], function() {
-    Route::get('/invoice/myInvoices', [ProviderInvoiceController::class, 'myInvoices'])->name('invoices.myInvoices');
-    Route::get('/invoice/myInvoicesTable', [ProviderInvoiceController::class, 'myInvoicesTable'])->name('invoices.myInvoicesTable');
+    Route::group(['prefix' => '/invoice'], function() {
+        Route::get('/myInvoices', [ProviderInvoiceController::class, 'myInvoices'])->name('invoices.myInvoices');
+        Route::get('/myInvoicesTable', [ProviderInvoiceController::class, 'myInvoicesTable'])->name('invoices.myInvoicesTable');
+        Route::get('/modalDetails', [ProviderInvoiceController::class, 'modalDetails'])->name('invoices.modalDetails');
+    });
 
-    Route::get('/payments/myPayments', [PaymentHistoryController::class, 'myPayments'])->name('invoices.myPayments');
-    Route::get('/payments/preview', [PaymentHistoryController::class, 'preview'])->name('invoices.preview');
-    Route::get('/payments/download/${id}', [PaymentHistoryController::class, 'download'])->name('invoices.downloadPayment');
-    Route::get('/payments/myPaymentsTable', [PaymentHistoryController::class, 'myPaymentsTable'])->name('invoices.myPaymentsTable');
+    Route::group(['prefix' => '/payments'], function() {
+        Route::get('/myPayments', [PaymentHistoryController::class, 'myPayments'])->name('invoices.myPayments');
+        Route::get('/preview', [PaymentHistoryController::class, 'preview'])->name('invoices.preview');
+        Route::get('/download/{id}', [PaymentHistoryController::class, 'download'])->name('invoices.downloadPayment');
+        Route::get('/myPaymentsTable', [PaymentHistoryController::class, 'myPaymentsTable'])->name('invoices.myPaymentsTable');
+    });
+
+    Route::group(['prefix' => '/products'], function() {
+        Route::get('/myProducts', [ProductController::class, 'myProducts'])->name('products.myProducts');
+    });
 });
 
 
