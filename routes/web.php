@@ -81,8 +81,12 @@ Route::group(['middleware' => ['is_admin'] ], function() {
 
 
     Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');
-    Route::get('/owners/index', [AdminOwnerController::class, 'index'])->name('owners.index');
-    Route::get('/owners/delete/{id}', [AdminOwnerController::class, 'delete'])->name('owners.delete');
+
+    Route::group(['prefix' => '/owners'], function() {
+        Route::get('/index', [AdminOwnerController::class, 'index'])->name('owners.index');
+        Route::post('/store', [AdminOwnerController::class, 'store'])->name('owners.store');
+        Route::get('/delete/{id}', [AdminOwnerController::class, 'delete'])->name('owners.delete');
+    });
 });
 
 //* Rutas de proveedores

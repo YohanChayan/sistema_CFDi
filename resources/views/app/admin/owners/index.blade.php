@@ -17,7 +17,7 @@
   <div class="bg-light text-center rounded p-4">
     <div class="d-flex justify-content-between mb-4">
       <h2 class="mb-0">Mis Datos</h2>
-      <button class="btn btn-success" type="button">Nueva Empresa</button>
+      <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#createOwnerModal">Nueva Empresa</button>
     </div>
 
     <div class="table-responsive">
@@ -47,6 +47,38 @@
           @endforeach
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <div class="modal fade" id="createOwnerModal" tabindex="-1" aria-labelledby="createOwnerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createOwnerModalLabel">Registrar nueva empresa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ route('owners.store') }}" method="POST" id="createOwnerForm">
+            @csrf
+            <div class="row">
+              <div class="col-md-6">
+                <label for="rfc">RFC</label>
+                <input class="form-control" type="text" name="rfc" id="rfc" maxlength="13" style="text-transform: uppercase">
+                <div class="text-danger" id="error_rfc"></div>
+              </div>
+              <div class="col-md-6">
+                <label for="name">Nombre</label>
+                <input class="form-control" type="text" name="name" id="name" style="text-transform: uppercase">
+                <div class="text-danger" id="error_name"></div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="registerOwner(this);">Guardar</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
