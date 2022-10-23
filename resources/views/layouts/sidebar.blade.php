@@ -81,6 +81,12 @@
                         <a href="{{ route('reports.invoices') }}" class="dropdown-item ms-4">Facturas</a>
                     </div>
                 </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-hand-holding-usd"></i>Cotizaciones</a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="{{ route('quotes.index') }}" class="dropdown-item ms-4">Cotizar</a>
+                    </div>
+                </div>
             @endif
         </div>
     </nav>

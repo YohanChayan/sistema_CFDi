@@ -16,3 +16,7 @@
 
 <!-- Template Stylesheet -->
 <link href="{{asset('custom/css/style.css')}}" rel="stylesheet">
+
+<!-- DataTable -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/css/bootstrap.min.css">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\QuoteController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\OwnerController as AdminOwnerController;
 use App\Http\Controllers\Admin\ReportsController;
@@ -79,6 +80,11 @@ Route::group(['middleware' => ['is_admin'] ], function() {
         Route::get('/invoicesPDFReport', [ReportsController::class, 'invoicesPDFReport'])->name('reports.invoicesPDFReport');
     });
 
+    //* Rutas de cotización
+    Route::group(['prefix' => '/quotes'], function() {
+        Route::get('/index', [QuoteController::class, 'index'])->name('quotes.index');
+        Route::get('/infer', [QuoteController::class, 'infer'])->name('quotes.infer');
+    });
 
     Route::get('/provider/index', [ProviderController::class, 'index'])->name('providers.index');
 
