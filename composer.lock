@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0c353989ff5134190a3bf8807f5987f",
+    "content-hash": "3e74c855855538b333002986ffbdc84d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -222,6 +222,50 @@
                 "source": "https://github.com/DASPRiD/Enum/tree/1.0.3"
             },
             "time": "2020-10-02T16:03:48+00:00"
+        },
+        {
+            "name": "devtronic/tree-classifier",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Devtronic/tree-classifier.git",
+                "reference": "99fd5594f9e77b5821751952eeb9e1264662da30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Devtronic/tree-classifier/zipball/99fd5594f9e77b5821751952eeb9e1264662da30",
+                "reference": "99fd5594f9e77b5821751952eeb9e1264662da30",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Devtronic\\TreeClassifier\\": "src/",
+                    "Devtronic\\Tests\\TreeClassifier\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Julian Finkler",
+                    "email": "julian@developer-heaven.de"
+                }
+            ],
+            "description": "Tree Classifier",
+            "support": {
+                "issues": "https://github.com/Devtronic/tree-classifier/issues",
+                "source": "https://github.com/Devtronic/tree-classifier/tree/v1.0.0"
+            },
+            "time": "2016-12-09T22:20:44+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -8580,5 +8624,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.0.0"
 }

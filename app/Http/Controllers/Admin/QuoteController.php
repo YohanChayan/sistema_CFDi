@@ -35,7 +35,39 @@ class QuoteController extends Controller
 
         $products = $invoiceProducts->union($satInvoiceProducts);   // Unir ambos resultados
         $products = $products->sortBy([['created_at', 'desc'], ['name', 'asc']]);   // Ordenar los productos por fecha y nombre
+        $productsCount = $products->groupBy('name');   // Obtener cuantas veces se repite cada producto
         $products = $products->unique('name');   // Descartar productos repetidos
+        //dd($productsCount, $products);
+
+        $subjects = [];   // Guarda los productos en un arreglo para su proceso en el árbol de decisión
+
+        // Proceso de organización de los datos
+        foreach($products as $product) {
+            foreach($productsCount as $key => $productCount) {
+                if($product->name == $key) {
+                    $monthlySales = 0;
+
+                    // Obtener las ventas mensuales actuales del producto
+                    foreach($productCount as $productC) {
+                        if(date('m', strtotime($productC->created_at)) == date('m', strtotime(now()))) {
+                            $monthlySales++;
+                        }
+                    }
+
+                    array_push($subjects, [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'price' => $product->price,
+                        'totalSales' => count($productCount),
+                        'monthlySales' => $monthlySales,
+                    ]);
+
+                    break;
+                }
+            }
+        }
+        
+        dd($subjects);
 
         return view('app.admin.quotes.infer')->with('products', $products);
     }
