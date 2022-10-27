@@ -62,6 +62,7 @@ class DatabaseSeeder extends Seeder
             OwnerSeeder::class,
             ProviderSeeder::class,
             InvoiceSeeder::class,
+            StateSeeder::class,
         ]);
     }
 }

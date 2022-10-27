@@ -49,6 +49,7 @@ class InvoiceController extends Controller
             $owner_rfc = Invoice::getOwnerRFCXML($convertedXML);         // Obtiene el RFC del receptor
             $total = Invoice::getTotalXML($convertedXML);                // Obtiene el Total de la factura
             $folio = Invoice::getFolio($convertedXML);                   // Obtiene el Folio de la factura
+            $zip_code = Invoice::getZipCode($convertedXML);              // Obtiene el Código Postal de la factura
             $products = Invoice::getProductsXML($convertedXML);          // Obtiene los Productos registrados en la factura
 
             /**************************************************/
@@ -136,6 +137,7 @@ class InvoiceController extends Controller
             $new_invoice->owner_id = $search_owner->id;
             $new_invoice->uuid = $uuid;
             $new_invoice->folio = $folio;
+            $new_invoice->zip_code = $zip_code;
             $new_invoice->total = $total;
             $new_invoice->pdf = $pdf_name;
             $new_invoice->xml = $xml_name;

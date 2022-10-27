@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\InvoiceDetail;
 use App\Models\SatProduct;
+use App\Models\State;
+use App\Models\ZipCode;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class QuoteController extends Controller
 {
     public function index() {
-        return view('app.admin.quotes.index');
+        $states = State::all();
+        return view('app.admin.quotes.index')->with('states', $states);
     }
 
     public function infer(Request $request) {
@@ -46,6 +49,7 @@ class QuoteController extends Controller
             foreach($productsCount as $key => $productCount) {
                 if($product->name == $key) {
                     $monthlySales = 0;
+                    $state = '';
 
                     // Obtener las ventas mensuales actuales del producto
                     foreach($productCount as $productC) {
@@ -54,12 +58,16 @@ class QuoteController extends Controller
                         }
                     }
 
+                    // Obtener la información del lugar a partir del código postal
+                    $zip_code = ZipCode::where('zip_code', $product->invoice->zip_code)->first();
+
                     array_push($subjects, [
                         'id' => $product->id,
                         'name' => $product->name,
                         'price' => $product->price,
                         'totalSales' => count($productCount),
                         'monthlySales' => $monthlySales,
+                        'state' => $zip_code->state,
                     ]);
 
                     break;

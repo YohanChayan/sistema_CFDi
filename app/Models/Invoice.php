@@ -141,6 +141,10 @@ class Invoice extends Model
         }
     }
 
+    public static function getZipCode($xml) {
+        return $xml['Comprobante'][0]['@attributes']['LugarExpedicion'];   //Obtiene el Lugar de Expedición del emisor (C.P.) de la factura del archivo xml
+    }
+
     public static function getProductsXML($xml) {
         $array_products = [];
         foreach($xml['Productos'] as $product) {

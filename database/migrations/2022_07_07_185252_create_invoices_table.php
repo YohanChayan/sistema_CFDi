@@ -19,6 +19,7 @@ class CreateInvoicesTable extends Migration
             $table->foreignId("owner_id")->constrained("owners", "id");
             $table->string("uuid");
             $table->string("folio")->nullable();
+            $table->integer("zip_code")->comment("Código postal del emisor");
             $table->double("total", 8, 2);
             $table->string("payment_status", 40)->default("Pendiente")->comment("Pendiente, Pagado");
             $table->string("pdf")->comment("Url del archivo pdf");

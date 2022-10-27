@@ -50,8 +50,9 @@
         <select class="form-select" name="location" id="location">
           <option value="-1" selected>Seleccione una opción...</option>
           <option value="0">Todos</option>
-          <option value="1">Local</option>
-          <option value="2">Nacional</option>
+          @foreach($states as $state)
+            <option value="{{ $state->id }}">{{ $state->name }}</option>
+          @endforeach
         </select>
         <div class="text-danger" id="error_location"></div>
       </div>

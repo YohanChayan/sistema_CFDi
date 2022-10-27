@@ -21,14 +21,16 @@
         @if(count($products) > 0)
             @php $cont = 1; @endphp
             @foreach($products as $product)
-                <tr>
-                    <td class="text-center">{{ $cont }}</td>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->sat_product->name }}</td>
-                    <td class="text-center">${{ number_format($product->price, 2) }}</td>
-                    <td class="text-center">{{ date('d-m-Y', strtotime($product->created_at)) }}</td>
-                </tr>
-                @php $cont++; @endphp
+                @if($product->invoice->status == 'A')
+                    <tr>
+                        <td class="text-center">{{ $cont }}</td>
+                        <td>{{ $product->name }}</td>
+                        <td>{{ $product->sat_product->name }}</td>
+                        <td class="text-center">${{ number_format($product->price, 2) }}</td>
+                        <td class="text-center">{{ date('d-m-Y', strtotime($product->created_at)) }}</td>
+                    </tr>
+                    @php $cont++; @endphp
+                @endif
             @endforeach
         @else
             <tr>
