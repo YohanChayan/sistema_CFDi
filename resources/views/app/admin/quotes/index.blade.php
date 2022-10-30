@@ -39,9 +39,9 @@
         <label for="filter">Filtro</label>
         <select class="form-select" name="filter" id="filter">
           <option value="-1" selected>Seleccione una opción...</option>
-          <option value="0">Todos</option>
-          <option value="1">Más comprados</option>
-          <option value="2">Novedades</option>
+          <option value="Todos">Todos</option>
+          <option value="Mas_Comprados">Más comprados</option>
+          <option value="Novedades">Novedades</option>
         </select>
         <div class="text-danger" id="error_filter"></div>
       </div>
@@ -51,7 +51,7 @@
           <option value="-1" selected>Seleccione una opción...</option>
           <option value="0">Todos</option>
           @foreach($states as $state)
-            <option value="{{ $state->id }}">{{ $state->name }}</option>
+            <option value="{{ $state->name }}">{{ $state->name }}</option>
           @endforeach
         </select>
         <div class="text-danger" id="error_location"></div>

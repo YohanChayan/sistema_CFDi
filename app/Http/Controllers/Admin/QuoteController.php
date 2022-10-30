@@ -10,6 +10,10 @@ use App\Models\ZipCode;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
+use Devtronic\TreeClassifier\DecisionNode;
+use Devtronic\TreeClassifier\RootNode;
+use Devtronic\TreeClassifier\TerminalNode;
+
 class QuoteController extends Controller
 {
     public function index() {
@@ -68,14 +72,80 @@ class QuoteController extends Controller
                         'totalSales' => count($productCount),
                         'monthlySales' => $monthlySales,
                         'state' => $zip_code->state,
+                        'fecha_en_stock' => $product->created_at->format('Y-m-d'),
                     ]);
 
                     break;
                 }
             }
         }
-        
-        dd($subjects);
+
+        // dd($subjects);
+
+        // state indetifier (name)
+        $_targetState = $location;
+
+        // We want all subjects who IS IN THAT STATE
+        $stateDecisions = [
+            strval($_targetState) => new TerminalNode(),  //selected state name
+            'other state' => new TerminalNode(), // This is our last node
+        ];
+
+        // Create the decider for state
+        $stateDecider = new DecisionNode(function ($subject) use ($_targetState) {
+            return ($subject['state'] == $_targetState ? strval($_targetState) : 'other state');
+        }, $stateDecisions);
+
+        // Great, next we need the filter-decisions.
+        $_targetFilter = $filter; //Todos , Mas_Comprados , Novedades
+
+        $filterDecisions = [
+            strval($_targetFilter) => $stateDecider, // redirect all subjects WHICH FILTER MATCH THE SELECTED
+            'other filter' => new TerminalNode(),
+        ];
+
+        $filterDecider = '';
+
+        if($_targetFilter == 'Mas_Comprados'){
+
+            $_sumTotalSales = 0;
+            foreach($subjects as $s)
+                $_sumTotalSales += $s['totalSales'];
+            $_averageTotalSales = ceil($_sumTotalSales/count($subjects)); //round up integer  -ex, 0.6 = 1
+
+            $filterDecider = new DecisionNode(function ($subject) use ($_averageTotalSales, $_targetFilter) {
+                return ($subject['totalSales'] > $_averageTotalSales) ? strval($_targetFilter) : 'other filter'; //Apply filter
+            }, $filterDecisions);
+
+
+
+        }else if($_targetFilter == 'Novedades'){
+
+            $_sumFechas_en_stocks = 0;
+            foreach($subjects as $s)
+                $_sumFechas_en_stocks += strtotime($s['fecha_en_stock']); //suma las fechas en timestamp
+
+            $_averageFechas = $_sumTotalSales/count($subjects); //promedio de fechas
+
+            $filterDecider = new DecisionNode(function ($subject) use($_averageFechas, $_targetFilter){
+                return (strtotime($subject['fecha_en_stock']) > strtotime($_averageFechas) ) ? strval($_targetFilter) : 'other filter' ; //Apply filter
+            }, $filterDecisions);
+
+        }else{
+            $filterDecider = new DecisionNode(function ($subject) use($_targetFilter) {
+                return (!is_null($subject)) ? strval($_targetFilter) : 'other filter'; //Todos
+            }, $filterDecisions);
+        }
+        // And now we need to create a RootNode
+        $rootNode = new RootNode($subjects);
+
+        // Add the first (last created): POR AHORA filterDecider
+        $rootNode->addSubNode($filterDecider);
+
+        // And classify
+        $rootNode->classify();
+
+        dd($filterDecisions[$_targetFilter]);
 
         return view('app.admin.quotes.infer')->with('products', $products);
     }
