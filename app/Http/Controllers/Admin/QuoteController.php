@@ -22,10 +22,10 @@ class QuoteController extends Controller
     }
 
     public function infer(Request $request) {
-        $product = $request->get('product');
-        $budget = $request->get('budget');
-        $filter = $request->get('filter');
-        $location = $request->get('location');
+        $product = $request->get('product');     // Nombre del producto
+        $budget = $request->get('budget');       // Presupuesto
+        $filter = $request->get('filter');       // Todos, Más Comprados, Novedades
+        $location = $request->get('location');   // Estado seleccionado
 
         // Buscar los nombres de los productos del sat que incluyan el nombre dado por el usuario
         $satProducts = SatProduct::where('name', 'LIKE', '%' . $product . '%')->get();
@@ -53,7 +53,6 @@ class QuoteController extends Controller
             foreach($productsCount as $key => $productCount) {
                 if($product->name == $key) {
                     $monthlySales = 0;
-                    $state = '';
 
                     // Obtener las ventas mensuales actuales del producto
                     foreach($productCount as $productC) {
@@ -72,7 +71,7 @@ class QuoteController extends Controller
                         'totalSales' => count($productCount),
                         'monthlySales' => $monthlySales,
                         'state' => $zip_code->state,
-                        'fecha_en_stock' => $product->created_at->format('Y-m-d'),
+                        'stockDate' => $product->created_at->format('Y-m-d'),
                     ]);
 
                     break;
@@ -80,72 +79,112 @@ class QuoteController extends Controller
             }
         }
 
-        // dd($subjects);
+        /**************************************************/
+        /*                   Ubicación                    */
+        /**************************************************/
 
-        // state indetifier (name)
-        $_targetState = $location;
-
-        // We want all subjects who IS IN THAT STATE
+        // Posibles decisiones para los estados
         $stateDecisions = [
-            strval($_targetState) => new TerminalNode(),  //selected state name
-            'other state' => new TerminalNode(), // This is our last node
+            strval($location) => new TerminalNode(),   // Estado seleccionado
+            'Other State' => new TerminalNode(),       // Otros estados
         ];
 
-        // Create the decider for state
-        $stateDecider = new DecisionNode(function ($subject) use ($_targetState) {
-            return ($subject['state'] == $_targetState ? strval($_targetState) : 'other state');
+        // Crear el nodo de decisión para el estado y asignarlo a los nodos terminales
+        $stateDecider = new DecisionNode(function ($subject) use ($location) {
+            if($location == 'Todos')
+                return (!is_null($subject['state']) ? strval($location) : 'Other State');
+            else
+                return ($subject['state'] == $location ? strval($location) : 'Other State');
         }, $stateDecisions);
 
-        // Great, next we need the filter-decisions.
-        $_targetFilter = $filter; //Todos , Mas_Comprados , Novedades
-
+        // Posibles decisiones para el filtro (todos, más comprados, novedades) y asignarlo a los nodos terminales
         $filterDecisions = [
-            strval($_targetFilter) => $stateDecider, // redirect all subjects WHICH FILTER MATCH THE SELECTED
-            'other filter' => new TerminalNode(),
+            strval($filter) => $stateDecider,          // Filtro seleccionado
+            'Other Filter' => new TerminalNode(),      // Otros filtros
         ];
 
-        $filterDecider = '';
+        /**************************************************/
+        /*                     Filtro                     */
+        /**************************************************/
 
-        if($_targetFilter == 'Mas_Comprados'){
+        $filterDecider = '';   // Nodo de decisión para el tipo de filtro seleccionado por el usuario
 
-            $_sumTotalSales = 0;
-            foreach($subjects as $s)
-                $_sumTotalSales += $s['totalSales'];
-            $_averageTotalSales = ceil($_sumTotalSales/count($subjects)); //round up integer  -ex, 0.6 = 1
+        if($filter == 'Mas_Comprados') {
 
-            $filterDecider = new DecisionNode(function ($subject) use ($_averageTotalSales, $_targetFilter) {
-                return ($subject['totalSales'] > $_averageTotalSales) ? strval($_targetFilter) : 'other filter'; //Apply filter
+            $sumTotalSales = 0;   // Total de ventas de todos los productos
+            $contSales = 0;       // Contador para descartar ventas según el presupuesto
+            foreach($subjects as $subject) {
+                if($subject['price'] <= $budget) {
+                    $sumTotalSales += $subject['totalSales'];
+                    $contSales++;
+                }
+            }
+            $averageTotalSales = ceil($sumTotalSales/$contSales);   // Promedio de ventas, se redondea el entero hacia arriba
+
+            // Se realiza la decisión de acuerdo al premio obtenido de sumar todas la ventas totales
+            $filterDecider = new DecisionNode(function ($subject) use ($averageTotalSales, $filter) {
+                return ($subject['totalSales'] >= $averageTotalSales) ? strval($filter) : 'Other Filter';
+            }, $filterDecisions);
+            
+        } else if($filter == 'Novedades') {
+            
+            $sumTotalSales = 0;    // Total de ventas de todos los productos
+            $salesDates = [];      // Contador para descartar ventas según el presupuesto
+            foreach($subjects as $subject) {
+                if($subject['price'] <= $budget) {
+                    $salesDates[] = $subject['stockDate'];
+                }
+            }
+
+            // Se toma en cuenta la primera fecha (están ordenadas de forma descendente)
+            $lastDate = explode('-', strval(trim($salesDates[0])));
+            $lastYear = intval($lastDate[0]);
+            $lastMonth = intval($lastDate[1]);
+            
+            $filterDecider = new DecisionNode(function ($subject) use($lastYear, $lastMonth, $filter) {
+                $tempDate = explode('-', strval(trim($subject['stockDate'])));
+                $tempYear = intval($tempDate[0]);
+                $tempMonth = intval($tempDate[1]);
+
+                if($tempYear == $lastYear && $tempMonth == $lastMonth)
+                    return strval($filter);
+                else
+                    return 'Other Filter';
             }, $filterDecisions);
 
+        } else {   // Todos
 
-
-        }else if($_targetFilter == 'Novedades'){
-
-            $_sumFechas_en_stocks = 0;
-            foreach($subjects as $s)
-                $_sumFechas_en_stocks += strtotime($s['fecha_en_stock']); //suma las fechas en timestamp
-
-            $_averageFechas = $_sumTotalSales/count($subjects); //promedio de fechas
-
-            $filterDecider = new DecisionNode(function ($subject) use($_averageFechas, $_targetFilter){
-                return (strtotime($subject['fecha_en_stock']) > strtotime($_averageFechas) ) ? strval($_targetFilter) : 'other filter' ; //Apply filter
+            $filterDecider = new DecisionNode(function ($subject) use($filter) {
+                return (!is_null($subject)) ? strval($filter) : 'Other Filter';
             }, $filterDecisions);
-
-        }else{
-            $filterDecider = new DecisionNode(function ($subject) use($_targetFilter) {
-                return (!is_null($subject)) ? strval($_targetFilter) : 'other filter'; //Todos
-            }, $filterDecisions);
+            
         }
-        // And now we need to create a RootNode
+
+        /**************************************************/
+        /*                  Presupuesto                   */
+        /**************************************************/
+
+        // Posibles decisiones para el presupuesto (budget) y asignarlo a los nodos terminales
+        $budgetDecisions = [
+            strval($budget) => $filterDecider,          // Presupuesto
+            'Its expensive' => new TerminalNode(),      // Otros filtros
+        ];
+
+        // Crear el nodo de decisión para el presupuesto y asignarlo a los nodos terminales
+        $budgetDecider = new DecisionNode(function ($subject) use ($budget) {
+            return ($subject['price'] <= $budget ? strval($budget) : 'Its expensive');
+        }, $budgetDecisions);
+        
+        // Creamos el nodo raíz
         $rootNode = new RootNode($subjects);
 
-        // Add the first (last created): POR AHORA filterDecider
-        $rootNode->addSubNode($filterDecider);
+        // Add the first (last created): POR AHORA budgetDecider
+        $rootNode->addSubNode($budgetDecider);
 
-        // And classify
+        // Clasificar el árbol de decisión
         $rootNode->classify();
 
-        dd($filterDecisions[$_targetFilter]);
+        dd($subjects, $rootNode);
 
         return view('app.admin.quotes.infer')->with('products', $products);
     }

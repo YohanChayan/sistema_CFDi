@@ -49,7 +49,7 @@
         <label for="location">Ubicación</label>
         <select class="form-select" name="location" id="location">
           <option value="-1" selected>Seleccione una opción...</option>
-          <option value="0">Todos</option>
+          <option value="Todos">Todos</option>
           @foreach($states as $state)
             <option value="{{ $state->name }}">{{ $state->name }}</option>
           @endforeach
