@@ -50,6 +50,8 @@ function quote() {
         let budget = $('#budget').val();
         let filter = $('#filter').val();
         let location = $('#location').val();
+        $('#my_spinner').css('display', 'inline-block');
+        $('#quote_result').html('');
 
         $.ajax({
             url: './infer',
@@ -61,6 +63,7 @@ function quote() {
             },
             success: function(data) {
                 $('#quote_result').html(data);
+                $('#my_spinner').css('display', 'none');
             }
         });
     }

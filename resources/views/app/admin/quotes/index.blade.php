@@ -60,16 +60,18 @@
 
     <br>
 
-    <div class="row d-flex justify-content-center">
-      <div class="col-lg-3">
-        <button class="btn btn-primary btn-lg" type="button" onclick="quote();">
-          Cotizar &nbsp;<i class="fas fa-coins"></i>
-        </button>
-      </div>
+    <div class="d-flex justify-content-center mb-5">
+      <button class="btn btn-primary btn-lg" type="button" onclick="quote();">
+        Cotizar &nbsp;<i class="fas fa-coins"></i>
+      </button>
     </div>
 
     <br>
 
+    <div class="text-center">
+      <div id="my_spinner" class="spinner-border text-primary" style="width: 3rem; height: 3rem; display: none;" role="status">
+      </div>
+    </div>
     <div class="row">
       <div class="col-lg-12" id="quote_result">
 

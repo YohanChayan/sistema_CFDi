@@ -14,6 +14,7 @@
             <th class="text-center">Nombre</th>
             <th class="text-center">Producto SAT</th>
             <th class="text-center">Precio</th>
+            <th class="text-center">Ubicación</th>
             <th class="text-center">Últ. Actualización</th>
         </tr>
     </thead>
@@ -27,6 +28,7 @@
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->sat_product->name }}</td>
                         <td class="text-center">${{ number_format($product->price, 2) }}</td>
+                        <td>{{ $zip_codes->where('zip_code', $product->invoice->zip_code)->first()->state }}</td>
                         <td class="text-center">{{ date('d-m-Y', strtotime($product->created_at)) }}</td>
                     </tr>
                     @php $cont++; @endphp
@@ -34,7 +36,7 @@
             @endforeach
         @else
             <tr>
-                <td class="text-center" colspan="5">No pudimos cotizar productos de acuerdo a los criterios establecido. Prueba nuevamente.</td>
+                <td class="text-center" colspan="6">No pudimos cotizar productos de acuerdo a los criterios establecidos. Prueba nuevamente.</td>
             </tr>
         @endif
     </tbody>
