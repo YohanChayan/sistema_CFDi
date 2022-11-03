@@ -1,6 +1,7 @@
 var rfc = '';
 var nombre = '';
 
+//Evento que detecta cuando el usuario sube el archivo XML
 $("#xml_input").change(function() {
     let file = document.getElementById("xml_input").files[0];
     let reader = new FileReader();
@@ -20,13 +21,10 @@ $("#xml_input").change(function() {
         }
 
         let result = data.match(exp_emisor);
-        let result_rfc = result[0].match(exp_rfc);
-        let result_nombre = result[0].match(exp_nombre);
-        rfc = result_rfc[1];
-        nombre = result_nombre[1];
-
-        // console.log(rfc);
-        // console.log(nombre);
+        let result_rfc = (result != null) ? result[0].match(exp_rfc) : null;
+        let result_nombre = (result != null) ? result[0].match(exp_nombre) : null;
+        rfc = (result_rfc != null) ? result_rfc[1] : null;
+        nombre = (result_nombre != null) ? result_nombre[1] : null;
     };
 });
 
@@ -36,7 +34,6 @@ function registerCreateInvoiceData() {
     let pdf_file = $('#pdf_input').val();
     let xml_file = $('#xml_input').val();
     let other_file = $('#other_input').val();
-    let hola = 'f';
 
     //Obtener la extensión de los archivos
     let pdf_extension = pdf_file.substring(pdf_file.lastIndexOf('.')).toLowerCase();
@@ -44,19 +41,24 @@ function registerCreateInvoiceData() {
     let other_file_extension = other_file.substring(other_file.lastIndexOf('.')).toLowerCase();
 
     if(pdf_extension == '.pdf' && xml_extension == '.xml' && other_file) {
-        $.ajax({
-            url: '/invoice/validateProvider',
-            data: {rfc: rfc},
-            success: function(data) {
-                if(data == 1) {   //Enviar formulario
-                    $('#formulario').submit();
+        if(rfc != null && nombre != null) {
+            $.ajax({
+                url: '/invoice/validateProvider',
+                data: {rfc: rfc},
+                success: function(data) {
+                    if(data == 1) {   //Enviar formulario
+                        $('#formulario').submit();
+                    }
+                    else {   //Abrir modal para crear un nuevo proveedor
+                        let myModal = new bootstrap.Modal(document.getElementById('registerModal'));
+                        myModal.show();
+                    }
                 }
-                else {   //Abrir modal para crear un nuevo proveedor
-                    let myModal = new bootstrap.Modal(document.getElementById('registerModal'));
-                    myModal.show();
-                }
-            }
-        });
+            });
+        }
+        else {
+            Swal.fire('Advertencia', 'El archivo XML no contiene el formato de una factura.', 'warning');
+        }
     }
     else {
         Swal.fire('Advertencia', 'Es necesario que cargues los formatos señalados en el formulario.', 'warning');
