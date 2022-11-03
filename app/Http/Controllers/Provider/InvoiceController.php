@@ -170,26 +170,26 @@ class InvoiceController extends Controller
                     // Enviar correo electrónico
                     $pdf_original_name = $file_pdf->getClientOriginalName();
                     $xml_original_name = $file_xml->getClientOriginalName();
-                    $archivos_email = new FilesReceived($xml_name, $xml_original_name, $pdf_name, $pdf_original_name, $other_name, $name_other_file, $name_provider, $other_file_aux);
+                    // $archivos_email = new FilesReceived($xml_name, $xml_original_name, $pdf_name, $pdf_original_name, $other_name, $name_other_file, $name_provider, $other_file_aux);
                     // Mail::to('proveedoresfrutioro@hotmail.com')->send($archivos_email);
                     // Mail::to('chuyatlas2001@hotmail.com')->send($archivos_email);
 
                     Alert::success('Éxito', 'Factura guardada correctamente');
-                    return redirect()->back();
+                    return redirect()->route('invoices.create');
                 }
                 else {
                     Alert::error('Error', 'Los archivos no siguen una estructura válida. Por favor intente de nuevo.');
-                    return redirect()->back();
+                    return redirect()->route('invoices.create');
                 }
             }
             else {
                 Alert::error('Error', 'Los archivos NO contienen el mismo UUID');
-                return redirect()->back();
+                return redirect()->route('invoices.create');
             }
         }
         else {
             Alert::error('Error', 'Los archivos no siguen una estructura válida. Por favor intente de nuevo.');
-            return redirect()->back();
+            return redirect()->route('invoices.create');
         }
     }
 

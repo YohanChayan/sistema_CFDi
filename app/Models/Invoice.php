@@ -137,6 +137,7 @@ class Invoice extends Model
      * Obtiene el UUID del archivo XML.
      * @param mixed $xml Archivo XML.
      * @return string UUID.
+     * @return null Retorna null en caso de que no encuentre el campo.
     */
     public static function getUUIDXML($xml) {
         try {
@@ -150,6 +151,7 @@ class Invoice extends Model
      * Obtiene el RFC del emisor del archivo XML.
      * @param mixed $xml Archivo XML.
      * @return string RFC del emisor.
+     * @return null Retorna null en caso de que no encuentre el campo.
     */
     public static function getProviderRFCXML($xml) {
         try {
@@ -163,6 +165,7 @@ class Invoice extends Model
      * Obtiene el RFC del receptor del archivo XML.
      * @param mixed $xml Archivo XML.
      * @return string RFC del receptor.
+     * @return null Retorna null en caso de que no encuentre el campo.
     */
     public static function getOwnerRFCXML($xml) {
         try {
@@ -176,6 +179,7 @@ class Invoice extends Model
      * Obtiene el nombre del emisor del archivo XML.
      * @param mixed $xml Archivo XML.
      * @return string Nombre del emisor.
+     * @return null Retorna null en caso de que no encuentre el campo.
     */
     public static function getNameProviderXML($xml) {
         try {
@@ -189,6 +193,7 @@ class Invoice extends Model
      * Obtiene el nombre del receptor del archivo XML.
      * @param mixed $xml Archivo XML.
      * @return string Nombre del receptor.
+     * @return null Retorna null en caso de que no encuentre el campo.
     */
     public static function getNameOwnerXML($xml) {
         try {
@@ -202,6 +207,7 @@ class Invoice extends Model
      * Obtiene el total de la factura del archivo XML.
      * @param mixed $xml Archivo XML.
      * @return string Total de la factura.
+     * @return null Retorna null en caso de que no encuentre el campo.
     */
     public static function getTotalXML($xml) {
         try {
@@ -215,6 +221,7 @@ class Invoice extends Model
      * Obtiene el folio de la factura del archivo XML.
      * @param mixed $xml Archivo XML.
      * @return string Folio de la factura.
+     * @return null Retorna null en caso de que no encuentre el campo.
     */
     public static function getFolio($xml) {
         try {
@@ -228,6 +235,7 @@ class Invoice extends Model
      * Obtiene el lugar de expedición (código postal) del emisor del archivo XML.
      * @param mixed $xml Archivo XML.
      * @return string Lugar de expedición del emisor.
+     * @return null Retorna null en caso de que no encuentre el campo.
     */
     public static function getZipCode($xml) {
         try {
@@ -241,9 +249,10 @@ class Invoice extends Model
      * Obtiene los productos registrados en la factura del archivo XML.
      * @param mixed $xml Archivo XML.
      * @return array Productos registrados en la factura.
+     * @return null Retorna null en caso de que no encuentre el campo.
     */
     public static function getProductsXML($xml) {
-        if(asset($xml['Productos'])) {
+        if(isset($xml['Productos'])) {
             $array_products = [];
             foreach($xml['Productos'] as $product) {
                 array_push($array_products, [
