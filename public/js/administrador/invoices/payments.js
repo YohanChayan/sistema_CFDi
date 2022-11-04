@@ -4,6 +4,7 @@ changeProvider();
 
 function changeOwner() {
     let owner = datalist_id('owner', 'owners_list');
+    
     $.ajax({
         'url': './providersDatalist',
         data: {owner: owner},
@@ -16,6 +17,13 @@ function changeOwner() {
             else {
                 $('#providers_list').html(data);
             }
+        },
+        error: function(data) {
+            Swal.fire(
+                'Error',
+                'Hubo un error, por favor intenta de nuevo o contacta al desarrollador.',
+                'error'
+            );
         }
     });
 }
@@ -24,6 +32,8 @@ function changeProvider() {
     let owner = datalist_id('owner', 'owners_list');
     let provider = datalist_id('provider', 'providers_list');
 
+    $('#my_spinner').css('display', 'inline-block');
+    $('#table_pending_payments').html('');
     $.ajax({
         'url': './pendingPaymentsTable',
         data: {
@@ -38,6 +48,14 @@ function changeProvider() {
                 changeAlert('success');
             }
             $('#table_pending_payments').html(data);
+            $('#my_spinner').css('display', 'none');
+        },
+        error: function(data) {
+            Swal.fire(
+                'Error',
+                'Hubo un error, por favor intenta de nuevo o contacta al desarrollador.',
+                'error'
+            );
         }
     });
 }

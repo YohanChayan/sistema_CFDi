@@ -84,8 +84,8 @@
                 <th style="width: 20%" class="text-center">Proveedor</th>
                 <th style="width: 15%" class="text-center">RFC</th>
                 <th style="width: 10%" class="text-center">Folio</th>
-                <th style="width: 30%" class="text-center">UUID</th>
-                <th style="width: 10%" class="text-center">Pago</th>
+                <th style="width: 25%" class="text-center">UUID</th>
+                <th style="width: 15%" class="text-center">Pago</th>
             </tr>
         </thead>
         <tbody>
@@ -112,7 +112,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td class="text-center" colspan="6">No hay registros en ese rango de fechas.</td>
+                    <td class="text-center" colspan="7">No hay registros en ese rango de fechas.</td>
                 </tr>
             @endif
         </tbody>

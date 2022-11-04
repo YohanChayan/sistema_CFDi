@@ -1,4 +1,13 @@
-<table class="table text-start align-middle table-bordered mb-0">
+<script>
+  $('#table').DataTable({
+    ordering: false,
+    language: {
+        url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/es-MX.json'
+    },
+  });
+</script>
+
+<table id="table" class="table text-start align-middle table-bordered mb-0" style="width: 100%;">
     <thead>
       <tr class="text-dark">
         <th scope="col" class="text-center">UUID</th>

@@ -1,4 +1,13 @@
-<table class="table text-start align-middle table-bordered mb-0">
+<script>
+    $('#table').DataTable({
+        ordering: false,
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/es-MX.json'
+        },
+    });
+</script>
+
+<table id="table" class="table text-start align-middle table-bordered mb-0" style="width: 100%;">
     <thead>
         <tr class="text-dark">
             <th class="text-center">#</th>
@@ -11,29 +20,23 @@
         </tr>
     </thead>
     <tbody>
-        @if(count($invoices) > 0)
-            @foreach($invoices as $key => $invoice)
-                <tr>
-                    <td class="text-center">{{ $key+1 }}</td>
-                    <td class="text-center">{{ $invoice->uuid }}</td>
-                    <td class="text-center">{{ $invoice->folio }}</td>
-                    <td class="text-center">${{ number_format($invoice->total, 2) }}</td>
-                    <td class="text-center">${{ number_format($invoice->total - $invoice->payments->sum('payment'), 2) }}</td>
-                    <td class="text-center">{{ $invoice->payment_status }}</td>
-                    <td class="text-center">
-                        <a id="details_{{ $invoice->id }}" class="text-primary" style="cursor: pointer;" onclick="modalDetails(this);">
-                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Ver Detalles">
-                                <i class="far fa-eye"></i>
-                            </span>
-                        </a>
-                    </td>
-                </tr>
-            @endforeach
-        @else
+        @foreach($invoices as $key => $invoice)
             <tr>
-                <td class="text-center" colspan="6">No hay registros.</td>
+                <td class="text-center">{{ $key+1 }}</td>
+                <td class="text-center">{{ $invoice->uuid }}</td>
+                <td class="text-center">{{ $invoice->folio }}</td>
+                <td class="text-center">${{ number_format($invoice->total, 2) }}</td>
+                <td class="text-center">${{ number_format($invoice->total - $invoice->payments->sum('payment'), 2) }}</td>
+                <td class="text-center">{{ $invoice->payment_status }}</td>
+                <td class="text-center">
+                    <a id="details_{{ $invoice->id }}" class="text-primary" style="cursor: pointer;" onclick="modalDetails(this);">
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Ver Detalles">
+                            <i class="far fa-eye"></i>
+                        </span>
+                    </a>
+                </td>
             </tr>
-        @endif
+        @endforeach
     </tbody>
 </table>
 

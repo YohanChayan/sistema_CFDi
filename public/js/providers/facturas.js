@@ -57,11 +57,19 @@ function registerCreateInvoiceData() {
             });
         }
         else {
-            Swal.fire('Advertencia', 'El archivo XML no contiene el formato de una factura.', 'warning');
+            Swal.fire(
+                'Advertencia',
+                'El archivo XML no contiene el formato de una factura.',
+                'warning'
+            );
         }
     }
     else {
-        Swal.fire('Advertencia', 'Es necesario que cargues los formatos señalados en el formulario.', 'warning');
+        Swal.fire(
+            'Advertencia',
+            'Es necesario que cargues los formatos señalados en el formulario.',
+            'warning'
+        );
     }
 }
 

@@ -31,7 +31,7 @@ class InvoiceController extends Controller
         $owner = $request->get('owner');
         $provider = $request->get('provider');
 
-        $invoices = Invoice::where('status', 'A')->get();
+        $invoices = Invoice::with('provider')->where('status', 'A')->get();
 
         if($owner != -1) {
             $invoices = $invoices->where('owner_id', $owner);

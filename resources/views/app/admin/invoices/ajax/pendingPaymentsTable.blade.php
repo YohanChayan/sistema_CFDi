@@ -1,3 +1,10 @@
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
+
 <form action="{{ route('invoices.addFilteredPayments') }}" method="POST" id="paymentsForm" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="paymentsFiltered" id="paymentsFiltered" value="{{ json_encode($invoices) }}">
@@ -20,7 +27,7 @@
 <br>
 
 <div class="table-responsive">
-    <table class="table text-start align-middle table-bordered mb-0">
+    <table class="table text-start align-middle table-bordered mb-0" style="width: 100%;">
         <thead>
             <tr class="text-dark">
                 <th scope="col" class="text-center" style="width: 10%;">Seleccionar</th>

@@ -1,4 +1,13 @@
-<table class="table text-start align-middle table-bordered mb-0">
+<script>
+    $('#table').DataTable({
+        ordering: false,
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/es-MX.json'
+        },
+    });
+</script>
+
+<table id="table" class="table text-start align-middle table-bordered mb-0" style="width: 100%;">
     <thead>
         <tr class="text-dark">
             <th style="width: 5%" class="text-center">#</th>
@@ -11,22 +20,16 @@
         </tr>
     </thead>
     <tbody>
-        @if(count($payments) > 0)
-            @foreach($payments as $key => $payment)
-                <tr>
-                    <td class="text-center">{{ $key+1 }}</td>
-                    <td class="text-center">{{ date("d-m-Y", strtotime($payment->date)) }}</td>
-                    <td class="text-center">{{ $payment->invoice->provider->nombre }}</td>
-                    <td class="text-center">{{ $payment->invoice->provider->rfc }}</td>
-                    <td class="text-center">{{ $payment->invoice->folio }}</td>
-                    <td class="text-center">{{ $payment->invoice->uuid }}</td>
-                    <td class="text-center">${{ number_format($payment->payment, 2) }}</td>
-                </tr>
-            @endforeach
-        @else
+        @foreach($payments as $key => $payment)
             <tr>
-                <td class="text-center" colspan="6">No hay registros en ese rango de fechas.</td>
+                <td class="text-center">{{ $key+1 }}</td>
+                <td class="text-center">{{ date("d-m-Y", strtotime($payment->date)) }}</td>
+                <td class="text-center">{{ $payment->invoice->provider->nombre }}</td>
+                <td class="text-center">{{ $payment->invoice->provider->rfc }}</td>
+                <td class="text-center">{{ $payment->invoice->folio }}</td>
+                <td class="text-center">{{ $payment->invoice->uuid }}</td>
+                <td class="text-center">${{ number_format($payment->payment, 2) }}</td>
             </tr>
-        @endif
+        @endforeach
     </tbody>
 </table>

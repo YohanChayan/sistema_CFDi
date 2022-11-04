@@ -43,6 +43,8 @@ function filter() {
     let end_date = $('#end_date').val();
 
     if(validate() == 0) {
+        $('#my_spinner').css('display', 'inline-block');
+        $('#my_payments_table').html('');
         $.ajax({
             url: './myPaymentsTable',
             data: {
@@ -51,6 +53,14 @@ function filter() {
             },
             success: function(data) {
                 $('#my_payments_table').html(data);
+                $('#my_spinner').css('display', 'none');
+            },
+            error: function(data) {
+                Swal.fire(
+                    'Error',
+                    'Hubo un error, por favor intenta de nuevo o contacta al desarrollador.',
+                    'error'
+                );
             }
         });
     }

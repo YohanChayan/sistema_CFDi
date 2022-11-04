@@ -60,8 +60,8 @@
 
     <br>
 
-    <div class="d-flex justify-content-center mb-5">
-      <button class="btn btn-primary btn-lg" type="button" onclick="quote();">
+    <div class="d-flex justify-content-center mb-3">
+      <button class="btn btn-primary btn-lg" type="button" onclick="quote(this);">
         Cotizar &nbsp;<i class="fas fa-coins"></i>
       </button>
     </div>

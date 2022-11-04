@@ -231,11 +231,11 @@ class InvoiceController extends Controller
         $filter = $request->get('filter');
 
         if($filter == 'TO')
-            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['status', 'A']])->get();
+            $invoices = Invoice::with('payments')->where([['provider_id', auth()->user()->provider->id], ['status', 'A']])->get();
         else if($filter == 'PE')
-            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['payment_status', 'Pendiente'], ['status', 'A']])->get();
+            $invoices = Invoice::with('payments')->where([['provider_id', auth()->user()->provider->id], ['payment_status', 'Pendiente'], ['status', 'A']])->get();
         else if($filter == 'PA')
-            $invoices = Invoice::where([['provider_id', auth()->user()->provider->id], ['payment_status', 'Pagado'], ['status', 'A']])->get();
+            $invoices = Invoice::with('payments')->where([['provider_id', auth()->user()->provider->id], ['payment_status', 'Pagado'], ['status', 'A']])->get();
 
         return view('app.providers.invoices.ajax.myInvoicesTable')->with('invoices', $invoices);
     }

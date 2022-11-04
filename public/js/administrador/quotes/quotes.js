@@ -44,7 +44,8 @@ function validate() {
     return errors;
 }
 
-function quote() {
+function quote(btn) {
+    btn.disabled = true;
     if(validate() == 0) {
         let product = $('#product').val();
         let budget = $('#budget').val();
@@ -64,7 +65,24 @@ function quote() {
             success: function(data) {
                 $('#quote_result').html(data);
                 $('#my_spinner').css('display', 'none');
+                btn.disabled = false;
+            },
+            error: function(data) {
+                Swal.fire(
+                    'Error',
+                    'Hubo un error, por favor intenta de nuevo o contacta al desarrollador.',
+                    'error'
+                );
+                btn.disabled = false;
             }
         });
+    }
+    else {
+        Swal.fire(
+            'Advertencia',
+            'Es necesario llenar los campos obligatorios',
+            'warning'
+        );
+        btn.disabled = false;
     }
 }

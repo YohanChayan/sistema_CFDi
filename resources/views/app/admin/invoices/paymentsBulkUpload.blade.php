@@ -38,6 +38,10 @@
 
     <br>
 
+    <div class="text-center mt-3">
+      <div id="my_spinner" class="spinner-border text-primary" style="width: 3rem; height: 3rem; display: none;" role="status">
+      </div>
+    </div>
     <div id="table_pending_payments">
       
     </div>

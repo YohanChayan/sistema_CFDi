@@ -109,6 +109,8 @@ function filter() {
     let provider = datalist_id('provider', 'providers_list');
 
     if(validate() == 0) {
+        $('#my_spinner').css('display', 'inline-block');
+        $('#my_invoices_table').html('');
         $.ajax({
             url: './invoicesTable',
             data: {
@@ -117,6 +119,14 @@ function filter() {
             },
             success: function(data) {
                 $('#my_invoices_table').html(data);
+                $('#my_spinner').css('display', 'none');
+            },
+            error: function(data) {
+                Swal.fire(
+                    'Error',
+                    'Hubo un error, por favor intenta de nuevo o contacta al desarrollador.',
+                    'error'
+                );
             }
         });
     }
@@ -150,10 +160,18 @@ document.querySelector('#formNewPayment').addEventListener('submit', function(e)
                 if(data == 1) {
                     cleanPayment();
                     modalPayment(invoice_id);
-                    Swal.fire('Éxito', 'Pago registrado correctamente.', 'success');
+                    Swal.fire(
+                        'Éxito',
+                        'Pago registrado correctamente.',
+                        'success'
+                    );
                 }
                 else {
-                    Swal.fire('Error', 'No es posible agregar una cantidad mayor a la del saldo pendiente.', 'error');
+                    Swal.fire(
+                        'Error',
+                        'No es posible agregar una cantidad mayor a la del saldo pendiente.',
+                        'error'
+                    );
                 }
             }
         });
