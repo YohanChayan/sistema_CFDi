@@ -1,92 +1,12 @@
 @extends('layouts.app')
 
 @section('my_scripts')
+    <script src="{{asset('js/administrador/dashboard/charts.js')}}"></script>
     <script>
-        const providers_vs_invoices = @json($providers_vs_invoices);
-        const arrayLabel_SingleBar = [];
-        const arrayData_SingleBar = [];
-
-        let i = 0;
-        for( p of providers_vs_invoices){
-            arrayLabel_SingleBar[i] = p['nombre_proveedor'];
-            arrayData_SingleBar[i] = p['facturas'];
-            i++;
-        }
-
-        // Single Bar Chart
-        var ctx4 = $("#bar-chart").get(0).getContext("2d");
-        var myChart4 = new Chart(ctx4, {
-            type: "bar",
-            data: {
-                labels: ["#1", "#2", "#3", "#4", "#5"],
-                // labels: arrayLabel_SingleBar,
-                datasets: [{
-                    label: "Facturas",
-                    backgroundColor: [
-                        "rgba(0, 156, 255, .7)",
-                        "rgba(0, 156, 255, .6)",
-                        "rgba(0, 156, 255, .5)",
-                        "rgba(0, 156, 255, .4)",
-                        "rgba(0, 156, 255, .3)"
-                    ],
-                    data: arrayData_SingleBar
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins:{
-                    tooltip:{
-                        callbacks:{
-                            title: function(context){
-                                return ` ${arrayLabel_SingleBar[context[0].dataIndex]} `;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-
-        const arrayMonthsLabel = [
-        'Enero',
-        'Febrero',
-        'Marzo',
-        'Abril',
-        'Mayo',
-        'Junio',
-        'Julio',
-        'Agosto',
-        'Septiembre',
-        'Octubre',
-        'Noviembre',
-        'Diciembre'];
-
-        const invoices_vs_months = @json($invoices_vs_months);
-
-        // Single Line Chart
-        var ctx3 = $("#line-chart").get(0).getContext("2d");
-        var myChart3 = new Chart(ctx3, {
-            type: "line",
-            data: {
-                // labels: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
-                labels: arrayMonthsLabel,
-                datasets: [{
-                    label: "Facturas",
-                    fill: false,
-                    backgroundColor: "rgba(0, 156, 255, .3)",
-                    // data: [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 11]
-                    data: invoices_vs_months
-                }]
-            },
-            options: {
-                responsive: true
-            },
-            scales:{
-                y:{
-                    beginAtZero: true
-                }
-            }
-        });
+        $(document).ready(function(){
+          load_top_providers(@json($providers_vs_invoices));
+          load_invoices_months(@json($invoices_vs_months));
+        })
     </script>
 @endsection
 
@@ -139,18 +59,18 @@
         <div class="row g-4">
             <div class="col-sm-12 col-xl-6">
                 <div class="bg-light text-center rounded p-4">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
                         <h6 class="mb-0">TOP 5 proveedores mas facturados </h6>
-                        <a href="">Mostrar todo</a>
+                        {{-- <a href="">Mostrar todo</a> --}}
                     </div>
                     <canvas id="bar-chart" width="902" height="450" style="display: block; box-sizing: border-box; height: 225px; width: 451px;"></canvas>
                 </div>
             </div>
             <div class="col-sm-12 col-xl-6">
                 <div class="bg-light rounded h-100 p-4">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex align-items-center justify-content-center mb-4">
                         <h6 class="mb-0">Facturas por meses</h6>
-                        <a href="">Mostrar todo</a>
+                        {{-- <a href="">Mostrar todo</a> --}}
                     </div>
                     <canvas id="line-chart" width="902" height="450" style="display: block; box-sizing: border-box; height: 225px; width: 451px;"></canvas>
                 </div>

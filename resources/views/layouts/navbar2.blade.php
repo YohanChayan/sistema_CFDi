@@ -8,7 +8,7 @@
         <i class="fa fa-bars"></i>
     </a>
     <div class="navbar-nav align-items-center ms-auto">
-        
+
         {{-- Barra superior --}}
 
         @if (!Auth::Check())
@@ -16,7 +16,7 @@
                 <a href="{{ route('login') }}" class="btn btn-success m-2">Iniciar Sesión</a>
             </div>
         @else
-            <div class="nav-item dropdown">
+            {{-- <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <i class="fa fa-envelope me-lg-2"></i>
                     <span class="d-none d-lg-inline-flex">Message</span>
@@ -78,17 +78,17 @@
                     <hr class="dropdown-divider">
                     <a href="#" class="dropdown-item text-center">See all notifications</a>
                 </div>
-            </div>
+            </div> --}}
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2 border border-dark" src="{{ (auth()->user()->profile_photo_path) == null ? \App\Models\User::find(auth()->user()->id)->profile_photo_url : asset(auth()->user()->profile_photo_path) }}" alt="" style="width: 40px; height: 40px;">
                     <span class="d-none d-lg-inline-flex">{{ auth()->user()->name }}</span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-    
+                <div class="dropdown-menu dropdown-menu-end bg-light border rounded rounded-bottom m-0">
+
                     {{-- <a href="#" class="dropdown-item">My Profile</a> --}}
-    
-                    <a class="dropdown-item p-2" href="{{ route('logout') }}"
+
+                    <a class="dropdown-item" href="{{ route('logout') }}"
                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         {{ __('Cerrar sesión') }}
                     </a>

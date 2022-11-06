@@ -22,17 +22,28 @@
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
+
+                        <div class="alert alert-secondary" role="alert">
+                            <p class="text-dark fs-3 text-center mb-2">Sólo para <span class="fw-bold">proveedores</span></p>
+
+                            <p class="text-dark fs-5 text-center mb-3">
+                                En caso de acceder como administrativo
+                                <span class="d-block">click <a href="{{route('login')}}" class=" link-primary">aquí <i class="fas fa-sign-in-alt"></i> </a></span>
+                            </p>
+
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-center mb-3">
                             <a href="#" class="">
                                 <h3 class="text-primary">Frutioro</h3>
                             </a>
-                            <h3>Iniciar Sesión</h3>
+                            {{-- <h3>Iniciar Sesión</h3> --}}
                         </div>
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="form-floating mb-3">
                                 <input id="rfc" type="string" class="form-control @error('rfc') is-invalid @enderror" name="rfc" value="{{ old('rfc') }}" required autocomplete="rfc" autofocus placeholder="RFC">
-                                
+
                                 <label for="rfc">{{ __('RFC') }}</label>
                                 @error('rfc')
                                     <span class="invalid-feedback" role="alert">
@@ -57,7 +68,7 @@
                                 </div>
                                 <a href="#">Olvidé mi contraseña</a>
                             </div>
-                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Iniciar Sesión</button>
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-2">Iniciar Sesión</button>
                             {{-- <p class="text-center mb-0">Don't have an Account? <a href="">Sign Up</a></p> --}}
                         </form>
                     </div>

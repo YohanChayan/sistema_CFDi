@@ -22,17 +22,24 @@
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
+
+                        <div class="alert alert-secondary" role="alert">
+                            <p class="text-dark fs-3 text-center mb-2">Sólo para personal <span class="fw-bold">administrativo</span></p>
+
+                            <p class="text-dark fs-5 text-center mb-3">En caso de acceder como proveedor <span class="d-block">click <a href="{{route('loginProviderView')}}" class="link-primary">aquí <i class="fas fa-sign-in-alt"></i> </a></span> </p>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-center mb-3">
                             <a href="#" class="">
                                 <h3 class="text-primary">Frutioro</h3>
                             </a>
-                            <h3>Iniciar Sesión</h3>
+                            {{-- <h3>Iniciar Sesión</h3> --}}
                         </div>
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="form-floating mb-3">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email">
-                                
+
                                 <label for="email">{{ __('Correo Electrónico') }}</label>
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -58,7 +65,7 @@
                                 </div>
                                 <a href="#">Olvidé mi contraseña</a>
                             </div>
-                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Iniciar Sesión</button>
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-2">Iniciar Sesión</button>
                             <!-- <p class="text-center mb-0">Don't have an Account? <a href="">Sign Up</a></p> -->
                         </form>
                     </div>
@@ -73,17 +80,17 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('Login') }}</div>
-    
+
                     <div class="card-body">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
-    
+
                             <div class="row mb-3">
                                 <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-    
+
                                 <div class="col-md-6">
                                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-    
+
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -91,7 +98,7 @@
                                     @enderror
                                 </div>
                             </div>
-    
+
                             <div class="row mb-3">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Contraseña">
 
@@ -100,27 +107,27 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                                
+
                             </div>
-    
+
                             <div class="row mb-3">
                                 <div class="col-md-6 offset-md-4">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-    
+
                                         <label class="form-check-label" for="remember">
                                             {{ __('Remember Me') }}
                                         </label>
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="row mb-0">
                                 <div class="col-md-8 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
                                         {{ __('Login') }}
                                     </button>
-    
+
                                     @if (Route::has('password.request'))
                                         <a class="btn btn-link" href="{{ route('password.request') }}">
                                             {{ __('Forgot Your Password?') }}

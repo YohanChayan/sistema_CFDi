@@ -81,7 +81,7 @@ class AdminController extends Controller
         ->with('invoices_today', $invoices_today)
         ->with('users_count', $users_count)
         ->with('providers_vs_invoices', $providers_vs_invoices)
-        ->with('invoices_vs_months', $invoices_vs_months)
+        // ->with('invoices_vs_months', $invoices_vs_months)
         ->with('invoices_vs_months', $arr);
     }
 
