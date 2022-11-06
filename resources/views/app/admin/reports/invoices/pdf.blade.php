@@ -93,7 +93,7 @@
                 @foreach($invoices as $key => $invoice)
                     <tr>
                         <td class="text-center">{{ $key+1 }}</td>
-                        <td class="text-center">{{ date("d-m-Y", strtotime($invoice->date)) }}</td>
+                        <td class="text-center">{{ date("d-m-Y", strtotime($invoice->created_at)) }}</td>
                         <td class="text-center">{{ $invoice->provider->nombre }}</td>
                         <td class="text-center">{{ $invoice->provider->rfc }}</td>
                         <td class="text-center">{{ $invoice->folio }}</td>

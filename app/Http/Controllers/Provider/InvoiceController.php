@@ -55,7 +55,7 @@ class InvoiceController extends Controller
                 $products = Invoice::getProductsXML($convertedXML);          // Obtiene los Productos Registrados
 
                 // Validar que no existan valores nulos al obtener los datos del archivo XML
-                if($uuid != null && $provider_rfc != null && $owner_rfc && $total != null && $folio != null && $zip_code != null && $products != null) {
+                if($uuid != null && $provider_rfc != null && $owner_rfc && $total != null && $zip_code != null && $products != null) {
 
                     /**************************************************/
                     /*           Valida el CFDI ante el SAT           */
@@ -197,9 +197,9 @@ class InvoiceController extends Controller
         $rfc = $request->get('rfc');   // Obtiene el rfc que se le pasa por el método get desde ajax
         $search_provider = Provider::where('rfc', $rfc)->first();   // Busca el RFC del emisor en la base de datos
         if($search_provider == null)
-            return 0;
+            return $rfc;   //El proveedor aún no se ha dado de alta
         else
-            return 1;
+            return 1;   //EL proveedor ya existe
     }
 
     public function createNewProvider(Request $request) {

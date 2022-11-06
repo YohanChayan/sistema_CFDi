@@ -51,6 +51,7 @@ function registerCreateInvoiceData() {
                     }
                     else {   //Abrir modal para crear un nuevo proveedor
                         let myModal = new bootstrap.Modal(document.getElementById('registerModal'));
+                        $('#provider_rfc').text('Se creará un usuario con el siguiente RFC: ' + data);
                         myModal.show();
                     }
                 }

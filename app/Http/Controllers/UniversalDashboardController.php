@@ -18,8 +18,8 @@ class UniversalDashboardController extends Controller
         // Admin Dashboard
         if($user_type == 'A') {
             $invoices = Invoice::with('owner', 'provider')->get();
-            $recent_invoices = $invoices->sortBy('created_at')->take(5);
-            $recent_payments = PaymentHistory::with('invoice')->get()->sortByDesc('date')->take(5);
+            $recent_invoices = $invoices->sortByDesc('created_at')->take(5);
+            $recent_payments = PaymentHistory::with('invoice')->get()->sortByDesc('created_at')->take(5);
             $recent_providers = Provider::all()->sortByDesc('created_at')->take(5);
 
             // Counts

@@ -62,6 +62,8 @@
                                     <h5 class="modal-title" id="registerModalLabel">Registro</h5>
                                 </div>
                                 <div class="modal-body">
+                                    <h6 id="provider_rfc">Se creará un usuario con el siguiente RFC: </h6>
+                                    <br>
                                     <div class="form-floating mb-3">
                                         <input class="form-control" type="password" name="password" id="password" placeholder="Contraseña">
                                         <label for="password">Contraseña</label>

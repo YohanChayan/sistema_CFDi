@@ -43,35 +43,37 @@
         </thead>
         <tbody>
             @foreach($invoices as $inv)
-                <tr>
-                    <td class="text-center">
-                        <input class="form-check-input" type="checkbox" id="check_{{ $inv->id }}" onchange="selectPayment(this);">
-                    </td>
-                    <td class="text-center">{{ $inv->uuid }}</td>
-                    <td class="text-center">{{ $inv->folio }}</td>
-                    <td class="text-center">{{ $inv->provider->nombre }}</td>
-                    <td class="text-center">${{ number_format($inv->total, 2) }}</td>
-                    <td class="text-center">${{ number_format($inv->total - $inv->payments->sum('payment'), 2) }}</td>
-                    {{-- <td class="text-center">
-                        <input class="form-control" type="date" name="date_{{ $inv->id }}" id="date_{{ $inv->id }}">
-                    </td> --}}
-                    <td class="text-center">
-                        <select class="form-select" name="payment_method_{{ $inv->id }}" id="payment_method_{{ $inv->id }}">
-                            <option value="1">Efectivo</option>
-                            <option value="2">Tarjeta crédito</option>
-                            <option value="3">Tarjeta débito</option>
-                            <option value="4">Transferencia</option>
-                            <option value="5">Otro</option>
-                        </select>
-                    </td>
-                    <td class="text-center">
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input class="form-control" type="number" name="payment_{{ $inv->id }}" id="payment_{{ $inv->id }}" min="0" onchange="payment();">
-                            <div class="text-danger" id="error_payment_{{ $inv->id }}"></div>
-                        </div>
-                    </td>
-                </tr>
+                @if($inv->total - $inv->payments->sum('payment') > 0)
+                    <tr>
+                        <td class="text-center">
+                            <input class="form-check-input" type="checkbox" id="check_{{ $inv->id }}" onchange="selectPayment(this);">
+                        </td>
+                        <td class="text-center">{{ $inv->uuid }}</td>
+                        <td class="text-center">{{ $inv->folio }}</td>
+                        <td class="text-center">{{ $inv->provider->nombre }}</td>
+                        <td class="text-center">${{ number_format($inv->total, 2) }}</td>
+                        <td class="text-center">${{ number_format($inv->total - $inv->payments->sum('payment'), 2) }}</td>
+                        {{-- <td class="text-center">
+                            <input class="form-control" type="date" name="date_{{ $inv->id }}" id="date_{{ $inv->id }}">
+                        </td> --}}
+                        <td class="text-center">
+                            <select class="form-select" name="payment_method_{{ $inv->id }}" id="payment_method_{{ $inv->id }}">
+                                <option value="1">Efectivo</option>
+                                <option value="2">Tarjeta crédito</option>
+                                <option value="3">Tarjeta débito</option>
+                                <option value="4">Transferencia</option>
+                                <option value="5">Otro</option>
+                            </select>
+                        </td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input class="form-control" type="number" name="payment_{{ $inv->id }}" id="payment_{{ $inv->id }}" min="0" onchange="payment();">
+                                <div class="text-danger" id="error_payment_{{ $inv->id }}"></div>
+                            </div>
+                        </td>
+                    </tr>
+                @endif
             @endforeach
             <tr>
                 <th class="text-end fs-5" colspan="7">Monto Total</th>
