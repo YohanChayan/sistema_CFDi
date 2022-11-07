@@ -43,7 +43,7 @@ function registerCreateInvoiceData() {
     if(pdf_extension == '.pdf' && xml_extension == '.xml' && other_file) {
         if(rfc != null && nombre != null) {
             $.ajax({
-                url: '/invoice/validateProvider',
+                url: './validateProvider',
                 data: {rfc: rfc},
                 success: function(data) {
                     if(data == 1) {   //Enviar formulario
@@ -112,7 +112,7 @@ function registerDataNewProvider() {
 
     if(validateDataNewProvider() == 0) {
         $.ajax({
-            url: '/invoice/createNewProvider',
+            url: './createNewProvider',
             data: {
                 rfc: rfc,
                 nombre: nombre,

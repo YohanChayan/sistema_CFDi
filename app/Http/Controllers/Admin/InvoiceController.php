@@ -270,8 +270,10 @@ class InvoiceController extends Controller
 
             $filename_pdf = 'factura_' . $invoice->uuid . '.pdf';
             $filename_xml = 'factura_' . $invoice->uuid . '.xml';
-            preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   //Obtiene la extensión del archivo
-            $filename_other = 'factura_' . $invoice->uuid . $extension[0];
+            if($invoice->other != null) {
+                preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   //Obtiene la extensión del archivo
+                $filename_other = 'factura_' . $invoice->uuid . $extension[0];
+            }
 
             $zip = new ZipArchive();
             //!Así debe ir en producción (situación con las rutas)
@@ -286,7 +288,9 @@ class InvoiceController extends Controller
             $zip->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
             $zip->addFile($invoice->pdf, $filename_pdf);
             $zip->addFile($invoice->xml, $filename_xml);
-            $zip->addFile($invoice->other, $filename_other);
+            if($invoice->other != null) {
+                $zip->addFile($invoice->other, $filename_other);
+            }
             $zip->close();
 
             return Response::download($filename);
@@ -306,12 +310,18 @@ class InvoiceController extends Controller
             return Response::download($invoice->xml, $filename);
         }
         else if($option == 'A') {
-            preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   //Obtiene la extensión del archivo
-            $filename = 'factura_' . $invoice->uuid . $extension[0];
-            //!Así debe ir en producción (situación con las rutas
-            // $route = 'laravel/public/' . $invoice->other;
-            // return Response::download($route, $filename);
-            return Response::download($invoice->other, $filename);
+            if($invoice->other != null) {
+                preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   //Obtiene la extensión del archivo
+                $filename = 'factura_' . $invoice->uuid . $extension[0];
+                //!Así debe ir en producción (situación con las rutas
+                // $route = 'laravel/public/' . $invoice->other;
+                // return Response::download($route, $filename);
+                return Response::download($invoice->other, $filename);
+            }
+            else {
+                Alert::warning('Advertencia', 'No pudimos encontrar este archivo :(');
+                return redirect()->route('invoices.index');
+            }
         }
     }
 

@@ -50,7 +50,7 @@ class FilesReceived extends Mailable
     {
         // dd(asset($this->xml_name));
         if ($this->name_other_file == '') {
-            return $this->view('email.files-received')->attach(  
+            return $this->view('email.files-received')->attach(
                 asset($this->xml_name) , [
                     'as' => $this->xml_original_name,
                     'mime' => 'application/xml',
