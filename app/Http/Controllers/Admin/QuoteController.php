@@ -70,7 +70,7 @@ class QuoteController extends Controller
                             'price' => $product->price,
                             'totalSales' => count($productCount),
                             'monthlySales' => $monthlySales,
-                            'state' => $zip_code->state,
+                            'state' => ($zip_code != null) ? $zip_code->state : 'X',
                             'stockDate' => $product->created_at->format('Y-m-d'),
                         ]);
 
@@ -193,7 +193,7 @@ class QuoteController extends Controller
                 array_push($ids, $r['id']);
             }
 
-            $products = InvoiceDetail::with('sat_product')->whereIn('id', $ids)->get();
+            $products = InvoiceDetail::with('sat_product')->whereIn('id', $ids)->orderBy('created_at', 'desc')->get();
         }
 
         $zip_codes = ZipCode::all();

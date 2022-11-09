@@ -63,16 +63,19 @@ class InvoiceController extends Controller
 
                     $validate_cfdi = new ValidateCFDI($provider_rfc, $owner_rfc, $total, $uuid);
                     $sat_response = $validate_cfdi->validate();
-                    $status_code = substr(trim($sat_response['CodigoEstatus']), 0, 1);   // Devuelve S si encontró la factura y N si no la encontró
-                    $cfdi_status = trim($sat_response['Estado']);   // Devuelve el estado de la factura, ya sea que esté vigente o cancelada
                     
-                    if($status_code != 'S') {
-                        Alert::warning('Advertencia', 'No pudimos encontrar esta factura en el sistema del SAT');
-                        return redirect()->back();
-                    }
-                    else if($cfdi_status != 'Vigente') {
-                        Alert::warning('Advertencia', 'Esta factura está cancelada ante el SAT');
-                        return redirect()->back();
+                    if($sat_response !== false) {
+                        $status_code = substr(trim($sat_response['CodigoEstatus']), 0, 1);   // Devuelve S si encontró la factura y N si no la encontró
+                        $cfdi_status = trim($sat_response['Estado']);   // Devuelve el estado de la factura, ya sea que esté vigente o cancelada
+                        
+                        if($status_code != 'S') {
+                            Alert::warning('Advertencia', 'No pudimos encontrar esta factura en el sistema del SAT');
+                            return redirect()->back();
+                        }
+                        else if($cfdi_status != 'Vigente') {
+                            Alert::warning('Advertencia', 'Esta factura está cancelada ante el SAT');
+                            return redirect()->back();
+                        }
                     }
 
                     /**************************************************/
@@ -170,9 +173,9 @@ class InvoiceController extends Controller
                     // Enviar correo electrónico
                     $pdf_original_name = $file_pdf->getClientOriginalName();
                     $xml_original_name = $file_xml->getClientOriginalName();
-                    // $archivos_email = new FilesReceived($xml_name, $xml_original_name, $pdf_name, $pdf_original_name, $other_name, $name_other_file, $name_provider, $other_file_aux);
-                    // Mail::to('proveedoresfrutioro@hotmail.com')->send($archivos_email);
-                    // Mail::to('chuyatlas2001@hotmail.com')->send($archivos_email);
+                    $email_files = new FilesReceived($xml_name, $xml_original_name, $pdf_name, $pdf_original_name, $other_name, $name_other_file, $name_provider, $other_file_aux);
+                    // Mail::to('proveedoresfrutioro@hotmail.com')->send($email_files);
+                    Mail::to('jesusanz2001@gmail.com')->send($email_files);
 
                     Alert::success('Éxito', 'Factura guardada correctamente');
                     return redirect()->route('invoices.create');

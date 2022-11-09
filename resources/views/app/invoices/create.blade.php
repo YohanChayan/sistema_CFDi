@@ -50,7 +50,7 @@
 
                         <div class="row g-3 justify-content-center">
                             <div class="mb-3 col-md-8">
-                                <button type="button" class="btn btn-primary" onclick="registerCreateInvoiceData();">Subir</button>
+                                <button type="button" class="btn btn-primary" onclick="registerCreateInvoiceData(this);">Subir</button>
                             </div>
                         </div>
                     </form>

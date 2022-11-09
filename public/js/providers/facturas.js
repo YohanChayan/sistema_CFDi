@@ -29,7 +29,10 @@ $("#xml_input").change(function() {
 });
 
 //Registrar factura
-function registerCreateInvoiceData() {
+function registerCreateInvoiceData(btn) {
+    //Deshabilitar el botón para que no puedan volver a presionarlo hasta que se valide el formulario
+    btn.disabled = true;
+
     //Obtener los nombres de los archivos
     let pdf_file = $('#pdf_input').val();
     let xml_file = $('#xml_input').val();
@@ -63,6 +66,7 @@ function registerCreateInvoiceData() {
                 'El archivo XML no contiene el formato de una factura.',
                 'warning'
             );
+            btn.disabled = false;
         }
     }
     else {
@@ -71,6 +75,7 @@ function registerCreateInvoiceData() {
             'Es necesario que cargues los formatos señalados en el formulario.',
             'warning'
         );
+        btn.disabled = false;
     }
 }
 

@@ -23,7 +23,7 @@ class InvoiceController extends Controller
     public function index()
     {
         $owners = Owner::all();
-        $invoices = Invoice::with('owner', 'provider')->where('status', 'A')->get();
+        $invoices = Invoice::with('owner', 'provider')->where('status', 'A')->orderBy('created_at', 'desc')->get();
         return view('app.admin.invoices.index')->with('invoices', $invoices)->with('owners', $owners);
     }
 
