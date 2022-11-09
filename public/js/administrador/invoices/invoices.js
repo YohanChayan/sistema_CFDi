@@ -17,7 +17,17 @@ function validatePayment() {
 
     if($('#payment').val() == '') {
         $('#payment').addClass('is-invalid');
-        $('#error_payment').text('Ingresa una cantidad');
+        $('#error_payment').text('Ingresa una cantidad válida');
+        errors++;
+    }
+    else {
+        $('#payment').removeClass('is-invalid');
+        $('#error_payment').text('');
+    }
+
+    if($('#payment').val() != '' && $('#payment').val() <= 0) {
+        $('#payment').addClass('is-invalid');
+        $('#error_payment').text('Ingresa una cantidad válida');
         errors++;
     }
     else {
