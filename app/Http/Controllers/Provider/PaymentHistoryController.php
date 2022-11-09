@@ -50,5 +50,4 @@ class PaymentHistoryController extends Controller
             return redirect()->back();
         }
     }
-
 }

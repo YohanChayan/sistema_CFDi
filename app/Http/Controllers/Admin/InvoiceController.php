@@ -33,6 +33,7 @@ class InvoiceController extends Controller
 
         $invoices = Invoice::with('provider')->where('status', 'A')->get();
 
+        // Filtrar facturas por emisor (proveedor) y receptor
         if($owner != -1) {
             $invoices = $invoices->where('owner_id', $owner);
         }
@@ -265,13 +266,13 @@ class InvoiceController extends Controller
         $option = $request->get('option');
         $invoice = Invoice::find($id);
 
-        if($option == 'T') {
+        if($option == 'T') {   // Descargar todo en un zip
             $filename = 'factura_' . $invoice->uuid . '.zip';
 
             $filename_pdf = 'factura_' . $invoice->uuid . '.pdf';
             $filename_xml = 'factura_' . $invoice->uuid . '.xml';
             if($invoice->other != null) {
-                preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   //Obtiene la extensión del archivo
+                preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   // Obtiene la extensión del archivo
                 $filename_other = 'factura_' . $invoice->uuid . $extension[0];
             }
 
@@ -285,6 +286,7 @@ class InvoiceController extends Controller
             // $routeOther = 'laravel/public/' . $invoice->other;
             // $zip->addFile($routeOther, $filename_other);
 
+            // Agregar los archivos pdf, xml y el anexo al zip
             $zip->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
             $zip->addFile($invoice->pdf, $filename_pdf);
             $zip->addFile($invoice->xml, $filename_xml);
@@ -295,23 +297,23 @@ class InvoiceController extends Controller
 
             return Response::download($filename);
         }
-        else if($option == 'PDF') {
+        else if($option == 'PDF') {   // Descargar solo el archivo PDF
             $filename = 'factura_' . $invoice->uuid . '.pdf';
             //!Así debe ir en producción (situación con las rutas
             // $route = 'laravel/public/' . $invoice->pdf;
             // return Response::download($route, $filename);
             return Response::download($invoice->pdf, $filename);
         }
-        else if($option == 'XML') {
+        else if($option == 'XML') {   // Descargar solo el archivo XML
             $filename = 'factura_' . $invoice->uuid . '.xml';
             //!Así debe ir en producción (situación con las rutas
             // $route = 'laravel/public/' . $invoice->xml;
             // return Response::download($route, $filename);
             return Response::download($invoice->xml, $filename);
         }
-        else if($option == 'A') {
+        else if($option == 'A') {   // Descargar solo el archivo anexo
             if($invoice->other != null) {
-                preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   //Obtiene la extensión del archivo
+                preg_match('/\.[0-9a-z]+$/i', $invoice->other, $extension);   // Obtiene la extensión del archivo
                 $filename = 'factura_' . $invoice->uuid . $extension[0];
                 //!Así debe ir en producción (situación con las rutas
                 // $route = 'laravel/public/' . $invoice->other;
@@ -350,11 +352,6 @@ class InvoiceController extends Controller
         $amount = $data['payment'];
         $payment_method = $data['payment_method'];
 
-        $receiptFile = $request->file('receipt');
-        $name_file = time() . '.' . $receiptFile->extension();
-        $receiptFile->move(public_path('archivos/pagos'), $name_file);
-        $file_name = 'archivos/pagos/' . $name_file;
-
         $invoice = Invoice::with('provider')->find($id);
         $subtotal = PaymentHistory::where('invoice_id', $id)->sum('payment');
 
@@ -362,6 +359,11 @@ class InvoiceController extends Controller
             return 0;
         }
         else {
+            $receiptFile = $request->file('receipt');   // Comprobante de pago
+            $name_file = time() . '.' . $receiptFile->extension();
+            $receiptFile->move(public_path('archivos/pagos'), $name_file);
+            $file_name = 'archivos/pagos/' . $name_file;
+
             $payment = new PaymentHistory();
             $payment -> user_id = $invoice->provider->user_id;
             $payment -> approved_by = Auth::id();
@@ -412,6 +414,11 @@ class InvoiceController extends Controller
         $data = $request->all();
         $pendingPayments = json_decode($data['pendingPayments']);
         $receipt = $request->file('filePayment');
+
+        // Comprobante de pago
+        $name_file = time() . '.' . $receipt->extension();
+        $receipt->move(public_path('archivos/pagos'), $name_file);
+        $file_name = 'archivos/pagos/' . $name_file;
         
         foreach($pendingPayments as $pendingPayment) {
             $invoice = Invoice::with('payments', 'provider')->find($pendingPayment->invoice_id);
@@ -423,10 +430,6 @@ class InvoiceController extends Controller
             $payment -> date = $data['date'];
             $payment -> payment_method = $pendingPayment->payment_method;
             $payment -> payment = $pendingPayment->payment;
-
-            $name_file = time() . '.' . $receipt->extension();
-            $receipt->move(public_path('archivos/pagos'), $name_file);
-            $file_name = 'archivos/pagos/' . $name_file;
 
             $payment -> receipt = $file_name;
             $payment -> save();

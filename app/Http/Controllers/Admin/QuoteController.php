@@ -24,7 +24,7 @@ class QuoteController extends Controller
     public function infer(Request $request) {
         $product = $request->get('product');     // Nombre del producto
         $budget = $request->get('budget');       // Presupuesto
-        $filter = $request->get('filter');       // Todos, Más Comprados, Novedades
+        $filter = $request->get('filter');       // Filtrar por Todos, Más Comprados, Novedades
         $location = $request->get('location');   // Estado seleccionado
 
         // Buscar los nombres de los productos del sat que incluyan el nombre dado por el usuario
