@@ -4,14 +4,14 @@
 
 Sistema de gestion de estatus facturas generadas por una empresa en relacion con sus clientes.
 
-##Funcionalidades -Administradores
+## Funcionalidades -Administradores
 
 - Seguimiento a estatus de facturas de clientes.
 - Reportes en PDF de los pagos y facturas de un rango de fechas determinadas.
 - Sistema de recomendacion de cotizaciones de productos para futuras transacciones.
 - Graficas estadisticas de los clientes mas facturados y facturas generadas al mes.
 
-##Funcionalidades -Clientes/Proveedores
+## Funcionalidades -Clientes/Proveedores
 
 - Subida de archivos de facturas del SAT en formato PDF y XML, (Extracción de informacion) .
 - Validacion de ambos archivos y verificacion de validez directo con el SAT. 
