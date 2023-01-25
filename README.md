@@ -19,4 +19,4 @@ Sistema de gestion de estatus facturas generadas por una empresa en relacion con
 - Historial Pagos realizados.
 - Listado de productos con las que se han hecho transacciones (extracción automatica del archivo subido previamente). 
 
-<p align="center"> Sistema desarollado en equipo. </p>
+<p align="center"> Sistema desarrollado en equipo. </p>
